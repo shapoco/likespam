@@ -367,5 +367,6 @@ var spam_items = [
   {"screen_name": "TayleighM83824", "added_date": "2024-09-16 16:46:00+09:00"},
   {"screen_name": "HollyHarri5485", "added_date": "2024-09-16 16:46:00+09:00"},
   {"screen_name": "tee_hall67580", "added_date": "2024-09-16 16:46:00+09:00"},
-  {"screen_name": "ostracize_21", "added_date": "2024-09-16 16:46:00+09:00"}
+  {"screen_name": "ostracize_21", "added_date": "2024-09-16 16:46:00+09:00"},
+  {"screen_name": "StephanieA83370", "added_date": "2024-09-17 04:28:00+09:00"}
 ]
