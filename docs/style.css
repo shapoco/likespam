@@ -30,10 +30,7 @@ table th {
 }
 
 table td {
-	background: #f8f8f8;
-}
-table tr:nth-child(odd) td {
-	background: #ffffff;
+	background: #fff;
 }
 
 tr.frozen td {
