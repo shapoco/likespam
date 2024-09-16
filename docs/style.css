@@ -25,8 +25,29 @@ table td {
   padding: 0.2ex 0.5em;
 }
 
+table th {
+  background: #ddd;
+}
+
+table td {
+	background: #f8f8f8;
+}
+table tr:nth-child(odd) td {
+	background: #ffffff;
+}
+
+tr.frozen td {
+  background: #ccc !important;
+}
+
 a:link { color: #06c; }
-a:visited { color: #888; }
+a:visited { color: #444; }
 a:hover { color: #08f; }
 a:active { color: #08f; }
 
+tr.frozen td { color: #666; }
+
+tr.frozen td a:link { color: #666; text-decoration: line-through; }
+tr.frozen td a:visited { color: #666; text-decoration: line-through; }
+tr.frozen td a:hover { color: #666; text-decoration: line-through; }
+tr.frozen td a:active { color: #666; text-decoration: line-through; }
