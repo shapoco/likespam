@@ -4,9 +4,14 @@ body, input, textarea {
   font-family: メイリオ, Meiryo, sans-serif;
 }
 
-p, ul, ol, form, table {
+p, form, table {
   margin: 10px 20px;
   padding: 0px;
+}
+
+ul, ol {
+  margin: 10px 20px;
+  padding: 0px 0px 0px 20px;
 }
 
 h1 {
@@ -48,3 +53,5 @@ tr.frozen td a:link { color: #666; text-decoration: line-through; }
 tr.frozen td a:visited { color: #666; text-decoration: line-through; }
 tr.frozen td a:hover { color: #666; text-decoration: line-through; }
 tr.frozen td a:active { color: #666; text-decoration: line-through; }
+
+strong { color: #c00; font-weight: normal; }
