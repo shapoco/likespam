@@ -1,0 +1,32 @@
+body, input, textarea {
+  background: #eee;
+  font-size: calc(12pt);
+  font-family: メイリオ, Meiryo, sans-serif;
+}
+
+p, ul, ol, form, table {
+  margin: 10px 20px;
+  padding: 0px;
+}
+
+h1 {
+  border-bottom: solid 1px black;
+  margin: 10px 20px;
+  padding: 0px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  border: solid 1px #888;
+  padding: 0.2ex 0.5em;
+}
+
+a:link { color: #06c; }
+a:visited { color: #888; }
+a:hover { color: #08f; }
+a:active { color: #08f; }
+

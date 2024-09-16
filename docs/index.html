@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+  <head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"> -->
+
+    <meta name="keywords" content="X,Twitter,いいねスパム,公式スパム">
+    <meta name="description" content="X で「いいね」を送りつけてくるスパムの一覧">
+
+    <meta property="og:url" content="https://shapoco.github.io/likespam/" />
+    <meta property="og:title" content="いいねスパム一覧" />
+    <meta property="og:description" content="X で「いいね」を送りつけてくるスパムの一覧" />
+    <meta property="og:image" content="https://shapoco.github.io/likespam/card.png" />
+
+    <!-- <link rel="icon" href="/likespam/favicon192.png" sizes="192x192"> -->
+    <!-- <link rel="apple-touch-icon" href="/likespam/apple-touch-icon180.png" sizes="180x180"> -->
+    <!-- <link rel="shortcut icon" href="/likespam/favicon48.ico"> -->
+
+    <title>いいねスパム一覧</title>
+    <script src="./database.js?b"></script>
+    <link href="./style.css?f" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <h1>いいねスパム一覧</h1>
+
+    <p>
+      <a href="https://github.com/shapoco/likespam">この表について（質問・要望等を送る前にお読み下さい）</a>
+    </p>
+
+    <table id="spam_table">
+      <tr>
+        <th>#</th>
+        <th>ID (screen_name)</th>
+        <th>追加日</th>
+      </tr>
+    </table>
+
+    <script>
+      function main() {
+        tbl = document.getElementById('spam_table');
+        for (var i = spam_items.length - 1; i >= 0; i--) {
+          const spam = spam_items[i];
+          td_num = document.createElement('td'); 
+          td_id = document.createElement('td');
+          td_added = document.createElement('td');
+          td_num.innerHTML = (i + 1).toString();
+          td_id.innerHTML = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name+ '</a>';
+          td_added.innerHTML = new Date(spam.added_date).toLocaleString();
+          tr = document.createElement('tr');
+          tr.appendChild(td_num);
+          tr.appendChild(td_id);
+          tr.appendChild(td_added);
+          tbl.appendChild(tr);
+        };
+      }
+
+      main();
+    </script>
+
+  </body>
+
+</html>
