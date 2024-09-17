@@ -340,7 +340,7 @@ var spam_items = [
   {"screen_name": "MichelleRa45743", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
   {"screen_name": "MorrisBarb29031", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
   {"screen_name": "michele_du45943", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
-  {"screen_name": "MindyOrtiz77953", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "MindyOrtiz77953", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2024-09-17T10:50:00+09:00"},
   {"screen_name": "NairobyPet30581", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
   {"screen_name": "MichelleWi73210", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
   {"screen_name": "OrtizBenne50236", "added_date": "2024-09-16T16:01:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
