@@ -55,3 +55,28 @@ tr.frozen td a:hover { color: #666; text-decoration: line-through; }
 tr.frozen td a:active { color: #666; text-decoration: line-through; }
 
 strong { color: #c00; font-weight: normal; }
+
+ul#query_list {
+  margin: 10px 20px;
+  padding: 0px;
+}
+
+ul#query_list li {
+  display: block;
+  margin: 0px;
+  padding: 0px 0px 10px 0px;
+}
+
+ul#query_list li.frozen {
+  background: #ccc;
+}
+
+ul#query_list li.frozen a:link { color: #666; text-decoration: line-through; }
+ul#query_list li.frozen a:visited { color: #666; text-decoration: line-through; }
+ul#query_list li.frozen a:hover { color: #666; text-decoration: line-through; }
+ul#query_list li.frozen a:active { color: #666; text-decoration: line-through; }
+
+del {
+  background: #ccc; 
+  color: #666;
+}

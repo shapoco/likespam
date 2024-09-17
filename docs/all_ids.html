@@ -18,8 +18,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <script src="./database.js?l"></script>
-    <link href="./style.css?n" rel="stylesheet" type="text/css">
+    <script src="./database.js?k"></script>
+    <link href="./style.css?l" rel="stylesheet" type="text/css">
   </head>
 
   <body>
@@ -27,52 +27,41 @@
 
     <ul>
       <li><a href="https://github.com/shapoco/likespam" target="_blank">この表について（質問・要望等を送る前にお読み下さい）</a></li>
-      <li>灰色のアカウントは凍結済みです。</li>
-      <li><strong>短時間に大量のアカウントをブロックすると強制ログアウトされる場合があるそうなので、一度に全部をブロックしようとは思わない方が良さそうです。</strong></li>
+      <li>灰色の行は凍結済みのアカウントです。</li>
+      <li><strong>短時間に大量のアカウントをブロックすると強制ログアウトされる場合があるそうなので、全部をブロックしようとは思わない方が良さそうです。</strong></li>
     </ul>
     
-    <ul id="query_list">
-    </ul>
+    <table id="spam_table">
+      <tr>
+        <th>#</th>
+        <th>ID (screen_name)</th>
+        <th>追加日</th>
+      </tr>
+    </table>
 
     <script>
       function main() {
         now = Date.now();
-        ul = document.getElementById('query_list');
-        const GROUP_SIZE = 20;
-        const ngrp = Math.ceil(spam_items.length / GROUP_SIZE);
-        for (var igrp = ngrp - 1; igrp >= 0; igrp--)  {
-          const ifrom = igrp * GROUP_SIZE;
-          const ito = (igrp < ngrp - 1) ? (ifrom + GROUP_SIZE) : spam_items.length;
-          var is_all_frozen = true;
-          var url = 'https://x.com/search?q=';
-          var text = '';
-          for (var i = ifrom; i < ito; i++) {
-            const spam = spam_items[i];
-            is_frozen = new Date(spam.frozen_date) < now;
-            is_all_frozen &= is_frozen;
-            url += '%40' + spam.screen_name;
-            if (is_frozen) {
-              text += '<del>@' + spam.screen_name + '</del>';
-            }
-            else {
-              text += '@' + spam.screen_name;
-            }
-            if (i < ito - 1) {
-              url += '+OR+';
-              text += ' ';
-            }
+        tbl = document.getElementById('spam_table');
+        for (var i = spam_items.length - 1; i >= 0; i--) {
+          const spam = spam_items[i];
+          is_frozen = new Date(spam.frozen_date) < now;
+          const name_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name+ '</a>';
+          td_num = document.createElement('td'); 
+          td_id = document.createElement('td');
+          td_added = document.createElement('td');
+          td_num.innerHTML = (i + 1).toString();
+          td_id.innerHTML = name_html;
+          td_added.innerHTML = formatDate(new Date(spam.added_date));
+          tr = document.createElement('tr');
+          if (is_frozen) {
+            tr.classList.add("frozen");
           }
-          url += '&src=typed_query&f=user';
-          li = document.createElement('li');
-          li.innerHTML = 
-            '#' + (ifrom + 1).toString() + '～' + ito.toString() + 
-            ' ('  + formatDate(new Date(spam_items[ito - 1].added_date)) + ' 追加)<br>' +
-            '<a href="' + url + '" target="_blank">' + text + '</a>';
-          if (is_all_frozen) {
-            li.classList.add("frozen");
-          }
-          ul.appendChild(li);
-        }
+          tr.appendChild(td_num);
+          tr.appendChild(td_id);
+          tr.appendChild(td_added);
+          tbl.appendChild(tr);
+        };
       }
 
       function formatDate(d) {
