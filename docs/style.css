@@ -4,6 +4,10 @@ body, input, textarea {
   font-family: メイリオ, Meiryo, sans-serif;
 }
 
+hr {
+  margin: 10px 20px;  
+}
+
 p, form, table {
   margin: 10px 20px;
   padding: 0px;
