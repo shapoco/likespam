@@ -430,5 +430,14 @@ var spam_items = [
   {"screen_name": "lyndon82773", "added_date": "2024-09-17T07:00:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
   {"screen_name": "LWhitnie67375", "added_date": "2024-09-17T07:00:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
   {"screen_name": "RavanRozan92616", "added_date": "2024-09-17T07:00:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
-  {"screen_name": "AudreyB88377", "added_date": "2024-09-17T07:00:00+09:00", "frozen_date": "2100-01-01T00:00:00"}
+  {"screen_name": "AudreyB88377", "added_date": "2024-09-17T07:00:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "D8dFieWEulyj3km", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "b7KkdyhK3TxVfIx", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "DanielleSc41347", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "ErikaMille76103", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "CrystalSta29030", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "CynthiaWhi87434", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "CristinaFi96722", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "DonnaGrant80814", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"},
+  {"screen_name": "Heather48516234", "added_date": "2024-09-17T10:09:00+09:00", "frozen_date": "2100-01-01T00:00:00"}
 ]
