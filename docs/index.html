@@ -18,8 +18,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <script src="./database.js?g"></script>
-    <link href="./style.css?k" rel="stylesheet" type="text/css">
+    <script src="./database.js?h"></script>
+    <link href="./style.css?l" rel="stylesheet" type="text/css">
   </head>
 
   <body>
@@ -52,7 +52,7 @@
           td_added = document.createElement('td');
           td_num.innerHTML = (i + 1).toString();
           td_id.innerHTML = name_html;
-          td_added.innerHTML = new Date(spam.added_date).toLocaleString();
+          td_added.innerHTML = formatDate(new Date(spam.added_date));
           tr = document.createElement('tr');
           if (is_frozen) {
             tr.classList.add("frozen");
@@ -62,6 +62,35 @@
           tr.appendChild(td_added);
           tbl.appendChild(tr);
         };
+      }
+
+      function formatDate(d) {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        const isToday = d >= today && d < new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        const isYesterday = d >= yesterday && d < today;
+        const isThisYear = d.getFullYear() === now.getFullYear();
+
+        const hours = d.getHours().toString().padStart(2, '0');
+        const minutes = d.getMinutes().toString().padStart(2, '0');
+
+        if (isToday) {
+          return `今日 ${hours}:${minutes}`;
+        } else if (isYesterday) {
+          return `昨日 ${hours}:${minutes}`;
+        } else if (isThisYear) {
+          const month = (d.getMonth() + 1);
+          const day = d.getDate().toString().padStart(2, '0');
+          return `${month}/${day} ${hours}:${minutes}`;
+        } else {
+          const year = d.getFullYear().toString().slice(-2);
+          const month = (d.getMonth() + 1);
+          const day = d.getDate().toString().padStart(2, '0');
+          return `${year}/${month}/${day} ${hours}:${minutes}`;
+        }
       }
 
       main();
