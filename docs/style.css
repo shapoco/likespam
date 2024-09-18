@@ -15,7 +15,10 @@ div.header {
 }
 
 hr {
-  margin: 10px 20px;  
+  border-style: solid none none none;
+  border-color: #444;
+  border-width: 1px;
+  margin: 10px 20px;
 }
 
 p, form, table, h1, h2, h3 {
@@ -28,9 +31,8 @@ ul, ol {
   padding: 0px 0px 0px 20px;
 }
 
-h1 {
-  border-bottom: solid 1px black;
-}
+h1 { border-bottom: solid 1px #444; }
+h2 { border-bottom: solid 1px #ccc; }
 
 table {
   border-collapse: collapse;
