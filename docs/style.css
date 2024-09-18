@@ -1,7 +1,17 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
 body, input, textarea {
   background: #eee;
   font-size: 10pt;
   font-family: メイリオ, Meiryo, sans-serif;
+}
+
+div.header {
+  background: #404040;
+  text-align: center;
 }
 
 hr {
