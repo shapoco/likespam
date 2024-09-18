@@ -38,6 +38,8 @@
     
     <hr>
 
+    <p id="status"></p>
+
     <ul id="query_list">
     </ul>
 
@@ -47,6 +49,7 @@
         ul = document.getElementById('query_list');
         const GROUP_SIZE = 20;
         const ngrp = Math.ceil(spam_items.length / GROUP_SIZE);
+        var num_frozen = 0;
         for (var igrp = ngrp - 1; igrp >= 0; igrp--)  {
           const ifrom = igrp * GROUP_SIZE;
           const ito = (igrp < ngrp - 1) ? (ifrom + GROUP_SIZE) : spam_items.length;
@@ -55,7 +58,8 @@
           var text = '';
           for (var i = ifrom; i < ito; i++) {
             const spam = spam_items[i];
-            is_frozen = new Date(spam.frozen_date) < now;
+            const is_frozen = new Date(spam.frozen_date) < now;
+            if (is_frozen) num_frozen += 1;
             is_all_frozen &= is_frozen;
             url += '%40' + spam.screen_name;
             if (is_frozen) {
@@ -80,6 +84,7 @@
           }
           ul.appendChild(li);
         }
+        document.getElementById('status').innerHTML = spam_items.length + '件のスパム, ' + num_frozen + '件凍結確認済';
       }
 
       function formatDate(d) {

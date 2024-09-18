@@ -32,6 +32,8 @@
       <li><a href="./">20件ずつのグループ化版はこちら</a></li>
     </ul>
     
+    <p id="status"></p>
+    
     <table id="spam_table">
       <tr>
         <th>#</th>
@@ -44,9 +46,11 @@
       function main() {
         now = Date.now();
         tbl = document.getElementById('spam_table');
+        var num_frozen = 0;
         for (var i = spam_items.length - 1; i >= 0; i--) {
           const spam = spam_items[i];
-          is_frozen = new Date(spam.frozen_date) < now;
+          const is_frozen = new Date(spam.frozen_date) < now;
+          if (is_frozen) num_frozen += 1;
           const name_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name+ '</a>';
           td_num = document.createElement('td'); 
           td_id = document.createElement('td');
@@ -62,7 +66,8 @@
           tr.appendChild(td_id);
           tr.appendChild(td_added);
           tbl.appendChild(tr);
-        };
+        }
+        document.getElementById('status').innerHTML = spam_items.length + '件のスパム, ' + num_frozen + '件凍結確認済';
       }
 
       function formatDate(d) {
