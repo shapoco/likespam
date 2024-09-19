@@ -18,8 +18,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <script src="./database.js?v"></script>
-    <link href="./style.css?s" rel="stylesheet" type="text/css">
+    <script src="./database.js?w"></script>
+    <link href="./style.css?t" rel="stylesheet" type="text/css">
   </head>
 
   <body>
@@ -93,7 +93,7 @@
           var text = '';
           for (var i = ifrom; i < ito; i++) {
             const spam = spam_items[i];
-            const is_frozen = new Date(spam.frozen_date) < now;
+            const is_frozen = spam.frozen_date.trim().length != 0;
             if (is_frozen) num_frozen += 1;
             is_all_frozen &= is_frozen;
             url += '%40' + spam.screen_name;

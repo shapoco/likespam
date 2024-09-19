@@ -18,8 +18,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>表形式 | いいねスパム一覧</title>
-    <script src="./database.js?v"></script>
-    <link href="./style.css?s" rel="stylesheet" type="text/css">
+    <script src="./database.js?w"></script>
+    <link href="./style.css?t" rel="stylesheet" type="text/css">
   </head>
 
   <body>
@@ -38,8 +38,10 @@
     <table id="spam_table">
       <tr>
         <th>#</th>
-        <th>ID (screen_name)</th>
         <th>追加日</th>
+        <th>screen_name</th>
+        <th>user_id</th>
+        <th>name</th>
       </tr>
     </table>
 
@@ -50,22 +52,29 @@
         var num_frozen = 0;
         for (var i = spam_items.length - 1; i >= 0; i--) {
           const spam = spam_items[i];
-          const is_frozen = new Date(spam.frozen_date) < now;
+          const is_frozen = spam.frozen_date.trim().length != 0;
           if (is_frozen) num_frozen += 1;
-          const name_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name+ '</a>';
+          const userid_html = spam.user_id.length == 0 ? '' : '<a href="https://x.com/i/user/' + spam.user_id + '" target="_blank">' + spam.user_id + '</a>';
+          const scrname_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name + '</a>';
           td_num = document.createElement('td'); 
-          td_id = document.createElement('td');
           td_added = document.createElement('td');
+          td_scrname = document.createElement('td');
+          td_uesrid = document.createElement('td');
+          td_name = document.createElement('td');
           td_num.innerHTML = (i + 1).toString();
-          td_id.innerHTML = name_html;
           td_added.innerHTML = formatDate(new Date(spam.added_date));
+          td_scrname.innerHTML = scrname_html;
+          td_uesrid.innerHTML = userid_html;
+          td_name.innerHTML = spam.name;
           tr = document.createElement('tr');
           if (is_frozen) {
             tr.classList.add("frozen");
           }
           tr.appendChild(td_num);
-          tr.appendChild(td_id);
           tr.appendChild(td_added);
+          tr.appendChild(td_scrname);
+          tr.appendChild(td_uesrid);
+          tr.appendChild(td_name);
           tbl.appendChild(tr);
         }
         document.getElementById('status').innerHTML = spam_items.length + '件のスパム, ' + num_frozen + '件凍結確認済';
