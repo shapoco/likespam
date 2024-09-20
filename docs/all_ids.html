@@ -60,8 +60,9 @@
       function main() {
         now = Date.now();
         tbl = document.getElementById('spam_table');
+        const num_spam = spam_items.length;
         var num_frozen = 0;
-        for (var i = spam_items.length - 1; i >= 0; i--) {
+        for (var i = num_spam - 1; i >= 0; i--) {
           const spam = spam_items[i];
           const is_frozen = spam.frozen_date.trim().length != 0;
           if (is_frozen) num_frozen += 1;
@@ -91,7 +92,7 @@
         document.getElementById('status').innerHTML = 
           num_spam + '件のスパム, ' + 
           num_frozen + '件凍結確認済 ' +
-          '(' + Math.round(1000 * num_spam / num_frozen) / 10 + ')';
+          '(' + Math.round(1000 * num_frozen / num_spam) / 10 + '%)';
       }
 
       function formatDate(d) {
