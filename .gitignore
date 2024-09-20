@@ -1,6 +1,5 @@
 .vscode/
 .venv/
-*.csv
 *.py
 *.log
 *.sh
