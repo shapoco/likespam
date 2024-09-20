@@ -105,11 +105,12 @@
         now = Date.now();
         ul = document.getElementById('query_list');
         const GROUP_SIZE = 20;
-        const ngrp = Math.ceil(spam_items.length / GROUP_SIZE);
+        const num_spam = spam_items.length;
+        const ngrp = Math.ceil(num_spam / GROUP_SIZE);
         var num_frozen = 0;
         for (var igrp = ngrp - 1; igrp >= 0; igrp--)  {
           const ifrom = igrp * GROUP_SIZE;
-          const ito = (igrp < ngrp - 1) ? (ifrom + GROUP_SIZE) : spam_items.length;
+          const ito = (igrp < ngrp - 1) ? (ifrom + GROUP_SIZE) : num_spam;
           var is_all_frozen = true;
           var url = 'https://x.com/search?q=';
           var text = '';
@@ -141,7 +142,10 @@
           }
           ul.appendChild(li);
         }
-        document.getElementById('status').innerHTML = spam_items.length + '件のスパム, ' + num_frozen + '件凍結確認済';
+        document.getElementById('status').innerHTML = 
+          num_spam + '件のスパム, ' + 
+          num_frozen + '件凍結確認済 ' +
+          '(' + Math.round(1000 * num_spam / num_frozen) / 10 + ')';
       }
 
       function formatDate(d) {

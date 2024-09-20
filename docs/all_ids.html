@@ -88,7 +88,10 @@
           tr.appendChild(td_name);
           tbl.appendChild(tr);
         }
-        document.getElementById('status').innerHTML = spam_items.length + '件のスパム, ' + num_frozen + '件凍結確認済';
+        document.getElementById('status').innerHTML = 
+          num_spam + '件のスパム, ' + 
+          num_frozen + '件凍結確認済 ' +
+          '(' + Math.round(1000 * num_spam / num_frozen) / 10 + ')';
       }
 
       function formatDate(d) {
