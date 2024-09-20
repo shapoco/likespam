@@ -5,7 +5,7 @@
 // @version     1.0
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーに「収録済」のタグを表示します
-// @require     https://shapoco.github.io/likespam/spam_screen_names.js
+// @require     https://shapoco.github.io/likespam/gmus/db.js
 // ==/UserScript==
 
 const spamRegex = new RegExp('^@(' + spamScreenNames.join('|') + ')$');
