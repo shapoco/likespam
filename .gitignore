@@ -1,6 +1,6 @@
 .vscode/
 .venv/
+.work/
 *.py
 *.log
 *.sh
-tools.html
