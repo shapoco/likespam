@@ -385,7 +385,7 @@ var spam_items = [
   {"user_id": "", "screen_name": "kristie_jo30291", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "2024-09-19T01:32:00+09:00", "name": "", "profile_image_url": ""},
   {"user_id": "", "screen_name": "MeinertNak13198", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "2024-09-19T01:32:00+09:00", "name": "", "profile_image_url": ""},
   {"user_id": "1806874869470257152", "screen_name": "KristinaLy6253", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "2024-09-20T13:41:00+09:00", "name": "ْ", "profile_image_url": "https://pbs.twimg.com/profile_images/1835560342036070400/AN7fHthP_normal.png"},
-  {"user_id": "1806871972778811392", "screen_name": "SSchoch81859", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "", "name": "ْ", "profile_image_url": "https://pbs.twimg.com/profile_images/1835610416552325120/RZN_go3b_normal.png"},
+  {"user_id": "1806871972778811392", "screen_name": "SSchoch81859", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "2024-09-20T19:30:00+09:00", "name": "ْ", "profile_image_url": "https://pbs.twimg.com/profile_images/1835610416552325120/RZN_go3b_normal.png"},
   {"user_id": "", "screen_name": "VanessaLun71440", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "2024-09-18T14:52:00+09:00", "name": "", "profile_image_url": ""},
   {"user_id": "", "screen_name": "ThomasTenn48448", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "2024-09-19T01:32:00+09:00", "name": "", "profile_image_url": ""},
   {"user_id": "", "screen_name": "JessicaBoy65015", "added_date": "2024-09-17T06:34:00+09:00", "frozen_date": "2024-09-19T01:32:00+09:00", "name": "", "profile_image_url": ""},
