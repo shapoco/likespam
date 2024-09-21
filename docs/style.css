@@ -58,9 +58,9 @@ tr.frozen td {
 }
 
 a:link { color: #06c; }
-a:visited { color: #444; }
-a:hover { color: #08f; }
-a:active { color: #08f; }
+a:visited { color: #048; }
+a:hover { color: #06c; background: #cef; }
+a:active { color: #06c; background: #cef; }
 
 tr.frozen td { color: #666; }
 
@@ -69,7 +69,7 @@ tr.frozen td a:visited { color: #666; text-decoration: line-through; }
 tr.frozen td a:hover { color: #666; text-decoration: line-through; }
 tr.frozen td a:active { color: #666; text-decoration: line-through; }
 
-strong { color: #c00; font-weight: normal; }
+strong { color: #c00; font-weight: bold; }
 
 ul#query_list {
   margin: 10px 20px;
