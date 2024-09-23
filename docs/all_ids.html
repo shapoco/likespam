@@ -62,8 +62,30 @@
       </tr>
     </table>
 
+    <div id="table_size_warning" style="display: none;">
+      <p>
+        <strong>
+          スパムアカウントがの数が非常に多くなっているため、スマートフォンでは表が大きすぎてブラウザの動作が不安定になる場合があります。<br>
+        </strong>
+      </p>
+      <p>
+        <a href="javascript:generateTable();">表を表示するにはここをクリックしてください</a>
+      </p>
+    </div>
+
     <script>
       function main() {
+        if (isSmartPhone()) {
+          document.getElementById('table_size_warning').style.display = 'block';
+        }
+        else {
+          generateTable();
+        }
+      }
+
+      function generateTable() {
+        document.getElementById('table_size_warning').style.display = 'none';
+
         now = Date.now();
         tbl = document.getElementById('spam_table');
         const num_spam = spam_items.length;
@@ -127,6 +149,14 @@
           const month = (d.getMonth() + 1);
           const day = d.getDate().toString().padStart(2, '0');
           return `${year}/${month}/${day} ${hours}:${minutes}`;
+        }
+      }
+
+      function isSmartPhone() {
+        if (window.matchMedia && window.matchMedia('(max-device-width: 640px)').matches) {
+          return true;
+        } else {
+          return false;
         }
       }
 
