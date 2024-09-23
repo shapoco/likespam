@@ -32,7 +32,7 @@
     <title>ツール | いいねスパム一覧</title>
     <link href="./style.css?20240924000432" rel="stylesheet" type="text/css">
     <script src="./index.js?20240924000432"></script>
-    <script src="./database.js?20240924001210"></script>
+    <script src="./database.js?20240924001722"></script>
   </head>
 
   <body>
@@ -109,7 +109,7 @@
             url = 'https://x.com/' + items[i].substring(1);
             text = items[i];
             li = document.createElement('li');
-            li.innerHTML = '<a href="' + url + '" target="_blank">' + text + '</a>';
+            li.innerHTML = '<a href="' + url + '" target="_blank">' + url + '</a>';
             ul.appendChild(li);
           }
         }
