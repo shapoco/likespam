@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.2
+// @version     1.0.3
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924083852
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924084816
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -22,6 +22,8 @@ const screenNameRegex = /^@\w+$/;
 var dict = {};
 var ids = [];
 
+var infoReaderTimeoutId = -1;
+
 const div = document.createElement('div');
 div.style.position = 'fixed';
 div.style.left = '20px';
@@ -35,7 +37,12 @@ div.innerHTML =
   '<textarea id="findspan_ids"></textarea>';
 document.getElementsByTagName('body')[0].appendChild(div);
 
-document.addEventListener("scroll", (event) => { clearTimeout(); setTimeout(scanUsers, 1000); });
+document.addEventListener("scroll", (event) => {
+    clearTimeout(infoReaderTimeoutId);
+    infoReaderTimeoutId = setTimeout(scanUsers, 1000);
+});
+
+infoReaderTimeoutId = setTimeout(scanUsers, 2000);
 
 function scanUsers() {
   const spans = document.getElementsByTagName('span');
@@ -59,7 +66,7 @@ function scanUsers() {
 
     //const nodesSnapshot1 = document.evaluate('div[1]/div[1]/div/div[1]/a/div/div[1]/span]', div0, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     const nodesSnapshot1 = document.evaluate('div[1]/div[1]/div/div[1]/a/div/div[1]/span', div0, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-    if (!nodesSnapshot1) continue;
+    if (!nodesSnapshot1 || nodesSnapshot1 == null) continue;
     //const userName = nodesSnapshot1.snapshotItem(0).innerText;
     const userName = getInnerTextWithAlt(nodesSnapshot1.snapshotItem(0));
 
