@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>表形式 | いいねスパム一覧</title>
-    <script src="./database.js?20240923140746"></script>
-    <link href="./style.css?t" rel="stylesheet" type="text/css">
+    <script src="./database.js?20240923155942"></script>
+    <link href="./style.css?u" rel="stylesheet" type="text/css">
   </head>
 
   <body>
@@ -74,6 +74,11 @@
     </div>
 
     <script>
+      const STATUS_ICON_UNKNOWN = '⚪';
+      const STATUS_ICON_CHECKING = '🟡';
+      const STATUS_ICON_SUCCESS = '🟢';
+      const STATUS_ICON_FAILED = '🔴';
+
       function main() {
         if (isSmartPhone()) {
           document.getElementById('table_size_warning').style.display = 'block';
@@ -96,6 +101,7 @@
           if (is_frozen) num_frozen += 1;
           const userid_html = spam.user_id.length == 0 ? '' : '<a href="https://x.com/i/user/' + spam.user_id + '" target="_blank">' + spam.user_id + '</a>';
           const scrname_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name + '</a>';
+          //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
           td_num = document.createElement('td'); 
           td_added = document.createElement('td');
           td_scrname = document.createElement('td');
@@ -105,6 +111,7 @@
           td_added.innerHTML = formatDate(new Date(spam.added_date));
           td_scrname.innerHTML = scrname_html;
           td_uesrid.innerHTML = userid_html;
+          //td_name.innerHTML = icon_html + ' ' + spam.name;
           td_name.innerHTML = spam.name;
           tr = document.createElement('tr');
           if (is_frozen) {
@@ -150,6 +157,31 @@
           const day = d.getDate().toString().padStart(2, '0');
           return `${year}/${month}/${day} ${hours}:${minutes}`;
         }
+      }
+
+      function checkProfileIconExistence(index) {
+        const span = document.getElementById('status_icon_' + index);
+        if (span.innerHTML != STATUS_ICON_UNKNOWN) return;
+        span.innerHTML = STATUS_ICON_CHECKING;
+        const url = spam_items[index].profile_image_url;
+        checkIfImageExists(index, url)
+          .then((index, url) => {
+              //console.log(`Image found: ${index}`);
+              span.innerHTML = STATUS_ICON_SUCCESS;
+          })
+          .catch((index, url) => {
+              //console.log(`Image not found: ${index}`);
+              span.innerHTML = STATUS_ICON_FAILED;
+          });
+      }
+
+      function checkIfImageExists(index, url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = url;
+          img.onload = () => resolve(index, url);
+          img.onerror = () => reject(index, url);
+        });
       }
 
       function isSmartPhone() {
