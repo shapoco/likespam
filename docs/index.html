@@ -30,8 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <script src="./database.js?20240923225045"></script>
-    <link href="./style.css?w" rel="stylesheet" type="text/css">
+    <link href="./style.css?20240924000432" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240924000432"></script>
+    <script src="./database.js?20240923232843"></script>
   </head>
 
   <body>
@@ -39,11 +40,7 @@
     <div class="author">
       管理者: <a href="https://x.com/syego" target="_blank">@syego</a>
     </div>
-    <p>
-      <a href="./">グループ形式</a> |
-      <a href="all_ids.html">表形式(PC用)</a> |
-      <a href="info.html">補足情報</a>
-    </p>
+    <p id="menu"></p><script>render_menu(0);</script>
 
     <h1>いいねスパム一覧</h1>
 

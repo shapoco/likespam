@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+
+    <meta name="keywords" content="X,Twitter,いいねスパム,公式スパム">
+    <meta name="description" content="X で「いいね」を送りつけてくるスパムの一覧">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://shapoco.github.io/likespam/" />
+    <meta property="og:title" content="いいねスパム一覧" />
+    <meta property="og:description" content="X で「いいね」を送りつけてくるスパムの一覧" />
+    <meta property="og:image" content="https://shapoco.github.io/likespam/card.png" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMDGFGR0Z4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-BMDGFGR0Z4');
+    </script>
+
+    <!-- <link rel="icon" href="/likespam/favicon192.png" sizes="192x192"> -->
+    <!-- <link rel="apple-touch-icon" href="/likespam/apple-touch-icon180.png" sizes="180x180"> -->
+    <link rel="shortcut icon" href="/likespam/favicon48.ico">
+
+    <title>ツール | いいねスパム一覧</title>
+    <link href="./style.css?20240924000432" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240924000432"></script>
+    <script src="./database.js?aj"></script>
+  </head>
+
+  <body>
+    <div class="header"><img src="cover.png"></div>
+    <div class="author">
+      管理者: <a href="https://x.com/syego" target="_blank">@syego</a>
+    </div>
+    <p id="menu"></p><script>render_menu(3);</script>
+
+    <h1>ツール (管理用)</h1>
+
+    <h2>URL生成</h2>
+
+    <form>
+      ID:<br>
+      <textarea id="screen_names" cols="64" rows="16" style="overflow-y: scroll;"></textarea>
+    </form>
+    <ol id="search_links">
+
+    </ol>
+    <ol id="profile_links">
+
+    </ol>
+    <p id="regex_text">
+
+    </p>
+
+    <script>
+      function main() {
+        const sns = document.getElementById('screen_names');
+        sns.addEventListener('change', screen_names_changed);
+      }
+
+      function screen_names_changed(e) {
+        const sns = document.getElementById('screen_names');
+        items = sns.value.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('　', ' ').trim().split(/\s+/g);
+        for (var i = 0; i < items.length; i++) {
+          items[i] = items[i].replace('https://x.com/', '')
+          items[i] = items[i].replace('https://twitter.com/', '')
+          if (!items[i].startsWith('@')) {
+            items[i] = '@' + items[i];
+          }
+        }
+        
+        {
+          const ul = document.getElementById('search_links');
+          ul.innerHTML = '';
+          const GROUP_SIZE = 20;
+          for (var istep = 0; istep < items.length; istep+=GROUP_SIZE) {
+            var ifrom = istep;
+            var ito = ifrom + GROUP_SIZE;
+            if (ito > items.length) ito = items.length;
+            var url = 'https://x.com/search?q=';
+            var text = 'X検索: ';
+            for(var i = ifrom; i < ito; i++) {
+              url += items[i];
+              text += items[i];
+              if (i < ito - 1) {
+                url += '+OR+';
+                text += ' ';
+              }
+            }
+            url += '&src=typed_query&f=user';
+            li = document.createElement('li');
+            li.innerHTML = '<a href="' + url + '" target="_blank">' + text + '</a>';
+            ul.appendChild(li);
+          }
+        }
+
+        {
+          const ul = document.getElementById('profile_links');
+          ul.innerHTML = '';
+          for(var i = 0; i < items.length; i++) {
+            url = 'https://x.com/' + items[i].substring(1);
+            text = items[i];
+            li = document.createElement('li');
+            li.innerHTML = '<a href="' + url + '" target="_blank">' + text + '</a>';
+            ul.appendChild(li);
+          }
+        }
+
+        {
+          const p = document.getElementById('regex_text');
+          var text = '\\b('
+          for(var i = 0; i < items.length; i++) {
+            text += items[i].substring(1);
+            if (i < items.length - 1) {
+              text += '|';
+            }
+          }
+          text += ')\\b';
+          p.innerHTML = text;
+        }
+
+      }
+
+      main();
+    </script>
+
+    <hr>
+  </body>
+
+</html>
