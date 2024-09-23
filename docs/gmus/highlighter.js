@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/*
 // @grant       none
-// @version     1.0.129
+// @version     1.0.130
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーに「収録済」のタグを表示します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924070135
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924071617
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
