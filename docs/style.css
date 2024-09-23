@@ -14,6 +14,15 @@ div.header {
   text-align: center;
 }
 
+div.author {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  color: #ccc;
+  padding: 2px;
+}
+div.author a { color: #ccc !important; }
+
 hr {
   border-style: solid none none none;
   border-color: #444;
