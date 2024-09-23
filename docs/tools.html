@@ -32,7 +32,7 @@
     <title>ツール | いいねスパム一覧</title>
     <link href="./style.css?20240924000432" rel="stylesheet" type="text/css">
     <script src="./index.js?20240924000432"></script>
-    <script src="./database.js?20240924001722"></script>
+    <script src="./database.js?20240924010120"></script>
   </head>
 
   <body>
@@ -68,7 +68,7 @@
 
       function screen_names_changed(e) {
         const sns = document.getElementById('screen_names');
-        items = sns.value.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('　', ' ').trim().split(/\s+/g);
+        var items = sns.value.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('　', ' ').trim().split(/\s+/g);
         for (var i = 0; i < items.length; i++) {
           items[i] = items[i].replace('https://x.com/', '')
           items[i] = items[i].replace('https://twitter.com/', '')
@@ -77,6 +77,8 @@
           }
         }
         
+        items = Array.from(new Set(items));
+
         {
           const ul = document.getElementById('search_links');
           ul.innerHTML = '';
@@ -86,18 +88,15 @@
             var ito = ifrom + GROUP_SIZE;
             if (ito > items.length) ito = items.length;
             var url = 'https://x.com/search?q=';
-            var text = 'X検索: ';
             for(var i = ifrom; i < ito; i++) {
               url += items[i];
-              text += items[i];
               if (i < ito - 1) {
                 url += '+OR+';
-                text += ' ';
               }
             }
             url += '&src=typed_query&f=user';
             li = document.createElement('li');
-            li.innerHTML = '<a href="' + url + '" target="_blank">' + text + '</a>';
+            li.innerHTML = '<a href="' + url + '" target="_blank">' + url + '</a>';
             ul.appendChild(li);
           }
         }
@@ -107,7 +106,6 @@
           ul.innerHTML = '';
           for(var i = 0; i < items.length; i++) {
             url = 'https://x.com/' + items[i].substring(1);
-            text = items[i];
             li = document.createElement('li');
             li.innerHTML = '<a href="' + url + '" target="_blank">' + url + '</a>';
             ul.appendChild(li);
