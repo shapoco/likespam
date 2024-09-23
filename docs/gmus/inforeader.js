@@ -6,7 +6,7 @@
 // @version     1.0.3
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924084816
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924085334
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -147,20 +147,24 @@ function scanUsers() {
 }
 
 function getInnerTextWithAlt(elm) {
+  if (elm) {
     if (elm.nodeType === Node.TEXT_NODE) {
-        return elm.nodeValue;
-    } else if (elm.nodeType === Node.ELEMENT_NODE) {
-        if (elm.tagName.toLowerCase() === 'img') {
-            return elm.alt;
-        } else {
-            let text = '';
-            for (let child of elm.childNodes) {
-                text += getInnerTextWithAlt(child);
-            }
-            return text;
-        }
+      return elm.nodeValue;
     }
-    return '';
+    else if (elm.nodeType === Node.ELEMENT_NODE) {
+      if (elm.tagName.toLowerCase() === 'img') {
+        return elm.alt;
+      }
+      else {
+        let text = '';
+        for (let child of elm.childNodes) {
+          text += getInnerTextWithAlt(child);
+        }
+        return text;
+      }
+    }
+  }
+  return '';
 }
 
 function getPadRight(s, n) {
