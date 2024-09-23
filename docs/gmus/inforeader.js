@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.3
+// @version     1.0.4
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924085334
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924085833
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -21,6 +21,8 @@ const screenNameRegex = /^@\w+$/;
 
 var dict = {};
 var ids = [];
+var numKnown = 0;
+var numNormals = 0;
 
 var infoReaderTimeoutId = -1;
 
@@ -46,8 +48,6 @@ infoReaderTimeoutId = setTimeout(scanUsers, 2000);
 
 function scanUsers() {
   const spans = document.getElementsByTagName('span');
-  var numKnown = 0;
-  var numNormals = 0;
   //for (var span in spans) {
   for (var ispan = 0; ispan < spans.length; ispan++) {
     const span = spans[ispan];
@@ -56,7 +56,6 @@ function scanUsers() {
     //if (!screenName.startsWith('@')) continue;
     if (!screenName.match(screenNameRegex)) continue;
     if (screenName in dict) continue;
-    dict[screenName] = true;
 
     //const div = span.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.childNodes[2];
     const div0 = span.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
@@ -84,6 +83,8 @@ function scanUsers() {
         containsKey = true;
       }
     }
+
+    dict[screenName] = true;
 
     if (screenName in spamScreenNames) {
       numKnown += 1;
