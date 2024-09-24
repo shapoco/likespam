@@ -70,8 +70,9 @@
         sakuras.forEach(e => {
           const li = document.createElement('li');
           var html = 
-            `<a href="https://x.com/search?q=from%3A${e.screen_name}%20to%3A${to_id}&src=typed_query&f=live" target="_blank">${e.name}</a> ` +
-            `(<a href="https://x.com/i/user/${e.user_id}" target="_blank">@${e.screen_name}</a>)`;
+            `<a href="https://x.com/search?q=from%3A${e.screen_name}%20to%3A${to_id}&src=typed_query&f=live" target="_blank">@${e.name}</a> ` +
+            `(<a href="https://x.com/${e.screen_name}" target="_blank">@${e.screen_name}</a> : ` +
+            `<a href="https://x.com/i/user/${e.user_id}" target="_blank">${e.user_id}</a>)`;
           if (e.status.length != 0) {
             html = `<del>${html}</del> ${e.status}`;
           }
