@@ -3,16 +3,17 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/*
 // @grant       none
-// @version     1.0.145
+// @version     1.0.144
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーに「収録済」のタグを表示します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924092900
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924092038
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
 // ==/UserScript==
 
-const spamRegex = new RegExp('^@(' + spamScreenNames.join('|') + ')$');
+const spamRegex0 = new RegExp('^@(' + spamScreenNames.join('|') + ')$');
+const spamRegex1 = new RegExp('^https://x\\.com/(' + spamScreenNames.join('|') + ')$');
 
 var highlighterTimeoutId = -1;
 
@@ -27,11 +28,34 @@ function scanElems(elems) {
   const n = elems.length;
   for(var i = 0; i < n; i++) {
     const elem = elems[i];
-    if (elem.innerHTML.startsWith('@') && elem.innerHTML.match(spamRegex)) {
+    const innerText = getInnerTextWithAlt(elem);
+    if ((innerText.startsWith('@') && innerText.match(spamRegex0)) ||
+        (innerText.startsWith('https://x.com/') && innerText.match(spamRegex1))) {
       //elem.innerHTML += ' <elem style="background: #e00; color: white; border-radius: 999px; font-weight: bold;">&nbsp;収録済&nbsp;</span>';
       elem.style.background = '#fcc';
       elem.style.borderRadius = '5px';
     }
   }
   highlighterTimeoutId = setTimeout(scanSpams, 1000);
+}
+
+function getInnerTextWithAlt(elm) {
+  if (elm) {
+    if (elm.nodeType === Node.TEXT_NODE) {
+      return elm.nodeValue;
+    }
+    else if (elm.nodeType === Node.ELEMENT_NODE) {
+      if (elm.tagName.toLowerCase() === 'img') {
+        return elm.alt;
+      }
+      else {
+        let text = '';
+        for (let child of elm.childNodes) {
+          text += getInnerTextWithAlt(child);
+        }
+        return text;
+      }
+    }
+  }
+  return '';
 }
