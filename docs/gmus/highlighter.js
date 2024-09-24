@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.176
+// @version     1.0.173
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924235131
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240925000042
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -36,8 +36,8 @@ if (urlMatch) {
     a.style.margin = '0px 2px 0px 0px';
     a.style.padding = '0px 5px';
     a.style.background =
-      !(key in likeSpamAccounts)    ? '#ccc' :
-      likeSpamAccounts[key].frozen  ? '#4cf' : '#f88';
+      !(key in likeSpamAccounts)    ? '#8f8' :
+      likeSpamAccounts[key].frozen  ? '#4cf' : '#ccc';
     a.style.borderRadius = '5px';
     foundUserLinks[key] = a;
     divFoundUsers.appendChild(a);
@@ -73,7 +73,7 @@ function scanElems(elems, startMarker) {
         elem.style.borderRadius = '5px';
 
         if (key in foundUserLinks) {
-          foundUserLinks[key].style.background = '#8f8';
+          foundUserLinks[key].style.background = '#f88';
         }
       }
     }
