@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.31
+// @version     1.0.32
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924155423
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924150759
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -21,6 +21,7 @@ const screenNameRegex = /^@\w+$/;
 
 var dict = {};
 var ids = [];
+var known_indexes = [];
 var numKnown = 0;
 var numNormals = 0;
 
@@ -31,11 +32,13 @@ div.style.position = 'fixed';
 div.style.left = '20px';
 div.style.bottom = '20px';
 div.style.width = '200px';
-div.style.height = '150px';
+div.style.height = '200px';
 div.style.background = '#ccc';
+div.style.border = 'solid 1px #888';
 div.innerHTML =
   '<div id="findspam_status"></div>' +
-  '<button id="findspam_btn">Copy all ids</button>' +
+  '<button id="findspam_btn">Copy all ids</button><br>' +
+  '<input type="checkbox" id="findspam_rmv_known" checked><label for="findspam_rmv_known">Remove Knowns</label><br>' +
   '<textarea id="findspan_ids"></textarea>';
 document.getElementsByTagName('body')[0].appendChild(div);
 
@@ -88,10 +91,10 @@ function scanUsers() {
 
     if (spamScreenNames.includes(screenName.substring(1))) {
       numKnown += 1;
-      continue;
+      known_indexes.push(ids.length);
     }
 
-    if (!containsKey) {
+    if (!containsKey && !spamScreenNames.includes(screenName.substring(1))) {
       numNormals += 1;
       continue;
     }
@@ -246,7 +249,13 @@ function zeroPadding(s) {
 // <div class="css-175oi2r r-1niwhzg r-vvn4in r-u6sd8q r-1p0dtai r-1pi2tsx r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-13qz1uu r-1wyyakw r-4gszlv" style="background-image: url(&quot;https://pbs.twimg.com/profile_images/1835709222513971201/O5HOnatY_normal.png&quot;);"></div>
 
 document.getElementById('findspam_btn').addEventListener("click", (event) => {
-  const s = ids.join('\r\n') + '\r\n';
+  const rmvKnown = document.getElementById('findspam_rmv_known').checked;
+  var s = '';
+  for (var i = 0; i < ids.length; i++) {
+    if (!rmvKnown || !known_indexes.includes(i)) {
+      s += ids[i] + '\r\n';
+    }
+  }
   document.getElementById('findspan_ids').innerHTML = s;
   navigator.clipboard.writeText(s);
 });
