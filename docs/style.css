@@ -110,6 +110,10 @@ img {
   height: auto;
 }
 
+textarea {
+  max-width: 100%;
+}
+
 img.profile_image {
   width: 48px;
   height: 48px;
