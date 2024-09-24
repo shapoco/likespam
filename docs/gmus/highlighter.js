@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.155
+// @version     1.0.156
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーに「収録済」のタグを表示します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924132803
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924141937
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
