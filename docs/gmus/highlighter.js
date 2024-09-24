@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.177
+// @version     1.0.171
 // @author      Shapoco
-// @description いいねスパムリストに収録済みのユーザーに「収録済」のタグを表示します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924215202
+// @description いいねスパムリストに収録済みのユーザーを強調表示します。
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924231149
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -15,6 +15,39 @@
 
 const spamRegex0 = new RegExp('^@(' + spamScreenNames.join('|') + ')$');
 const spamRegex1 = new RegExp('^https://x\\.com/(' + spamScreenNames.join('|') + ')$');
+
+const divFoundUsers = document.createElement('div');
+divFoundUsers.style.position = 'fixed';
+divFoundUsers.style.left = '10px';
+divFoundUsers.style.bottom = '10px';
+divFoundUsers.style.fontSize = '8pt';
+
+console.log("URL=" + location.href);
+const searchUrlRegex = /https:\/\/x.com\/search\?q=(%40\w+(\+OR\+%40\w+)*)&/;
+const urlMatch = location.href.match(searchUrlRegex);
+var queryScreenNames = [];
+var foundUserLinks = {};
+if (urlMatch) {
+  queryScreenNames = urlMatch[1].replaceAll('%40', '').split('+OR+');
+  var i = 0;
+  queryScreenNames.forEach((e) => {
+    const a = document.createElement('a');
+    a.href = '/' + e;
+    a.target = '_blank';
+    a.innerHTML = e;
+    a.style.margin = '0px 2px 0px 0px';
+    a.style.padding = '0px 5px';
+    a.style.background = '#fcc';
+    a.style.borderRadius = '5px';
+    foundUserLinks[e.toLowerCase()] = a;
+    divFoundUsers.appendChild(a);
+    if ((i + 1) % 10 == 0) {
+      divFoundUsers.appendChild(document.createElement('br'));
+    }
+    i += 1;
+  });
+  document.getElementsByTagName('body')[0].appendChild(divFoundUsers);
+}
 
 var highlighterTimeoutId = -1;
 
@@ -35,6 +68,11 @@ function scanElems(elems, startMarker, regexp) {
       //elem.innerHTML += ' <elem style="background: #e00; color: white; border-radius: 999px; font-weight: bold;">&nbsp;収録済&nbsp;</span>';
       elem.style.background = 'rgba(255,64,64,0.3)';
       elem.style.borderRadius = '5px';
+
+      const key = innerText.substring(1).toLowerCase();
+      if (key in foundUserLinks) {
+        foundUserLinks[key].style.background = '#8f8';
+      }
     }
   }
   highlighterTimeoutId = setTimeout(scanSpams, 1000);
