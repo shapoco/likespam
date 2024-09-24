@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/*
 // @grant       none
-// @version     1.0.147
+// @version     1.0.148
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーに「収録済」のタグを表示します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924100635
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924101624
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -28,10 +28,11 @@ function scanElems(elems, startMarker, regexp) {
   const n = elems.length;
   for(var i = 0; i < n; i++) {
     const elem = elems[i];
+    if (elem.children.length == 1 && elem.children[0].tagName.toLowerCase() == 'span') continue;
     const innerText = getInnerTextWithAlt(elem);
     if (innerText.startsWith(startMarker) && innerText.match(regexp)) {
       //elem.innerHTML += ' <elem style="background: #e00; color: white; border-radius: 999px; font-weight: bold;">&nbsp;収録済&nbsp;</span>';
-      elem.style.background = 'rgba(255,0,0,0.2)';
+      elem.style.background = 'rgba(255,64,64,0.3)';
       elem.style.borderRadius = '5px';
     }
   }
