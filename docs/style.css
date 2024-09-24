@@ -78,6 +78,9 @@ tr.frozen td a:visited { color: #666; text-decoration: line-through; }
 tr.frozen td a:hover { color: #666; text-decoration: line-through; }
 tr.frozen td a:active { color: #666; text-decoration: line-through; }
 
+del.frozen_new { background: #8ff !important; }
+tr.frozen_new td { background: #8ff !important; }
+
 strong { color: #c00; font-weight: bold; }
 
 ul#query_list {

@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240924150442" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240924150442"></script>
+    <link href="./style.css?20240925072240" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240925072240"></script>
     <script src="./database.js?20240925070626"></script>
   </head>
 
@@ -127,7 +127,7 @@
       <img src="user_tab.png">
     </p>
 
-    <p>灰色ハッチングは凍結確認済のアカウントです。</p>
+    <p>打ち消し線: 凍結確認済 (水色: 過去24時間以内に凍結確認)</p>
     
     <p id="status"></p>
 
@@ -151,10 +151,14 @@
           for (var i = ifrom; i < ito; i++) {
             const spam = spam_items[i];
             const is_frozen = spam.frozen_date.trim().length != 0;
+            const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
             if (is_frozen) num_frozen += 1;
             is_all_frozen &= is_frozen;
             url += '%40' + spam.screen_name;
-            if (is_frozen) {
+            if (is_frozen_new) {
+              text += '<del class="frozen_new">@' + spam.screen_name + '</del>';
+            }
+            else if (is_frozen) {
               text += '<del>@' + spam.screen_name + '</del>';
             }
             else {
