@@ -7,14 +7,11 @@
 // @version     1.0.171
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924231149
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924232739
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
 // ==/UserScript==
-
-const spamRegex0 = new RegExp('^@(' + spamScreenNames.join('|') + ')$');
-const spamRegex1 = new RegExp('^https://x\\.com/(' + spamScreenNames.join('|') + ')$');
 
 const divFoundUsers = document.createElement('div');
 divFoundUsers.style.position = 'fixed';
@@ -31,15 +28,18 @@ if (urlMatch) {
   queryScreenNames = urlMatch[1].replaceAll('%40', '').split('+OR+');
   var i = 0;
   queryScreenNames.forEach((e) => {
+    const key = e.toLowerCase();
     const a = document.createElement('a');
     a.href = '/' + e;
     a.target = '_blank';
     a.innerHTML = e;
     a.style.margin = '0px 2px 0px 0px';
     a.style.padding = '0px 5px';
-    a.style.background = '#fcc';
+    a.style.background =
+      !(key in likeSpamAccounts)    ? '#ccc' :
+      likeSpamAccounts[key].frozen  ? '#4cf' : '#f88';
     a.style.borderRadius = '5px';
-    foundUserLinks[e.toLowerCase()] = a;
+    foundUserLinks[key] = a;
     divFoundUsers.appendChild(a);
     if ((i + 1) % 10 == 0) {
       divFoundUsers.appendChild(document.createElement('br'));
@@ -54,24 +54,27 @@ var highlighterTimeoutId = -1;
 highlighterTimeoutId = setTimeout(scanSpams, 1000);
 
 function scanSpams() {
-  scanElems(document.getElementsByTagName('span'), '@', spamRegex0);
+  scanElems(document.getElementsByTagName('span'), '@');
   //scanElems(document.getElementsByTagName('a'), 'https://x.com/', spamRegex1);
 }
 
-function scanElems(elems, startMarker, regexp) {
+function scanElems(elems, startMarker) {
   const n = elems.length;
   for(var i = 0; i < n; i++) {
     const elem = elems[i];
     if (elem.children.length == 1 && elem.children[0].tagName.toLowerCase() == 'span') continue;
     const innerText = getInnerTextWithAlt(elem);
-    if (innerText.startsWith(startMarker) && innerText.match(regexp)) {
-      //elem.innerHTML += ' <elem style="background: #e00; color: white; border-radius: 999px; font-weight: bold;">&nbsp;収録済&nbsp;</span>';
-      elem.style.background = 'rgba(255,64,64,0.3)';
-      elem.style.borderRadius = '5px';
-
+    if (innerText.startsWith(startMarker)) {
+      const screenName = innerText.substring(startMarker.length);
       const key = innerText.substring(1).toLowerCase();
-      if (key in foundUserLinks) {
-        foundUserLinks[key].style.background = '#8f8';
+      if (key in likeSpamAccounts) {
+        //elem.innerHTML += ' <elem style="background: #e00; color: white; border-radius: 999px; font-weight: bold;">&nbsp;収録済&nbsp;</span>';
+        elem.style.background = likeSpamAccounts[key].frozen ? 'rgba(64,192,255,0.3)' : 'rgba(255,64,64,0.3)';
+        elem.style.borderRadius = '5px';
+
+        if (key in foundUserLinks) {
+          foundUserLinks[key].style.background = '#8f8';
+        }
       }
     }
   }

@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.46
+// @version     1.0.37
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924231149
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240924232739
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -29,8 +29,8 @@ var infoReaderTimeoutId = -1;
 
 const div = document.createElement('div');
 div.style.position = 'fixed';
-div.style.left = '20px';
-div.style.bottom = '20px';
+div.style.left = '10px';
+div.style.bottom = '50px';
 div.style.width = '200px';
 div.style.height = '200px';
 div.style.background = '#ccc';
