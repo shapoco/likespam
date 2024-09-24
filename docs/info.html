@@ -52,21 +52,33 @@
       <li>いいねを送りつけてくるスパムアカウントはいずれもプロフィールから上記アカウントへ誘導している。</li>
       <li>
         定期的に協力者に <a href="https://twitter.com/search?q=to%3AZy_Iove&src=typed_query&f=live" target="_blank">本当に金品が貰えたかのようなリプライ</a> を送らせている。
-        <ul>
-          <li>
-            <a href="https://x.com/search?q=from%3Amnes_hb%20to%3AZy_Iove&src=typed_query&f=live" target="_blank">ろんどん</a>
-            (<a href="https://x.com/i/user/1247484061179760642" target="_blank">@mnes_hb</a>)
-          </li>
-          <li>
-            <a href="https://x.com/search?q=from%3ADerpyyGamesHd%20to%3AZy_Iove&src=typed_query&f=live" target="_blank">るる</a>
-            (<a href="https://x.com/i/user/4462728981" target="_blank">@DerpyyGamesHd</a>)
-          </li>
-          <li>
-            <a href="https://x.com/search?q=from%3AJkissLa%20to%3AZy_Iove&src=typed_query&f=live" target="_blank">MIERU</a>
-            (<a href="https://x.com/i/user/3017379293" target="_blank">@JkissLa</a>)
-          </li>
+        <ul id="sakura_list">
         </ul>
       </li>
+      <script>
+        const sakuras = [
+          { "name": "ゾウのおーじ👑"  , "screen_name": "exeunt1985"     , "user_id": "1667678898279129089", "status": "" },
+          { "name": "Omara Otto"      , "screen_name": "benfield_alpha" , "user_id": "1624407366753222657", "status": "" },
+          { "name": "のへじ≒紅葉"     , "screen_name": "rutabaga1991"   , "user_id": "1671795386736885761", "status": "" },
+          { "name": "永遠"            , "screen_name": "basipetal_boy4" , "user_id": "1637216734750060544", "status": "" },
+          { "name": "ろんどん"        , "screen_name": "mnes_hb"        , "user_id": "1247484061179760642", "status": "9/24 アカウント削除確認" },
+          { "name": "るる"            , "screen_name": "DerpyyGamesHd"  , "user_id": "4462728981"         , "status": "9/24 アカウント削除確認" },
+          { "name": "MIERU"           , "screen_name": "JkissLa"        , "user_id": "3017379293"         , "status": "9/24 アカウント削除確認" },
+        ];
+        const ul = document.getElementById('sakura_list');
+        const to_id = "Zy_Iove";
+        sakuras.forEach(e => {
+          const li = document.createElement('li');
+          var html = 
+            `<a href="https://x.com/search?q=from%3A${e.screen_name}%20to%3A${to_id}&src=typed_query&f=live" target="_blank">${e.name}</a> ` +
+            `(<a href="https://x.com/i/user/${e.user_id}" target="_blank">@${e.screen_name}</a>)`;
+          if (e.status.length != 0) {
+            html = `<del>${html}</del> ${e.status}`;
+          }
+          li.innerHTML = html;
+          ul.appendChild(li);
+        });
+      </script>
     </ul>
 
     <h2 id="faq">FAQ</h2>
