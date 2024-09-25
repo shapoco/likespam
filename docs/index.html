@@ -32,7 +32,7 @@
     <title>いいねスパム一覧</title>
     <link href="./style.css?20240925184642" rel="stylesheet" type="text/css">
     <script src="./index.js?20240925184642"></script>
-    <script src="./database.js?20240925190123"></script>
+    <script src="./database.js?20240925191041"></script>
   </head>
 
   <body>
@@ -145,6 +145,7 @@
         const num_spam = spam_items.length;
         const ngrp = Math.ceil(num_spam / GROUP_SIZE);
         var num_frozen = 0;
+        var num_frozen_new = 0;
         for (var igrp = ngrp - 1; igrp >= 0; igrp--)  {
           const ifrom = igrp * GROUP_SIZE;
           const ito = (igrp < ngrp - 1) ? (ifrom + GROUP_SIZE) : num_spam;
@@ -156,6 +157,7 @@
             const is_frozen = spam.frozen_date.trim().length != 0;
             const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
             if (is_frozen) num_frozen += 1;
+            if (is_frozen_new) num_frozen_new += 1;
             is_all_frozen &= is_frozen;
             url += '%40' + spam.screen_name;
             if (is_frozen_new) {
@@ -189,7 +191,8 @@
         document.getElementById('status').innerHTML = 
           num_spam + '件のスパム, ' + 
           num_frozen + '件凍結確認済 ' +
-          '(' + Math.round(1000 * num_frozen / num_spam) / 10 + '%)';
+          '(' + Math.round(1000 * num_frozen / num_spam) / 10 + '%)<br>' +
+          '直近24時間の凍結確認数: ' + num_frozen_new;
       }
 
       function formatDate(d) {

@@ -32,7 +32,7 @@
     <title>PC用 表形式 | いいねスパム一覧</title>
     <link href="./style.css?20240925184642" rel="stylesheet" type="text/css">
     <script src="./index.js?20240925184642"></script>
-    <script src="./database.js?20240925190123"></script>
+    <script src="./database.js?20240925191041"></script>
   </head>
 
   <body>
@@ -98,11 +98,13 @@
         tbl = document.getElementById('spam_table');
         const num_spam = spam_items.length;
         var num_frozen = 0;
+        var num_frozen_new = 0;
         for (var i = num_spam - 1; i >= 0; i--) {
           const spam = spam_items[i];
           const is_frozen = spam.frozen_date.trim().length != 0;
           const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
           if (is_frozen) num_frozen += 1;
+          if (is_frozen_new) num_frozen_new += 1;
           const userid_html = spam.user_id.length == 0 ? '' : '<a href="https://x.com/i/user/' + spam.user_id + '" target="_blank">' + spam.user_id + '</a>';
           const scrname_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name + '</a>';
           //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
@@ -137,7 +139,8 @@
         document.getElementById('status').innerHTML = 
           num_spam + '件のスパム, ' + 
           num_frozen + '件凍結確認済 ' +
-          '(' + Math.round(1000 * num_frozen / num_spam) / 10 + '%)';
+          '(' + Math.round(1000 * num_frozen / num_spam) / 10 + '%)<br>' +
+          '直近24時間の凍結確認数: ' + num_frozen_new;
       }
 
       function formatDate(d) {
