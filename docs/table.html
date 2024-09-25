@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>PC用 表形式 | いいねスパム一覧</title>
-    <link href="./style.css?20240925072240" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240925072240"></script>
-    <script src="./database.js?20240925183415"></script>
+    <link href="./style.css?20240925184642" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240925184642"></script>
+    <script src="./database.js?20240925185348"></script>
   </head>
 
   <body>
@@ -48,9 +48,12 @@
       スマホ等で 1 アカウントずつ開くのが面倒な場合は 20 アカウントずつにまとまった <a href="./">グループ形式版</a> をご覧下さい。
     </p>
 
-    <p>打ち消し線: 凍結確認済 (水色: 過去24時間以内に凍結確認)</p>
-    
     <p id="status"></p>
+
+    <ul>
+      <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del>: 過去24時間以内に凍結確認)</li>
+      <li><span class="rpspam">緑色</span> : リポストスパム (活動停止中。現状は無視していいと思います)</li>
+    </ul>
     
     <table id="spam_table">
       <tr>
@@ -117,9 +120,12 @@
           tr = document.createElement('tr');
           if (is_frozen) {
             tr.classList.add("frozen");
+            if (is_frozen_new) {
+              tr.classList.add("frozen_new");
+            }
           }
-          if (is_frozen_new) {
-            tr.classList.add("frozen_new");
+          else if (spam.name.includes('リポストされたらおめでとう')) {
+            tr.classList.add("rpspam");
           }
           tr.appendChild(td_num);
           tr.appendChild(td_added);

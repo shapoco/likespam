@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240925072240" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240925072240"></script>
-    <script src="./database.js?20240925183415"></script>
+    <link href="./style.css?20240925184642" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240925184642"></script>
+    <script src="./database.js?20240925185348"></script>
   </head>
 
   <body>
@@ -127,10 +127,13 @@
       <img src="user_tab.png">
     </p>
 
-    <p>打ち消し線: 凍結確認済 (水色: 過去24時間以内に凍結確認)</p>
-    
     <p id="status"></p>
 
+    <ul>
+      <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del> : 過去24時間以内に凍結確認)</li>
+      <li><span class="rpspam">緑色</span> : リポストスパム (活動停止中。現状は無視していいと思います)</li>
+    </ul>
+    
     <ul id="query_list">
     </ul>
 
@@ -148,7 +151,7 @@
           var is_all_frozen = true;
           var url = 'https://x.com/search?q=';
           var text = '';
-          for (var i = ifrom; i < ito; i++) {
+          for (var i = ito - 1; i >= ifrom; i--) {
             const spam = spam_items[i];
             const is_frozen = spam.frozen_date.trim().length != 0;
             const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
@@ -161,10 +164,13 @@
             else if (is_frozen) {
               text += '<del>@' + spam.screen_name + '</del>';
             }
+            else if (spam.name.includes('リポストされたらおめでとう')) {
+              text += '<span class="rpspam">@' + spam.screen_name + '</span>';
+            }
             else {
               text += '@' + spam.screen_name;
             }
-            if (i < ito - 1) {
+            if (i > ifrom) {
               url += '+OR+';
               text += ' ';
             }
