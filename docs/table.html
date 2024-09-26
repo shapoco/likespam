@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>PC用 表形式 | いいねスパム一覧</title>
-    <link href="./style.css?20240927024748" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240927024748"></script>
-    <script src="./database.js?20240927024748"></script>
+    <link href="./style.css?20240927030345" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240927030345"></script>
+    <script src="./database.js?20240927030345"></script>
   </head>
 
   <body>
@@ -103,7 +103,7 @@
           const spam = likeSpams[i];
           const isFrozen = !!(spam.frozenDate);
           const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
-          const userIdHtml = spam.userId.length == 0 ? '' : '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>';
+          const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
           const scrNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
           //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
           td_num = document.createElement('td'); 
