@@ -28,6 +28,10 @@ aCpMiss.style.background = '#ccc';
 aCpMiss.style.borderRadius = '5px';
 aCpMiss.addEventListener('click', copyMissingScreenNames);
 
+const frozenMessages = [
+  'アカウントは凍結されています',
+];
+
 var foundUserLinks = {};
 var missingScreenNames = {};
 
@@ -70,7 +74,23 @@ var highlighterTimeoutId = -1;
 highlighterTimeoutId = setTimeout(scanSpams, 1000);
 
 function scanSpams() {
-  scanElems(document.getElementsByTagName('span'), '@');
+  const spans = document.getElementsByTagName('span');
+  scanElems(spans, '@');
+
+  const numSpans = spans.length;
+  for (var ispan = 0; ispan < numSpans; ispan++) {
+    const span = spans[ispan];
+    if (frozenMessages.includes(span.innerHTML)) {
+      if (document.title.length == 0) {
+        document.title = '🔵 凍結されています';
+        break;
+      }
+      else if (!document.title.startsWith('🔵')) {
+        document.title = '🔵' + document.title;
+        break;
+      }
+    }
+  }
 }
 
 function scanElems(elems, startMarker) {
