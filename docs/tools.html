@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>ツール | いいねスパム一覧</title>
-    <link href="./style.css?20240927004816" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240927004816"></script>
-    <script src="./database.js?20240927005205"></script>
+    <link href="./style.css?20240927024748" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240927024748"></script>
+    <script src="./database.js?20240927024748"></script>
   </head>
 
   <body>
@@ -40,7 +40,8 @@
     <div class="author">
       管理者: <a href="https://x.com/syego" target="_blank">@syego</a>
     </div>
-    <p id="menu"></p><script>render_menu(3);</script>
+    <p id="menu"></p>
+    <script>likeSpamRenderMenu(3);</script>
 
     <h1>ツール (管理用)</h1>
 
@@ -95,10 +96,10 @@
         document.f_idgen.remove_known.addEventListener('change', screenNamesChanged);
         document.f_idgen.remove_frozen.addEventListener('change', screenNamesChanged);
         document.f_idgen.apply_normal.addEventListener('click', applyNormal);
-        spam_items.forEach(spam => {
-          const key =spam.screen_name.toLowerCase();
+        likeSpams.forEach(spam => {
+          const key = spam.screenName.toLowerCase();
           knownScreenNames[key] = true;
-          if (spam.frozen_date.trim().length != 0) {
+          if (!!(spam.frozenDate)) {
             frozenScreenNames[key] = true;
           }
         });

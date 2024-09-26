@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240927004816" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240927004816"></script>
-    <script src="./database.js?20240927005205"></script>
+    <link href="./style.css?20240927024748" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240927024748"></script>
+    <script src="./database.js?20240927024748"></script>
   </head>
 
   <body>
@@ -40,7 +40,8 @@
     <div class="author">
       管理者: <a href="https://x.com/syego" target="_blank">@syego</a>
     </div>
-    <p id="menu"></p><script>render_menu(0);</script>
+    <p id="menu"></p>
+    <script>likeSpamRenderMenu(0);</script>
 
     <h1>いいねスパム一覧</h1>
 
@@ -71,54 +72,12 @@
     </p>
 
     <div id="stats"></div>
-    <script>render_stats();</script>
+    <script>likeSpamRenderStats();</script>
 
     <h2>いいねスパムの見つけ方</h2>
-
-    <h3>ハッシュタグ (推奨)</h3>
     <p>
-      直近で活動中のアカウントについては <a href="https://x.com/syego/status/1839236483284443539" target="_blank">#いいねスパム</a> を参照ください (情報提供にご協力お願いします)。
+      <a href="info.html#finding">補足情報</a> を参照
     </p>
-
-    <h3>キーワード検索</h3>
-    <p>
-      ⚠ 犯人は頻繁に使用するアカウントと名前を変えてしまうため、現在活動中のアカウントを検索によって網羅的に見つけるのは困難です。
-    </p>
-    <ul id="search_keywords">
-    </ul>
-    <script>
-      {
-        const searchKeywords = [
-          '"景品GET"',
-          '"ギフト券" "プロフ"',
-          '"ヤバい企画"',
-          '"ギフト券ほしい人絶対プロフ見て"',
-          '"アイコンをタップしてみて"',
-          '"このアカウントが出てきたらおめでとう"',
-          '"書かれてたらすごい事が起こります"',
-          '"色々なギフト券が"',
-          '"特別なご案内です"',
-          '"いいね" "プロフィール" "おめでとう"',
-          '"個された人"',
-        ];
-        const ul = document.getElementById('search_keywords');
-        searchKeywords.forEach(kwd => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = `https://x.com/search?q=${encodeURI(kwd)}&src=typed_query&f=user`;
-          a.target = '_blank';
-          a.innerHTML = kwd;
-          li.appendChild(a);
-          ul.appendChild(li);
-        });
-      }
-    </script>
-
-    <h3>リスト</h3>
-    <ul>
-      <li><del><a href="https://x.com/i/lists/1835358282837541179" target="_blank">いいねスパム一覧 (syego)</a></del> 運用終了</li>
-      <li><del><a href="https://x.com/i/lists/1832276917539762276" target="_blank">公式リスト (Emilydanie29864氏)</a></del> 運用終了</li>
-    </ul>
 
     <h2>スパムからいいねが来たら…</h2>
     <ul>
@@ -164,31 +123,31 @@
         const now = Date.now();
         const ul = document.getElementById('query_list');
         const GROUP_SIZE = 20;
-        const num_spam = spam_items.length;
-        const ngrp = Math.ceil(num_spam / GROUP_SIZE);
-        for (var igrp = ngrp - 1; igrp >= 0; igrp--)  {
+        const numSpam = likeSpams.length;
+        const numGroup = Math.ceil(numSpam / GROUP_SIZE);
+        for (var igrp = numGroup - 1; igrp >= 0; igrp--)  {
           const ifrom = igrp * GROUP_SIZE;
-          const ito = (igrp < ngrp - 1) ? (ifrom + GROUP_SIZE) : num_spam;
-          var is_all_frozen = true;
+          const ito = (igrp < numGroup - 1) ? (ifrom + GROUP_SIZE) : numSpam;
+          var isAllFrozen = true;
           var url = 'https://x.com/search?q=';
           var text = '';
           for (var i = ito - 1; i >= ifrom; i--) {
-            const spam = spam_items[i];
-            const is_frozen = spam.frozen_date.trim().length != 0;
-            const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
-            is_all_frozen &= is_frozen;
-            url += '%40' + spam.screen_name;
-            if (is_frozen_new) {
-              text += '<del class="frozen_new">@' + spam.screen_name + '</del>';
+            const spam = likeSpams[i];
+            const isFrozen = !!(spam.frozenDate);
+            const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
+            isAllFrozen &= isFrozen;
+            url += '%40' + spam.screenName;
+            if (isNewFrozen) {
+              text += '<del class="frozen_new">@' + spam.screenName + '</del>';
             }
-            else if (is_frozen) {
-              text += '<del>@' + spam.screen_name + '</del>';
+            else if (isFrozen) {
+              text += '<del>@' + spam.screenName + '</del>';
             }
             else if (spam.name.includes('リポストされたらおめでとう')) {
-              text += '<span class="rpspam">@' + spam.screen_name + '</span>';
+              text += '<span class="rpspam">@' + spam.screenName + '</span>';
             }
             else {
-              text += '@' + spam.screen_name;
+              text += '@' + spam.screenName;
             }
             if (i > ifrom) {
               url += '+OR+';
@@ -199,9 +158,9 @@
           const li = document.createElement('li');
           li.innerHTML = 
             '#' + (ifrom + 1).toString() + '～' + ito.toString() + 
-            ' ('  + formatDate(new Date(spam_items[ito - 1].added_date)) + ' 追加)<br>' +
+            ' ('  + formatDate(likeSpams[ito - 1].addedDate) + ' 追加)<br>' +
             '<a href="' + url + '" target="_blank">' + text + '</a>';
-          if (is_all_frozen) {
+          if (isAllFrozen) {
             li.classList.add("frozen");
           }
           ul.appendChild(li);

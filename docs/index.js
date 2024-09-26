@@ -1,14 +1,14 @@
-likespam_menu = [
+const likeSpamMenuItems = [
   { "name": "トップ"  , "url": "./"         },
   { "name": "PC用一覧", "url": "table.html" },
   { "name": "補足情報", "url": "info.html"  },
   { "name": "ツール"  , "url": "tools.html" },
 ];
 
-function render_menu(index) {
+function likeSpamRenderMenu(index) {
   var i = 0;
   var html = '';
-  likespam_menu.forEach(e => {
+  likeSpamMenuItems.forEach(e => {
     if (i > 0) html += ' | ';
     if (index == i) {
       html += `<span style='font-weight: bold;'>${e.name}</span>`;
@@ -21,7 +21,7 @@ function render_menu(index) {
   document.getElementById('menu').innerHTML = html;
 }
 
-function render_stats() {
+function likeSpamRenderStats() {
   const div = document.getElementById('stats');
 
   const now = new Date();
@@ -30,7 +30,7 @@ function render_stats() {
   yestDate.setDate(yestDate.getDate() - 1);
   const yestStr = yestDate.toLocaleString("sv-SE").substring(0, 10);
 
-  const totalToday = spam_items.length;
+  const totalToday = likeSpams.length;
   var totalAliveToday = 0;
   var totalFrozenToday = 0;
 
@@ -40,12 +40,14 @@ function render_stats() {
   var frozenToday = 0;
   var frozenYest = 0;
 
-  spam_items.forEach((spam) => {
-    const isFrozen = spam.frozen_date.trim().length != 0;
-    if (spam.added_date.startsWith(todayStr)) addedToday += 1;
-    if (spam.added_date.startsWith(yestStr)) addedYest += 1;
-    if (spam.frozen_date.startsWith(todayStr)) frozenToday += 1;
-    if (spam.frozen_date.startsWith(yestStr)) frozenYest += 1;
+  Object.values(likeSpams).forEach((spam) => {
+    const isFrozen = !!(spam.frozenDate);
+    const addedDate = spam.addedDate.toLocaleString("sv-SE");
+    const frozenDate = isFrozen ? spam.frozenDate.toLocaleString("sv-SE") : '';
+    if (addedDate.startsWith(todayStr)) addedToday += 1;
+    if (addedDate.startsWith(yestStr)) addedYest += 1;
+    if (frozenDate.startsWith(todayStr)) frozenToday += 1;
+    if (frozenDate.startsWith(yestStr)) frozenYest += 1;
     if (isFrozen) totalFrozenToday += 1;
     else totalAliveToday += 1;
   });

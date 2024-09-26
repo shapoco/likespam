@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>PC用 表形式 | いいねスパム一覧</title>
-    <link href="./style.css?20240927004816" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240927004816"></script>
-    <script src="./database.js?20240927005205"></script>
+    <link href="./style.css?20240927024748" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240927024748"></script>
+    <script src="./database.js?20240927024748"></script>
   </head>
 
   <body>
@@ -40,7 +40,8 @@
     <div class="author">
       管理者: <a href="https://x.com/syego" target="_blank">@syego</a>
     </div>
-    <p id="menu"></p><script>render_menu(1);</script>
+    <p id="menu"></p>
+    <script>likeSpamRenderMenu(1);</script>
     
     <h1>いいねスパム一覧 (PC用 表形式)</h1>
 
@@ -49,7 +50,7 @@
     </p>
 
     <div id="stats"></div>
-    <script>render_stats();</script>
+    <script>likeSpamRenderStats();</script>
 
     <ul>
       <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del>: 過去24時間以内に凍結確認)</li>
@@ -97,13 +98,13 @@
 
         now = Date.now();
         tbl = document.getElementById('spam_table');
-        const num_spam = spam_items.length;
+        const num_spam = likeSpams.length;
         for (var i = num_spam - 1; i >= 0; i--) {
-          const spam = spam_items[i];
-          const is_frozen = spam.frozen_date.trim().length != 0;
-          const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
-          const userid_html = spam.user_id.length == 0 ? '' : '<a href="https://x.com/i/user/' + spam.user_id + '" target="_blank">' + spam.user_id + '</a>';
-          const scrname_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name + '</a>';
+          const spam = likeSpams[i];
+          const isFrozen = !!(spam.frozenDate);
+          const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
+          const userIdHtml = spam.userId.length == 0 ? '' : '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>';
+          const scrNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
           //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
           td_num = document.createElement('td'); 
           td_added = document.createElement('td');
@@ -111,15 +112,15 @@
           td_uesrid = document.createElement('td');
           td_name = document.createElement('td');
           td_num.innerHTML = (i + 1).toString();
-          td_added.innerHTML = formatDate(new Date(spam.added_date));
-          td_scrname.innerHTML = scrname_html;
-          td_uesrid.innerHTML = userid_html;
+          td_added.innerHTML = formatDate(spam.addedDate);
+          td_scrname.innerHTML = scrNameHtml;
+          td_uesrid.innerHTML = userIdHtml;
           //td_name.innerHTML = icon_html + ' ' + spam.name;
           td_name.innerHTML = spam.name;
           tr = document.createElement('tr');
-          if (is_frozen) {
+          if (isFrozen) {
             tr.classList.add("frozen");
-            if (is_frozen_new) {
+            if (isNewFrozen) {
               tr.classList.add("frozen_new");
             }
           }
@@ -168,7 +169,7 @@
         const span = document.getElementById('status_icon_' + index);
         if (span.innerHTML != STATUS_ICON_UNKNOWN) return;
         span.innerHTML = STATUS_ICON_CHECKING;
-        const url = spam_items[index].profile_image_url;
+        const url = likeSpams[index].profile_image_url;
         checkIfImageExists(index, url)
           .then((index, url) => {
               //console.log(`Image found: ${index}`);

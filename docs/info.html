@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240927004816" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240927004816"></script>
+    <link href="./style.css?20240927024748" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240927024748"></script>
   </head>
 
   <body>
@@ -39,7 +39,8 @@
     <div class="author">
       管理者: <a href="https://x.com/syego" target="_blank">@syego</a>
     </div>
-    <p id="menu"></p><script>render_menu(2);</script>
+    <p id="menu"></p>
+    <script>likeSpamRenderMenu(2);</script>
 
     <h1>補足情報</h1>
 
@@ -97,6 +98,53 @@
           ul.appendChild(li);
         });
       </script>
+    </ul>
+
+    <h2 id="finding">いいねスパムの見つけ方</h2>
+
+    <h3>ハッシュタグ (推奨)</h3>
+    <p>
+      直近で活動中のアカウントについては <a href="https://x.com/syego/status/1839236483284443539" target="_blank">#いいねスパム</a> を参照ください (情報提供にご協力お願いします)。
+    </p>
+
+    <h3>キーワード検索</h3>
+    <p>
+      ⚠ 犯人は頻繁に使用するアカウントと名前を変えてしまうため、現在活動中のアカウントを検索によって網羅的に見つけるのは困難です。
+    </p>
+    <ul id="search_keywords">
+    </ul>
+    <script>
+      {
+        const searchKeywords = [
+          '"景品GET"',
+          '"ギフト券" "プロフ"',
+          '"ヤバい企画"',
+          '"ギフト券ほしい人絶対プロフ見て"',
+          '"アイコンをタップしてみて"',
+          '"このアカウントが出てきたらおめでとう"',
+          '"書かれてたらすごい事が起こります"',
+          '"色々なギフト券が"',
+          '"特別なご案内です"',
+          '"いいね" "プロフィール" "おめでとう"',
+          '"個された人"',
+        ];
+        const ul = document.getElementById('search_keywords');
+        searchKeywords.forEach(kwd => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `https://x.com/search?q=${encodeURI(kwd)}&src=typed_query&f=user`;
+          a.target = '_blank';
+          a.innerHTML = kwd;
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+      }
+    </script>
+
+    <h3>リスト</h3>
+    <ul>
+      <li><del><a href="https://x.com/i/lists/1835358282837541179" target="_blank">いいねスパム一覧 (syego)</a></del> 運用終了</li>
+      <li><del><a href="https://x.com/i/lists/1832276917539762276" target="_blank">公式リスト (Emilydanie29864氏)</a></del> 運用終了</li>
     </ul>
 
     <h2 id="faq">FAQ</h2>
