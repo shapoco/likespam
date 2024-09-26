@@ -83,28 +83,30 @@
     <ul id="search_keywords">
     </ul>
     <script>
-      search_keywords = [
-        '"ギフト券" "プロフ"',
-        '"ヤバい企画"',
-        '"ギフト券ほしい人絶対プロフ見て"',
-        '"アイコンをタップしてみて"',
-        '"このアカウントが出てきたらおめでとう"',
-        '"書かれてたらすごい事が起こります"',
-        '"色々なギフト券が"',
-        '"特別なご案内です"',
-        '"いいね" "プロフィール" "おめでとう"',
-        '"個された人"'
-      ];
-      const ul = document.getElementById('search_keywords');
-      search_keywords.forEach(kwd => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = `https://x.com/search?q=${encodeURI(kwd)}&src=typed_query&f=user`;
-        a.target = '_blank';
-        a.innerHTML = kwd;
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
+      {
+        const searchKeywords = [
+          '"ギフト券" "プロフ"',
+          '"ヤバい企画"',
+          '"ギフト券ほしい人絶対プロフ見て"',
+          '"アイコンをタップしてみて"',
+          '"このアカウントが出てきたらおめでとう"',
+          '"書かれてたらすごい事が起こります"',
+          '"色々なギフト券が"',
+          '"特別なご案内です"',
+          '"いいね" "プロフィール" "おめでとう"',
+          '"個された人"',
+        ];
+        const ul = document.getElementById('search_keywords');
+        searchKeywords.forEach(kwd => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `https://x.com/search?q=${encodeURI(kwd)}&src=typed_query&f=user`;
+          a.target = '_blank';
+          a.innerHTML = kwd;
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+      }
     </script>
 
     <h3>リスト</h3>
