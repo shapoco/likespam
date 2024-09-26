@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.267
+// @version     1.0.268
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240926103000
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240926103930
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -96,6 +96,9 @@ function scanElems(elems, startMarker) {
   }
   if (Object.keys(missingScreenNames).length == 0) {
     aCpMiss.style.display = 'none';
+  }
+  else {
+    aCpMiss.style.background = '#ff0';
   }
   highlighterTimeoutId = setTimeout(scanSpams, 1000);
 }
