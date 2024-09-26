@@ -25,10 +25,10 @@ function render_stats() {
   const div = document.getElementById('stats');
 
   const now = new Date();
-  const todayStr = now.toISOString().substring(0, 10);
+  const todayStr = now.toLocaleString("sv-SE").substring(0, 10);
   var yestDate = new Date(now.getTime());
   yestDate.setDate(yestDate.getDate() - 1);
-  const yestStr = yestDate.toISOString().substring(0, 10);
+  const yestStr = yestDate.toLocaleString("sv-SE").substring(0, 10);
 
   const totalToday = spam_items.length;
   var totalAliveToday = 0;
