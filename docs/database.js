@@ -26,9 +26,7 @@ const likeSpamNames = [
 ];
 
 function newLikeSpam(userId, screenName, addedDate, frozenDate, nameKey, profileImageUrl) {
-  if (profileImageUrl.startsWith("%0%")) {
-    profileImageUrl = profileImageUrl.replace("%0%", "https://pbs.twimg.com/profile_images")
-  }
+  profileImageUrl = profileImageUrl.replace("%0%", "https://pbs.twimg.com/profile_images")
   return {
     "userId": userId,
     "screenName": screenName,
