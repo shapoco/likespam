@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.301
+// @version     1.0.300
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240926193444
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240926200149
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -55,7 +55,7 @@ var missingScreenNames = {};
         likeSpamAccounts[key].frozen  ? '#4cf' : '#ccc';
       a.style.borderRadius = '5px';
       foundUserLinks[key] = a;
-      if (!likeSpamAccounts[key].frozen) {
+      if (key in likeSpamAccounts && !likeSpamAccounts[key].frozen) {
         missingScreenNames[key] = true;
       }
       divFoundUsers.appendChild(a);
