@@ -62,9 +62,9 @@ function render_stats() {
 
   div.innerHTML = 
     '<table>' +
-    '<tr><th></th><th>総数 (増減)</th><th>凍結 (増減, 割合)</th><th>生存 (割合)</th></tr>' +
-    `<tr><th>今日</th><td>${totalToday} (+${addedToday})</td><td>${totalFrozenToday} (+${frozenToday}, ${totalFrozenTodayPercent}%)</td><td>${totalAliveToday} (${totalAliveTodayPercent}%)</td></tr>` +
-    `<tr><th>昨日</th><td>${totalYest} (+${addedYest})</td><td>${totalFrozenYest} (+${frozenYest}, ${totalFrozenYestPercent}%)</td><td>${totalAliveYest} (${totalAliveYestPercent}%)</td></tr>` +
+    '<tr><th></th><th>生存 (割合)</th><th>凍結 (増減, 割合)</th><th>合計 (増減)</th></tr>' +
+    `<tr><th>今日</th><td>${totalAliveToday} (${totalAliveTodayPercent}%)</td><td>${totalFrozenToday} (+${frozenToday}, ${totalFrozenTodayPercent}%)</td><td>${totalToday} (+${addedToday})</td></tr>` +
+    `<tr><th>昨日</th><td>${totalAliveYest} (${totalAliveYestPercent}%)</td><td>${totalFrozenYest} (+${frozenYest}, ${totalFrozenYestPercent}%)</td><td>${totalYest} (+${addedYest})</td></tr>` +
     '</table>';
 }
 
