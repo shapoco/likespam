@@ -80,17 +80,32 @@
     <p>
       ⚠ 犯人は頻繁に使用するアカウントと名前を変えてしまうため、現在活動中のアカウントを検索によって網羅的に見つけるのは困難です。
     </p>
-    <ul>
-      <li><a href="https://x.com/search?q=%E3%83%A4%E3%83%90%E3%81%84%E4%BC%81%E7%94%BB&src=typed_query&f=user" target="_blank">ヤバい企画</a></li>
-      <li><a href="https://x.com/search?q=%22%E3%82%AE%E3%83%95%E3%83%88%E5%88%B8%E3%81%BB%E3%81%97%E3%81%84%E4%BA%BA%E7%B5%B6%E5%AF%BE%E3%83%97%E3%83%AD%E3%83%95%E8%A6%8B%E3%81%A6%22&src=typed_query&f=user" target="_blank">"ギフト券ほしい人絶対プロフ見て"</a></li>
-      <li><a href="https://x.com/search?q=%22%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%82%92%E3%82%BF%E3%83%83%E3%83%97%E3%81%97%E3%81%A6%E3%81%BF%E3%81%A6%22&src=typed_query&f=user" target="_blank">"アイコンをタップしてみて"</a></li>
-      <li><a href="https://x.com/search?q=%22%E3%81%93%E3%81%AE%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%8C%E5%87%BA%E3%81%A6%E3%81%8D%E3%81%9F%E3%82%89%E3%81%8A%E3%82%81%E3%81%A7%E3%81%A8%E3%81%86%22&src=typed_query&f=user" target="_blank">"このアカウントが出てきたらおめでとう"</a></li>
-      <li><a href="https://x.com/search?q=%22%E6%9B%B8%E3%81%8B%E3%82%8C%E3%81%A6%E3%81%9F%E3%82%89%E3%81%99%E3%81%94%E3%81%84%E4%BA%8B%E3%81%8C%E8%B5%B7%E3%81%93%E3%82%8A%E3%81%BE%E3%81%99%22&src=typed_query&f=user" target="_blank">"書かれてたらすごい事が起こります"</a></li>
-      <li><a href="https://x.com/search?q=%22%E8%89%B2%E3%80%85%E3%81%AA%E3%82%AE%E3%83%95%E3%83%88%E5%88%B8%E3%81%8C%22&src=typed_query&f=user" target="_blank">"色々なギフト券が"</a></li>
-      <li><a href="https://x.com/search?q=%22%E7%89%B9%E5%88%A5%E3%81%AA%E3%81%94%E6%A1%88%E5%86%85%E3%81%A7%E3%81%99%22&src=typed_query&f=user" target="_blank">"特別なご案内です"</a></li>
-      <li><a href="https://x.com/search?q=%E3%81%84%E3%81%84%E3%81%AD+%E3%83%97%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB+%E3%81%8A%E3%82%81%E3%81%A7%E3%81%A8%E3%81%86&src=typed_query&f=user" target="_blank">いいね プロフィール おめでとう</a></li>
-      <li><a href="https://x.com/search?q=%22%E5%80%8B%E3%81%95%E3%82%8C%E3%81%9F%E4%BA%BA%22&src=typed_query&f=user" target="_blank">"個された人"</a></li>
+    <ul id="search_keywords">
     </ul>
+    <script>
+      search_keywords = [
+        '"ギフト券" "プロフ"',
+        '"ヤバい企画"',
+        '"ギフト券ほしい人絶対プロフ見て"',
+        '"アイコンをタップしてみて"',
+        '"このアカウントが出てきたらおめでとう"',
+        '"書かれてたらすごい事が起こります"',
+        '"色々なギフト券が"',
+        '"特別なご案内です"',
+        '"いいね" "プロフィール" "おめでとう"',
+        '"個された人"'
+      ];
+      const ul = document.getElementById('search_keywords');
+      search_keywords.forEach(kwd => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `https://x.com/search?q=${encodeURI(kwd)}&src=typed_query&f=user`;
+        a.target = '_blank';
+        a.innerHTML = kwd;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+    </script>
 
     <h3>リスト</h3>
     <ul>
