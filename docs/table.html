@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>PC用 表形式 | いいねスパム一覧</title>
-    <link href="./style.css?20240926130844" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240926130844"></script>
-    <script src="./database.js?20240926183532"></script>
+    <link href="./style.css?20240926193437" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240926193437"></script>
+    <script src="./database.js?20240926193444"></script>
   </head>
 
   <body>
@@ -48,7 +48,8 @@
       スマホ等で 1 アカウントずつ開くのが面倒な場合は 20 アカウントずつにまとまった <a href="./">グループ形式版</a> をご覧下さい。
     </p>
 
-    <p id="status"></p>
+    <div id="stats"></div>
+    <script>render_stats();</script>
 
     <ul>
       <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del>: 過去24時間以内に凍結確認)</li>
@@ -97,14 +98,10 @@
         now = Date.now();
         tbl = document.getElementById('spam_table');
         const num_spam = spam_items.length;
-        var num_frozen = 0;
-        var num_frozen_new = 0;
         for (var i = num_spam - 1; i >= 0; i--) {
           const spam = spam_items[i];
           const is_frozen = spam.frozen_date.trim().length != 0;
           const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
-          if (is_frozen) num_frozen += 1;
-          if (is_frozen_new) num_frozen_new += 1;
           const userid_html = spam.user_id.length == 0 ? '' : '<a href="https://x.com/i/user/' + spam.user_id + '" target="_blank">' + spam.user_id + '</a>';
           const scrname_html = '<a href="https://x.com/' + spam.screen_name + '" target="_blank">@' + spam.screen_name + '</a>';
           //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
@@ -136,11 +133,6 @@
           tr.appendChild(td_name);
           tbl.appendChild(tr);
         }
-        document.getElementById('status').innerHTML = 
-          num_spam + '件のスパム, ' + 
-          num_frozen + '件凍結確認済 ' +
-          '(' + Math.round(1000 * num_frozen / num_spam) / 10 + '%)<br>' +
-          '直近24時間の凍結確認数: ' + num_frozen_new;
       }
 
       function formatDate(d) {

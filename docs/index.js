@@ -20,3 +20,51 @@ function render_menu(index) {
   });
   document.getElementById('menu').innerHTML = html;
 }
+
+function render_stats() {
+  const div = document.getElementById('stats');
+
+  const now = new Date();
+  const todayStr = now.toISOString().substring(0, 10);
+  var yestDate = new Date(now.getTime());
+  yestDate.setDate(yestDate.getDate() - 1);
+  const yestStr = yestDate.toISOString().substring(0, 10);
+
+  const totalToday = spam_items.length;
+  var totalAliveToday = 0;
+  var totalFrozenToday = 0;
+
+  var addedToday = 0;
+  var addedYest = 0;
+
+  var frozenToday = 0;
+  var frozenYest = 0;
+
+  spam_items.forEach((spam) => {
+    const isFrozen = spam.frozen_date.trim().length != 0;
+    if (spam.added_date.startsWith(todayStr)) addedToday += 1;
+    if (spam.added_date.startsWith(yestStr)) addedYest += 1;
+    if (spam.frozen_date.startsWith(todayStr)) frozenToday += 1;
+    if (spam.frozen_date.startsWith(yestStr)) frozenYest += 1;
+    if (isFrozen) totalFrozenToday += 1;
+    else totalAliveToday += 1;
+  });
+
+  const totalYest = totalToday - addedToday;
+  const totalFrozenYest = totalFrozenToday - frozenToday;
+  const totalAliveYest = totalYest - totalFrozenYest;
+
+  const totalFrozenTodayPercent = Math.round(totalFrozenToday * 1000 / totalToday) / 10;
+  const totalAliveTodayPercent = Math.round(totalAliveToday * 1000 / totalToday) / 10;
+
+  const totalFrozenYestPercent = Math.round(totalFrozenYest * 1000 / totalYest) / 10;
+  const totalAliveYestPercent = Math.round(totalAliveYest * 1000 / totalYest) / 10;
+
+  div.innerHTML = 
+    '<table>' +
+    '<tr><th></th><th>総数 (増減)</th><th>凍結 (増減, 割合)</th><th>生存 (割合)</th></tr>' +
+    `<tr><th>今日</th><td>${totalToday} (+${addedToday})</td><td>${totalFrozenToday} (+${frozenToday}, ${totalFrozenTodayPercent}%)</td><td>${totalAliveToday} (${totalAliveTodayPercent}%)</td></tr>` +
+    `<tr><th>昨日</th><td>${totalYest} (+${addedYest})</td><td>${totalFrozenYest} (+${frozenYest}, ${totalFrozenYestPercent}%)</td><td>${totalAliveYest} (${totalAliveYestPercent}%)</td></tr>` +
+    '</table>';
+}
+

@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240926130844" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240926130844"></script>
-    <script src="./database.js?20240926183532"></script>
+    <link href="./style.css?20240926193437" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240926193437"></script>
+    <script src="./database.js?20240926193444"></script>
   </head>
 
   <body>
@@ -69,6 +69,9 @@
       これらのアカウントは数千個あり、もはやひとつひとつブロックすることに意味があるのかは微妙です。
       報告するのであれば、詐欺の窓口となっている <a href="info.html#pivot">@Zy_Iove とその周辺のアカウント</a> を報告することをおすすめします。
     </p>
+
+    <div id="stats"></div>
+    <script>render_stats();</script>
 
     <h2>いいねスパムの見つけ方</h2>
 
@@ -147,8 +150,6 @@
       <img src="user_tab.png">
     </p>
 
-    <p id="status"></p>
-
     <ul>
       <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del> : 過去24時間以内に凍結確認)</li>
       <li><span class="rpspam">緑色</span> : リポストスパム (活動停止中。現状は無視していいと思います)</li>
@@ -159,13 +160,11 @@
 
     <script>
       function main() {
-        now = Date.now();
-        ul = document.getElementById('query_list');
+        const now = Date.now();
+        const ul = document.getElementById('query_list');
         const GROUP_SIZE = 20;
         const num_spam = spam_items.length;
         const ngrp = Math.ceil(num_spam / GROUP_SIZE);
-        var num_frozen = 0;
-        var num_frozen_new = 0;
         for (var igrp = ngrp - 1; igrp >= 0; igrp--)  {
           const ifrom = igrp * GROUP_SIZE;
           const ito = (igrp < ngrp - 1) ? (ifrom + GROUP_SIZE) : num_spam;
@@ -176,8 +175,6 @@
             const spam = spam_items[i];
             const is_frozen = spam.frozen_date.trim().length != 0;
             const is_frozen_new = is_frozen && (now - new Date(spam.frozen_date.trim())) < 1000 * 60 * 60 * 24;
-            if (is_frozen) num_frozen += 1;
-            if (is_frozen_new) num_frozen_new += 1;
             is_all_frozen &= is_frozen;
             url += '%40' + spam.screen_name;
             if (is_frozen_new) {
@@ -198,7 +195,7 @@
             }
           }
           url += '&src=typed_query&f=user';
-          li = document.createElement('li');
+          const li = document.createElement('li');
           li.innerHTML = 
             '#' + (ifrom + 1).toString() + '～' + ito.toString() + 
             ' ('  + formatDate(new Date(spam_items[ito - 1].added_date)) + ' 追加)<br>' +
@@ -208,11 +205,6 @@
           }
           ul.appendChild(li);
         }
-        document.getElementById('status').innerHTML = 
-          num_spam + '件のスパム, ' + 
-          num_frozen + '件凍結確認済 ' +
-          '(' + Math.round(1000 * num_frozen / num_spam) / 10 + '%)<br>' +
-          '直近24時間の凍結確認数: ' + num_frozen_new;
       }
 
       function formatDate(d) {
