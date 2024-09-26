@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.249
+// @version     1.0.250
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240926091825
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240926095005
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -19,34 +19,50 @@ divFoundUsers.style.left = '10px';
 divFoundUsers.style.bottom = '10px';
 divFoundUsers.style.fontSize = '8pt';
 
-console.log("URL=" + location.href);
-const searchUrlRegex = /https:\/\/x.com\/search\?q=(%40\w+(\+OR\+%40\w+)*)&/;
-const urlMatch = location.href.match(searchUrlRegex);
-var queryScreenNames = [];
+const aCpMiss = document.createElement('a');
+aCpMiss.innerHTML = '未発見IDのコピー';
+aCpMiss.href = '#';
+aCpMiss.style.margin = '0px 2px 0px 0px';
+aCpMiss.style.padding = '0px 5px';
+aCpMiss.style.background = '#ccc';
+aCpMiss.style.borderRadius = '5px';
+aCpMiss.addEventListener('click', copyMissingScreenNames);
+
 var foundUserLinks = {};
-if (urlMatch) {
-  queryScreenNames = urlMatch[1].replaceAll('%40', '').split('+OR+');
-  var i = 0;
-  queryScreenNames.forEach((e) => {
-    const key = e.toLowerCase();
-    const a = document.createElement('a');
-    a.href = '/' + e;
-    a.target = '_blank';
-    a.innerHTML = e;
-    a.style.margin = '0px 2px 0px 0px';
-    a.style.padding = '0px 5px';
-    a.style.background =
-      !(key in likeSpamAccounts)    ? '#8f8' :
-      likeSpamAccounts[key].frozen  ? '#4cf' : '#ccc';
-    a.style.borderRadius = '5px';
-    foundUserLinks[key] = a;
-    divFoundUsers.appendChild(a);
-    if ((i + 1) % 10 == 0) {
-      divFoundUsers.appendChild(document.createElement('br'));
-    }
-    i += 1;
-  });
-  document.getElementsByTagName('body')[0].appendChild(divFoundUsers);
+var missingScreenNames = {};
+
+{
+  const searchUrlRegex = /https:\/\/x.com\/search\?q=(%40\w+(\+OR\+%40\w+)*)&/;
+  const urlMatch = location.href.match(searchUrlRegex);
+  var queryScreenNames = [];
+  if (urlMatch) {
+    queryScreenNames = urlMatch[1].replaceAll('%40', '').split('+OR+');
+    var i = 0;
+    queryScreenNames.forEach((e) => {
+      const key = e.toLowerCase();
+      const a = document.createElement('a');
+      a.href = '/' + e;
+      a.target = '_blank';
+      a.innerHTML = e;
+      a.style.margin = '0px 2px 0px 0px';
+      a.style.padding = '0px 5px';
+      a.style.background =
+        !(key in likeSpamAccounts)    ? '#8f8' :
+        likeSpamAccounts[key].frozen  ? '#4cf' : '#ccc';
+      a.style.borderRadius = '5px';
+      foundUserLinks[key] = a;
+      if (!likeSpamAccounts[key].frozen) {
+        missingScreenNames[key] = true;
+      }
+      divFoundUsers.appendChild(a);
+      if ((i + 1) % 10 == 0 && i < queryScreenNames.length - 1) {
+        divFoundUsers.appendChild(document.createElement('br'));
+      }
+      i += 1;
+    });
+    divFoundUsers.appendChild(aCpMiss);
+    document.getElementsByTagName('body')[0].appendChild(divFoundUsers);
+  }
 }
 
 var highlighterTimeoutId = -1;
@@ -55,7 +71,6 @@ highlighterTimeoutId = setTimeout(scanSpams, 1000);
 
 function scanSpams() {
   scanElems(document.getElementsByTagName('span'), '@');
-  //scanElems(document.getElementsByTagName('a'), 'https://x.com/', spamRegex1);
 }
 
 function scanElems(elems, startMarker) {
@@ -74,9 +89,13 @@ function scanElems(elems, startMarker) {
 
         if (key in foundUserLinks) {
           foundUserLinks[key].style.background = '#f88';
+          delete missingScreenNames[key];
         }
       }
     }
+  }
+  if (Object.keys(missingScreenNames).length == 0) {
+    aCpMiss.style.display = 'none';
   }
   highlighterTimeoutId = setTimeout(scanSpams, 1000);
 }
@@ -101,3 +120,9 @@ function getInnerTextWithAlt(elm) {
   }
   return '';
 }
+
+function copyMissingScreenNames(elem) {
+  const ids = Object.keys(missingScreenNames).join(' ');
+  navigator.clipboard.writeText(ids);
+}
+
