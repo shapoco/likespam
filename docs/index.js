@@ -68,3 +68,11 @@ function render_stats() {
     '</table>';
 }
 
+function getSearchLinkHtml(screenNames, linkText) {
+  const url = `https://x.com/search?q=${screenNames.map(e => '%40' + e).join('+OR+')}&src=typed_query&f=user`;
+  if (!linkText || linkText.length == 0) {
+    linkText = screenNames.map(e => '@' + e).join(' ');
+  }
+  return `<a href="${url}" target="_blank">${linkText}</a>`;
+}
+

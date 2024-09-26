@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240926202409" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240926202409"></script>
+    <link href="./style.css?20240926232124" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240926232124"></script>
   </head>
 
   <body>
@@ -79,6 +79,11 @@
         ];
         const ul = document.getElementById('sakura_list');
         const to_id = "Zy_Iove";
+        {
+          const li = document.createElement('li');
+          li.innerHTML = getSearchLinkHtml(sakuras.filter(e => e.status.length == 0).map(e => e.screen_name), 'まとめて表示');
+          ul.appendChild(li);
+        }
         sakuras.forEach(e => {
           const li = document.createElement('li');
           var html = 
