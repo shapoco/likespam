@@ -32,7 +32,7 @@
     <title>ツール | いいねスパム一覧</title>
     <link href="./style.css?20240925184642" rel="stylesheet" type="text/css">
     <script src="./index.js?20240925184642"></script>
-    <script src="./database.js?20240926084410"></script>
+    <script src="./database.js?20240926091206"></script>
   </head>
 
   <body>
@@ -51,6 +51,9 @@
       <textarea id="screen_names" cols="64" rows="16" style="overflow-y: scroll;"></textarea><br>
       <input id="remove_known" type="checkbox" checked>
       <label for="remove_known">既知のアカウントは除く</label>
+      <input id="remove_frozen" type="checkbox" checked>
+      <label for="remove_frozen">凍結済みは除く</label>
+      <button id="apply_normal" type="button">正規化適用</button>
     </form>
     <p id="idgen_result">
 
@@ -84,36 +87,25 @@
 
     <script>
       var knownScreenNames = {};
+      var frozenScreenNames = {};
 
       function main() {
-        document.f_idgen.screen_names.addEventListener('change', screen_names_changed);
-        document.f_idgen.screen_names.addEventListener('keyup', screen_names_changed);
-        document.f_idgen.remove_known.addEventListener('change', screen_names_changed);
+        document.f_idgen.screen_names.addEventListener('change', screenNamesChanged);
+        document.f_idgen.screen_names.addEventListener('keyup', screenNamesChanged);
+        document.f_idgen.remove_known.addEventListener('change', screenNamesChanged);
+        document.f_idgen.remove_frozen.addEventListener('change', screenNamesChanged);
+        document.f_idgen.apply_normal.addEventListener('click', applyNormal);
         spam_items.forEach(spam => {
-          knownScreenNames[spam.screen_name.toLowerCase()] = true;
+          const key =spam.screen_name.toLowerCase();
+          knownScreenNames[key] = true;
+          if (spam.frozen_date.trim().length != 0) {
+            frozenScreenNames[key] = true;
+          }
         });
       }
 
-      function screen_names_changed(e) {
-        const sns = document.f_idgen.screen_names;
-        const remove_known = document.f_idgen.remove_known.checked;
-        var items = sns.value.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('　', ' ').trim().split(/\s+/g);
-        for (var i = 0; i < items.length; i++) {
-          items[i] = items[i].replace('https://x.com/', '')
-          items[i] = items[i].replace('https://twitter.com/', '')
-          if (items[i].startsWith('@')) {
-            items[i] = items[i].substring(1);
-          }
-        }
-        
-        const numItemsOld0 = items.length;
-        items = Array.from(new Set(items));
-        const numItemsOld1 = items.length;
-        if (remove_known) {
-          items = items.filter(item => !(item.toLowerCase() in knownScreenNames))
-        }
-        const numConflict = numItemsOld0 - numItemsOld1;
-        const numKnown = numItemsOld1 - items.length;
+      function screenNamesChanged(e) {
+        const items = getNormalizedScreenNames();
 
         {
           const ul = document.getElementById('search_links');
@@ -150,22 +142,61 @@
 
         {
           const p = document.getElementById('regex_text');
-          var text = '\\b('
-          for(var i = 0; i < items.length; i++) {
-            text += items[i];
-            if (i < items.length - 1) {
-              text += '|';
+          var text = '';
+          if (items.length > 0) {
+            text += '\\b('
+            for(var i = 0; i < items.length; i++) {
+              text += items[i];
+              if (i < items.length - 1) {
+                text += '|';
+              }
             }
+            text += ')\\b';
           }
-          text += ')\\b';
           p.innerHTML = text;
         }
+      }
 
+      function applyNormal() {
+        const items = getNormalizedScreenNames();
+        document.f_idgen.screen_names.value = items.join(' ');
+      }
 
-        document.getElementById('idgen_result').innerHTML =
-          items.length + '個のアカウント (' +
-          '重複による削除: ' + numConflict + '個, ' +
-          '既知のアカウントの削除: ' + numKnown + '個) ';
+      function getNormalizedScreenNames() {
+        const textarea = document.f_idgen.screen_names;
+        const remove_known = document.f_idgen.remove_known.checked;
+        const remove_frozen = document.f_idgen.remove_frozen.checked;
+        var items = textarea.value.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('　', ' ').trim().split(/\s+/g);
+        for (var i = 0; i < items.length; i++) {
+          items[i] = items[i].replace('https://x.com/', '')
+          items[i] = items[i].replace('https://twitter.com/', '')
+          if (items[i].startsWith('@')) {
+            items[i] = items[i].substring(1);
+          }
+        }
+        
+        const numItemsOld0 = items.length;
+        items = Array.from(new Set(items));
+        const numItemsOld1 = items.length;
+        if (remove_known) {
+          items = items.filter(item => !(item.toLowerCase() in knownScreenNames));
+        }
+        const numItemsOld2 = items.length;
+        if (remove_frozen) {
+          items = items.filter(item => !(item.toLowerCase() in frozenScreenNames));
+        }
+        const numRemoveByConflict = numItemsOld0 - numItemsOld1;
+        const numRemoveByKnown = numItemsOld1 - numItemsOld2;
+        const numRemoveByFrozen = numItemsOld2 - items.length;
+
+        var removes = [];
+        if (numRemoveByConflict > 0) removes.push('重複による削除: ' + numRemoveByConflict + '個');
+        if (numRemoveByFrozen > 0) removes.push('凍結による削除: ' + numRemoveByFrozen + '個');
+        if (numRemoveByKnown > 0) removes.push('既知のアカウントの削除: ' + numRemoveByKnown + '個');
+        const removesStr = removes.length > 0 ? ' <strong>(' + removes.join(', ') + ')</strong>' : '';
+        document.getElementById('idgen_result').innerHTML = items.length + '個のアカウント' + removesStr;
+
+        return items;
       }
 
       main();
