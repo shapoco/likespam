@@ -23,6 +23,7 @@ const likeSpamNames = [
   "↑アイコンをタップしてみて👆プロフィ一ルに「大当たり」と書いてあったらすごい事が起こります【公式】",
   "👆タップ‼️ ギフト券ほしい人絶対プロフ見て😱❤️1万円分も貰えるヤバい企画やってるww【公式】",
   "【重要】❤️\u200d🔥❤️\u200d🔥❤️\u200d🔥この通知が届いた人は本日の当選者です🎉詳細はプロフィールにて🎁🎁🎁",
+  "🎉いいね通知きた人だけ🎉プロフィ一ル確認してね！おめでとう🎁",
 ];
 
 function newLikeSpam(userId, screenName, addedDate, frozenDate, nameKey, profileImageUrl) {
@@ -11712,4 +11713,5 @@ const likeSpams = [
   newLikeSpam("1796818594233253889","CathyRamir94245",2297254,-1,8,"%0%/1839217112541184000/lowJY4bR_normal.jpg"),
   newLikeSpam("1807081909454794752","ChelseaJim30080",2298720,-1,8,"%0%/1839217644680925184/4nJUYirW_normal.jpg"),
   newLikeSpam("1796745268324421632","EgctBVQ7ltfNAYi",2304774,-1,8,"%0%/1839196951658504192/BD7h_ToG_normal.jpg"),
+  newLikeSpam("1796748341260505088","f6EkHuWjNCUJt4C",2308055,-1,24,"%0%/1839198391055618048/GQ_xrLIt_normal.jpg"),
 ];
