@@ -90,10 +90,15 @@
         }
         sakuras.forEach(e => {
           const li = document.createElement('li');
-          var html = 
-            `${e.name} ` +
-            `(<a href="https://x.com/${e.screen_name}/with_replies" target="_blank">@${e.screen_name}</a>, ` +
-            `<a href="https://x.com/i/user/${e.user_id}" target="_blank">${e.user_id}</a>)`;
+          var html = '';
+          if (isSmartPhone()) {
+            html += `<a href="https://x.com/${e.screen_name}/with_replies" target="_blank">${e.name}</a>`;
+          }
+          else {
+            html += `${e.name} ` +
+              `(<a href="https://x.com/${e.screen_name}/with_replies" target="_blank">@${e.screen_name}</a>, ` +
+              `<a href="https://x.com/i/user/${e.user_id}" target="_blank">${e.user_id}</a>)`;
+          }
           if (e.status.length != 0) {
             html = `<del>${html}</del> ${e.status}`;
           }
