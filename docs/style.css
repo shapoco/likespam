@@ -134,14 +134,14 @@ img.profile_image {
 }
 
 .menu_wrapper {
-  line-height: 20pt;
+  line-height: 25pt;
 }
 
 .menu_item {
   border: solid 1px #ccc;
   border-radius: 5px;
   background: #fff;
-  padding: 0px 10px;
+  padding: 3px 10px;
 }
 
 .menu_selected {
