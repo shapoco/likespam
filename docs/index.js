@@ -41,7 +41,7 @@ function likeSpamRenderStats(elemId) {
   yestDate.setDate(yestDate.getDate() - 1);
   const yestStr = yestDate.toLocaleString("sv-SE").substring(0, 10);
 
-  const depth = 4;
+  const depth = 5;
 
   records = [];
 
