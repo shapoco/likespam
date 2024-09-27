@@ -133,6 +133,10 @@ img.profile_image {
   border-radius: 999px;
 }
 
+.menu_wrapper {
+  line-height: 20pt;
+}
+
 .menu_item {
   border: solid 1px #ccc;
   border-radius: 5px;
