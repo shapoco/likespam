@@ -151,3 +151,9 @@ img.profile_image {
 }
 
 .menu_item { text-decoration: none !important; }
+
+.gray {
+  color: #666;
+  font-size: smaller;
+  font-weight: normal;
+}

@@ -31,6 +31,7 @@ class LikeSpamStatRecord {
     this.newFrozen = 0;
     this.newAlive = 0;
     this.frozenPercent = 0;
+    this.isToday = false;
   }
 }
 
@@ -53,6 +54,7 @@ function likeSpamRenderStats(elemId) {
     var dateObj = new Date(now.getTime());
     dateObj.setDate(dateObj.getDate() - depth + 1 + iday);
     r.dateStr = dateObj.toLocaleString("sv-SE").substring(0, 10);
+    r.isToday = iday >= depth - 1;
     records.push(r);
   }
 
@@ -72,39 +74,47 @@ function likeSpamRenderStats(elemId) {
   
   for (var iday = depth - 2; iday >= 0; iday--) {
     var thisDay = records[iday];
-    var nextDay = records[iday + 1];
+    const nextDay = records[iday + 1];
     thisDay.total = nextDay.total - nextDay.newTotal;
     thisDay.frozen = nextDay.frozen - nextDay.newFrozen;
     thisDay.alive = thisDay.total - thisDay.frozen;
   }
   for (var iday = 1; iday < depth; iday++) {
-    var prevDay = records[iday - 1];
+    const prevDay = records[iday - 1];
     var thisDay = records[iday];
     thisDay.newAlive = thisDay.alive - prevDay.alive;
   }
   for (var iday = 0; iday < depth; iday++) {
     var thisDay = records[iday];
-    thisDay.frozenPercent = Math.round(thisDay.frozen * 10000 / thisDay.total) / 100;
+    thisDay.frozenPercent = Math.round(thisDay.frozen * 1000 / thisDay.total) / 10;
   }
   records.shift();
 
   function deltaStr(delta) {
     if (delta > 0) return '+' + delta.toString();
     if (delta == 0) return '±0';
-    if (delta == 0) return delta.toString();
+    return delta.toString();
   }
 
-  titles = records.map(r => `<th>${r.title}</th>`);
-  alives = records.map(r => `<td style="text-align: center;">${r.title == '今日' ? '<strong>' + r.alive + '</strong>' : r.alive}<br>(${deltaStr(r.newAlive)})</td>`);
-  forzens = records.map(r => `<td style="text-align: center;">${r.frozen}<br>(${deltaStr(r.newFrozen)})</td>`);
-  totals = records.map(r => `<td style="text-align: center;">${r.total}<br>(${deltaStr(r.newTotal)})</td>`);
-  percents = records.map(r => `<td style="text-align: center;">${r.frozenPercent}%</td>`);
+  titles = records.map(r => 
+    `<th>${r.title}</th>`);
+  alives = records.map(r =>
+    `<td style="text-align: center;">${r.isToday ? '<strong>' + r.alive + '</strong>' : r.alive}` +
+    `<br><span class="gray">(${deltaStr(r.newAlive)})</span></td>`);
+  forzens = records.map(r => 
+    `<td style="text-align: center;">${r.frozen}` +
+    `<br><span class="gray">(${deltaStr(r.newFrozen)})</span></td>`);
+  totals = records.map(r => 
+    `<td style="text-align: center;">${r.total}` +
+    `<br><span class="gray">(${deltaStr(r.newTotal)})</span></td>`);
+  percents = records.map(r => 
+    `<td style="text-align: center;">${r.frozenPercent}%</td>`);
 
   var html = '<table>';
   html += `<tr><th></th>${titles.join('')}</tr>`;
-  html += `<tr><th>生存<br>(増減)</th>${alives.join('')}</tr>`;
-  html += `<tr><th>凍結<br>(増減)</th>${forzens.join('')}</tr>`;
-  html += `<tr><th>合計<br>(増減)</th>${totals.join('')}</tr>`;
+  html += `<tr><th>生存<br><span class="gray">(増減)<span></th>${alives.join('')}</tr>`;
+  html += `<tr><th>凍結<br><span class="gray">(増減)<span></th>${forzens.join('')}</tr>`;
+  html += `<tr><th>合計<br><span class="gray">(増減)<span></th>${totals.join('')}</tr>`;
   html += `<tr><th>凍結率</th>${percents.join('')}</tr>`;
   html += '</table>';
   document.getElementById(elemId).innerHTML = html;
