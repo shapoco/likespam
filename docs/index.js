@@ -20,9 +20,7 @@ function likeSpamRenderMenu(index) {
   document.getElementById('menu').innerHTML = html;
 }
 
-function likeSpamRenderStats() {
-  const div = document.getElementById('stats');
-
+function likeSpamRenderStats(elemId) {
   const now = new Date();
   const todayStr = now.toLocaleString("sv-SE").substring(0, 10);
   var yestDate = new Date(now.getTime());
@@ -61,7 +59,7 @@ function likeSpamRenderStats() {
   const totalFrozenYestPercent = Math.round(totalFrozenYest * 1000 / totalYest) / 10;
   const totalAliveYestPercent = Math.round(totalAliveYest * 1000 / totalYest) / 10;
 
-  div.innerHTML = 
+  document.getElementById(elemId).innerHTML = 
     '<table>' +
     '<tr><th></th><th>生存 (割合)</th><th>凍結 (増減, 割合)</th><th>合計 (増減)</th></tr>' +
     `<tr><th>今日</th><td>${totalAliveToday} (${totalAliveTodayPercent}%)</td><td>${totalFrozenToday} (+${frozenToday}, ${totalFrozenTodayPercent}%)</td><td>${totalToday} (+${addedToday})</td></tr>` +
