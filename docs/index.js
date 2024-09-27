@@ -22,12 +22,15 @@ function likeSpamRenderMenu(index) {
 
 class LikeSpamStatRecord {
   constructor(dateStr) {
+    this.title = '';
     this.dateStr = '';
     this.total = 0;
     this.alive = 0;
     this.frozen = 0;
-    this.newAdded = 0;
+    this.newTotal = 0;
     this.newFrozen = 0;
+    this.newAlive = 0;
+    this.frozenPercent = 0;
   }
 }
 
@@ -38,14 +41,17 @@ function likeSpamRenderStats(elemId) {
   yestDate.setDate(yestDate.getDate() - 1);
   const yestStr = yestDate.toLocaleString("sv-SE").substring(0, 10);
 
-  const depth = 3;
+  const depth = 4;
 
   records = [];
 
-  for (var i = 0; i < depth; i++) {
+  for (var iday = 0; iday < depth; iday++) {
     var r = new LikeSpamStatRecord();
+    r.title = 
+      (iday == depth - 1) ? '今日' :
+      (iday == depth - 2) ? '昨日' : `${depth - iday - 1} 日前`;
     var dateObj = new Date(now.getTime());
-    dateObj.setDate(dateObj.getDate() - depth + 1 + i);
+    dateObj.setDate(dateObj.getDate() - depth + 1 + iday);
     r.dateStr = dateObj.toLocaleString("sv-SE").substring(0, 10);
     records.push(r);
   }
@@ -55,7 +61,7 @@ function likeSpamRenderStats(elemId) {
     const addedDate = spam.addedDate.toLocaleString("sv-SE");
     const frozenDate = isFrozen ? spam.frozenDate.toLocaleString("sv-SE") : '';
     records.forEach(r => {
-      if (addedDate.startsWith(r.dateStr)) r.newAdded += 1;
+      if (addedDate.startsWith(r.dateStr)) r.newTotal += 1;
       if (frozenDate.startsWith(r.dateStr)) r.newFrozen += 1;
     });
     if (isFrozen) records[depth - 1].frozen += 1;
@@ -64,63 +70,44 @@ function likeSpamRenderStats(elemId) {
   records[depth - 1].total = likeSpams.length;
   records[depth - 1].alive = records[depth - 1].total - records[depth - 1].frozen;
   
+  for (var iday = depth - 2; iday >= 0; iday--) {
+    var thisDay = records[iday];
+    var nextDay = records[iday + 1];
+    thisDay.total = nextDay.total - nextDay.newTotal;
+    thisDay.frozen = nextDay.frozen - nextDay.newFrozen;
+    thisDay.alive = thisDay.total - thisDay.frozen;
+  }
+  for (var iday = 1; iday < depth; iday++) {
+    var prevDay = records[iday - 1];
+    var thisDay = records[iday];
+    thisDay.newAlive = thisDay.alive - prevDay.alive;
+  }
+  for (var iday = 0; iday < depth; iday++) {
+    var thisDay = records[iday];
+    thisDay.frozenPercent = Math.round(thisDay.frozen * 10000 / prevDay.total) / 100;
+  }
+  records.shift();
 
-  const totalToday = likeSpams.length;
-  var aliveToday = 0;
-  var frozenToday = 0;
+  function deltaStr(delta) {
+    if (delta > 0) return '+' + delta.toString();
+    if (delta == 0) return '±0';
+    if (delta == 0) return delta.toString();
+  }
 
-  var newAddedToday = 0;
-  var newAddedYest = 0;
+  titles = records.map(r => `<th>${r.title}</th>`);
+  alives = records.map(r => `<td style="text-align: center;">${r.title == '今日' ? '<strong>' + r.alive + '</strong>' : r.alive}<br>(${deltaStr(r.newAlive)})</td>`);
+  forzens = records.map(r => `<td style="text-align: center;">${r.frozen}<br>(${deltaStr(r.newFrozen)})</td>`);
+  totals = records.map(r => `<td style="text-align: center;">${r.total}<br>(${deltaStr(r.newTotal)})</td>`);
+  percents = records.map(r => `<td style="text-align: center;">${r.frozenPercent}%</td>`);
 
-  var newFrozenToday = 0;
-  var newFrozenYest = 0;
-
-  Object.values(likeSpams).forEach((spam) => {
-    const isFrozen = !!(spam.frozenDate);
-    const addedDate = spam.addedDate.toLocaleString("sv-SE");
-    const frozenDate = isFrozen ? spam.frozenDate.toLocaleString("sv-SE") : '';
-    if (addedDate.startsWith(todayStr)) newAddedToday += 1;
-    if (addedDate.startsWith(yestStr)) newAddedYest += 1;
-    if (frozenDate.startsWith(todayStr)) newFrozenToday += 1;
-    if (frozenDate.startsWith(yestStr)) newFrozenYest += 1;
-    if (isFrozen) frozenToday += 1;
-    else aliveToday += 1;
-  });
-
-  const totalYest = totalToday - newAddedToday;
-  const totalFrozenYest = frozenToday - newFrozenToday;
-  const totalAliveYest = totalYest - totalFrozenYest;
-
-  const totalFrozenTodayPercent = Math.round(frozenToday * 1000 / totalToday) / 10;
-  const totalAliveTodayPercent = Math.round(aliveToday * 1000 / totalToday) / 10;
-
-  const totalFrozenYestPercent = Math.round(totalFrozenYest * 1000 / totalYest) / 10;
-  const totalAliveYestPercent = Math.round(totalAliveYest * 1000 / totalYest) / 10;
-
-  document.getElementById(elemId).innerHTML = 
-    //'<table>' +
-    //'<tr><th></th><th>生存 (割合)</th><th>凍結 (増減, 割合)</th><th>合計 (増減)</th></tr>' +
-    //`<tr><th>今日</th><td>${totalAliveToday} (${totalAliveTodayPercent}%)</td><td>${totalFrozenToday} (+${frozenToday}, ${totalFrozenTodayPercent}%)</td><td>${totalToday} (+${addedToday})</td></tr>` +
-    //`<tr><th>昨日</th><td>${totalAliveYest} (${totalAliveYestPercent}%)</td><td>${totalFrozenYest} (+${frozenYest}, ${totalFrozenYestPercent}%)</td><td>${totalYest} (+${addedYest})</td></tr>` +
-    //'</table>';
-    '<table>' +
-    '<tr><th></th><th>昨日</th><th>今日</th></tr>' +
-    '<tr>' +
-      '<th>生存アカウント<br>(割合)</th>' +
-      `<td style="text-align: center;">${totalAliveYest}<br>(${totalAliveYestPercent}%)</td>` +
-      `<td style="text-align: center;"><strong>${aliveToday}</strong><br>(${totalAliveTodayPercent}%)</td>` +
-    '</tr>' +
-    '<tr>' +
-      '<th>凍結アカウント<br>(増減)<br>(割合)</th>' +
-      `<td style="text-align: center;">${totalFrozenYest}<br>(+${newFrozenYest})<br>(${totalFrozenYestPercent}%)</td>` +
-      `<td style="text-align: center;">${frozenToday}<br>(+${newFrozenToday})<br>(${totalFrozenTodayPercent}%)</td>` +
-    '</tr>' +
-    '<tr>' +
-      '<th>合計<br>(増減)</th>' +
-      `<td style="text-align: center;">${totalYest}<br>(+${newAddedYest})</td>` +
-      `<td style="text-align: center;">${totalToday}<br>(+${newAddedToday})</td>` +
-    '</tr>' +
-    '</table>';
+  var html = '<table>';
+  html += `<tr><th></th>${titles.join('')}</tr>`;
+  html += `<tr><th>生存<br>(増減)</th>${alives.join('')}</tr>`;
+  html += `<tr><th>凍結<br>(増減)</th>${forzens.join('')}</tr>`;
+  html += `<tr><th>合計<br>(増減)</th>${totals.join('')}</tr>`;
+  html += `<tr><th>凍結率</th>${percents.join('')}</tr>`;
+  html += '</table>';
+  document.getElementById(elemId).innerHTML = html;
 }
 
 function likeSpamGetSearchLinkHtml(screenNames, linkText) {
