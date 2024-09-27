@@ -32,7 +32,7 @@
     <title>いいねスパム一覧</title>
     <link href="./style.css?20240927030345" rel="stylesheet" type="text/css">
     <script src="./index.js?20240927030345"></script>
-    <script src="./database.js?20240927033424"></script>
+    <script src="./database.js?20240927095138"></script>
   </head>
 
   <body>
@@ -158,41 +158,12 @@
           const li = document.createElement('li');
           li.innerHTML = 
             '#' + (ifrom + 1).toString() + '～' + ito.toString() + 
-            ' ('  + formatDate(likeSpams[ito - 1].addedDate) + ' 追加)<br>' +
+            ' ('  + likeSpamFormatDate(likeSpams[ito - 1].addedDate) + ' 追加)<br>' +
             '<a href="' + url + '" target="_blank">' + text + '</a>';
           if (isAllFrozen) {
             li.classList.add("frozen");
           }
           ul.appendChild(li);
-        }
-      }
-
-      function formatDate(d) {
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-
-        const isToday = d >= today && d < new Date(today.getTime() + 24 * 60 * 60 * 1000);
-        const isYesterday = d >= yesterday && d < today;
-        const isThisYear = d.getFullYear() === now.getFullYear();
-
-        const hours = d.getHours().toString().padStart(2, '0');
-        const minutes = d.getMinutes().toString().padStart(2, '0');
-
-        if (isToday) {
-          return `今日 ${hours}:${minutes}`;
-        } else if (isYesterday) {
-          return `昨日 ${hours}:${minutes}`;
-        } else if (isThisYear) {
-          const month = (d.getMonth() + 1);
-          const day = d.getDate().toString().padStart(2, '0');
-          return `${month}/${day} ${hours}:${minutes}`;
-        } else {
-          const year = d.getFullYear().toString().slice(-2);
-          const month = (d.getMonth() + 1);
-          const day = d.getDate().toString().padStart(2, '0');
-          return `${year}/${month}/${day} ${hours}:${minutes}`;
         }
       }
 

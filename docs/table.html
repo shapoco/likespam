@@ -32,7 +32,7 @@
     <title>PC用 表形式 | いいねスパム一覧</title>
     <link href="./style.css?20240927030345" rel="stylesheet" type="text/css">
     <script src="./index.js?20240927030345"></script>
-    <script src="./database.js?20240927033424"></script>
+    <script src="./database.js?20240927095138"></script>
   </head>
 
   <body>
@@ -106,13 +106,13 @@
           const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
           const scrNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
           //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
-          td_num = document.createElement('td'); 
-          td_added = document.createElement('td');
-          td_scrname = document.createElement('td');
-          td_uesrid = document.createElement('td');
-          td_name = document.createElement('td');
+          const td_num = document.createElement('td'); 
+          const td_added = document.createElement('td');
+          const td_scrname = document.createElement('td');
+          const td_uesrid = document.createElement('td');
+          const td_name = document.createElement('td');
           td_num.innerHTML = (i + 1).toString();
-          td_added.innerHTML = formatDate(spam.addedDate);
+          td_added.innerHTML = likeSpamFormatDate(spam.addedDate);
           td_scrname.innerHTML = scrNameHtml;
           td_uesrid.innerHTML = userIdHtml;
           //td_name.innerHTML = icon_html + ' ' + spam.name;
@@ -133,35 +133,6 @@
           tr.appendChild(td_uesrid);
           tr.appendChild(td_name);
           tbl.appendChild(tr);
-        }
-      }
-
-      function formatDate(d) {
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-
-        const isToday = d >= today && d < new Date(today.getTime() + 24 * 60 * 60 * 1000);
-        const isYesterday = d >= yesterday && d < today;
-        const isThisYear = d.getFullYear() === now.getFullYear();
-
-        const hours = d.getHours().toString().padStart(2, '0');
-        const minutes = d.getMinutes().toString().padStart(2, '0');
-
-        if (isToday) {
-          return `今日 ${hours}:${minutes}`;
-        } else if (isYesterday) {
-          return `昨日 ${hours}:${minutes}`;
-        } else if (isThisYear) {
-          const month = (d.getMonth() + 1);
-          const day = d.getDate().toString().padStart(2, '0');
-          return `${month}/${day} ${hours}:${minutes}`;
-        } else {
-          const year = d.getFullYear().toString().slice(-2);
-          const month = (d.getMonth() + 1);
-          const day = d.getDate().toString().padStart(2, '0');
-          return `${year}/${month}/${day} ${hours}:${minutes}`;
         }
       }
 
@@ -188,14 +159,6 @@
           img.onload = () => resolve(index, url);
           img.onerror = () => reject(index, url);
         });
-      }
-
-      function isSmartPhone() {
-        if (window.matchMedia && window.matchMedia('(max-device-width: 640px)').matches) {
-          return true;
-        } else {
-          return false;
-        }
       }
 
       main();

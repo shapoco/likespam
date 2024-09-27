@@ -80,7 +80,7 @@
         const to_id = "Zy_Iove";
         {
           const li = document.createElement('li');
-          li.innerHTML = getSearchLinkHtml(sakuras.filter(e => e.status.length == 0).map(e => e.screen_name), 'まとめて表示');
+          li.innerHTML = likeSpamGetSearchLinkHtml(sakuras.filter(e => e.status.length == 0).map(e => e.screen_name), 'まとめて表示');
           ul.appendChild(li);
         }
         sakuras.forEach(e => {
