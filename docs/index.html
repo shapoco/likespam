@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240928002830" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240928002830"></script>
+    <link href="./style.css?20240928083949" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240928083949"></script>
     <script src="./database.js?20240928080754"></script>
   </head>
 
@@ -122,64 +122,71 @@
       <img src="user_tab.png">
     </p>
 
+    <form name="filter">
+      表示対象:
+      <input id="show_frozen" type="checkbox" checked><label for="show_frozen">凍結確認済み</label>
+      <input id="show_rpspam" type="checkbox"><label for="show_rpspam">リポストスパム</label>
+    </form>
+
     <ul>
       <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del> : 過去24時間以内に凍結確認)</li>
-      <li><span class="rpspam">緑色</span> : リポストスパム (活動停止中。現状は無視していいと思います)</li>
+      <li><span class="rpspam">緑色</span> : リポストスパム</li>
     </ul>
     
     <ul id="query_list">
     </ul>
 
     <script>
-      function main() {
+      document.filter.show_frozen.addEventListener('change', e => likeSpamRenderLinks());
+      document.filter.show_rpspam.addEventListener('change', e => likeSpamRenderLinks());
+
+      function likeSpamRenderLinks() {
+        const showFrozen = document.filter.show_frozen.checked;
+        const showRpSpam = document.filter.show_rpspam.checked;
+
         const now = Date.now();
-        const ul = document.getElementById('query_list');
         const GROUP_SIZE = 20;
         const numSpam = likeSpams.length;
         const numGroup = Math.ceil(numSpam / GROUP_SIZE);
+
+        var html = '';
         for (var igrp = numGroup - 1; igrp >= 0; igrp--)  {
           const ifrom = igrp * GROUP_SIZE;
           const ito = (igrp < numGroup - 1) ? (ifrom + GROUP_SIZE) : numSpam;
           var isAllFrozen = true;
-          var url = 'https://x.com/search?q=';
-          var text = '';
+          var screenNames = [];
+          var linkTexts = [];
           for (var i = ito - 1; i >= ifrom; i--) {
             const spam = likeSpams[i];
+
             const isFrozen = !!(spam.frozenDate);
             const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
             isAllFrozen &= isFrozen;
-            url += '%40' + spam.screenName;
-            if (isNewFrozen) {
-              text += '<del class="frozen_new">@' + spam.screenName + '</del>';
-            }
-            else if (isFrozen) {
-              text += '<del>@' + spam.screenName + '</del>';
-            }
-            else if (spam.name.includes('リポストされたらおめでとう')) {
-              text += '<span class="rpspam">@' + spam.screenName + '</span>';
-            }
-            else {
-              text += '@' + spam.screenName;
-            }
-            if (i > ifrom) {
-              url += '+OR+';
-              text += ' ';
-            }
+            if (!showFrozen && isFrozen) continue;
+
+            const isRpSpam = spam.name.includes('リポストされたらおめでとう');
+            if (!showRpSpam && isRpSpam) continue;
+
+            screenNames.push(spam.screenName);
+
+            if (isNewFrozen) linkTexts.push(`<del class="frozen_new">@${spam.screenName}</del>`);
+            else if (isFrozen) linkTexts.push(`<del>@${spam.screenName}</del>`);
+            else if (isRpSpam) linkTexts.push(`<span class="rpspam">@${spam.screenName}</span>`);
+            else linkTexts.push('@' + spam.screenName);
           }
-          url += '&src=typed_query&f=user';
-          const li = document.createElement('li');
-          li.innerHTML = 
-            '#' + (ifrom + 1).toString() + '～' + ito.toString() + 
-            ' ('  + likeSpamFormatDate(likeSpams[ito - 1].addedDate) + ' 追加)<br>' +
-            '<a href="' + url + '" target="_blank">' + text + '</a>';
-          if (isAllFrozen) {
-            li.classList.add("frozen");
-          }
-          ul.appendChild(li);
+
+          if (screenNames.length == 0) continue;
+          
+          html += `<li${isAllFrozen ? ' class=frozen"' : ''}>`
+          html += `#${ifrom + 1}～${ito} (${likeSpamFormatDate(likeSpams[ito - 1].addedDate)} 追加)<br>`;
+          html += `${likeSpamGetSearchLinkHtml(screenNames, linkTexts.join(' '))}`;
+          html += '</li>';
         }
+
+        document.getElementById('query_list').innerHTML = html;
       }
 
-      main();
+      likeSpamRenderLinks();
     </script>
 
     <hr>
