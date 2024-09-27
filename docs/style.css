@@ -132,3 +132,18 @@ img.profile_image {
   height: 48px;
   border-radius: 999px;
 }
+
+.menu_item {
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0px 10px;
+}
+
+.menu_selected {
+  font-weight: bold;
+  background: transparent;
+  color: #048;
+}
+
+.menu_item { text-decoration: none !important; }

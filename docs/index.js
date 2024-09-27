@@ -9,12 +9,11 @@ function likeSpamRenderMenu(index) {
   var i = 0;
   var html = '';
   likeSpamMenuItems.forEach(e => {
-    if (i > 0) html += ' | ';
     if (index == i) {
-      html += `<span style='font-weight: bold;'>${e.name}</span>`;
+      html += `<span class="menu_item menu_selected">${e.name}</span> `;
     }
     else {
-      html += `<a href="${e.url}">${e.name}</a>`;
+      html += `<a class="menu_item" href="${e.url}">${e.name}</a> `;
     }
     i += 1;
   });
