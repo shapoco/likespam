@@ -20,6 +20,17 @@ function likeSpamRenderMenu(index) {
   document.getElementById('menu').innerHTML = html;
 }
 
+class LikeSpamStatRecord {
+  constructor(dateStr) {
+    this.dateStr = '';
+    this.total = 0;
+    this.alive = 0;
+    this.frozen = 0;
+    this.newAdded = 0;
+    this.newFrozen = 0;
+  }
+}
+
 function likeSpamRenderStats(elemId) {
   const now = new Date();
   const todayStr = now.toLocaleString("sv-SE").substring(0, 10);
@@ -27,34 +38,61 @@ function likeSpamRenderStats(elemId) {
   yestDate.setDate(yestDate.getDate() - 1);
   const yestStr = yestDate.toLocaleString("sv-SE").substring(0, 10);
 
+  const depth = 3;
+
+  records = [];
+
+  for (var i = 0; i < depth; i++) {
+    var r = new LikeSpamStatRecord();
+    var dateObj = new Date(now.getTime());
+    dateObj.setDate(dateObj.getDate() - depth + 1 + i);
+    r.dateStr = dateObj.toLocaleString("sv-SE").substring(0, 10);
+    records.push(r);
+  }
+
+  likeSpams.forEach((spam) => {
+    const isFrozen = !!(spam.frozenDate);
+    const addedDate = spam.addedDate.toLocaleString("sv-SE");
+    const frozenDate = isFrozen ? spam.frozenDate.toLocaleString("sv-SE") : '';
+    records.forEach(r => {
+      if (addedDate.startsWith(r.dateStr)) r.newAdded += 1;
+      if (frozenDate.startsWith(r.dateStr)) r.newFrozen += 1;
+    });
+    if (isFrozen) records[depth - 1].frozen += 1;
+  });
+
+  records[depth - 1].total = likeSpams.length;
+  records[depth - 1].alive = records[depth - 1].total - records[depth - 1].frozen;
+  
+
   const totalToday = likeSpams.length;
-  var totalAliveToday = 0;
-  var totalFrozenToday = 0;
-
-  var addedToday = 0;
-  var addedYest = 0;
-
+  var aliveToday = 0;
   var frozenToday = 0;
-  var frozenYest = 0;
+
+  var newAddedToday = 0;
+  var newAddedYest = 0;
+
+  var newFrozenToday = 0;
+  var newFrozenYest = 0;
 
   Object.values(likeSpams).forEach((spam) => {
     const isFrozen = !!(spam.frozenDate);
     const addedDate = spam.addedDate.toLocaleString("sv-SE");
     const frozenDate = isFrozen ? spam.frozenDate.toLocaleString("sv-SE") : '';
-    if (addedDate.startsWith(todayStr)) addedToday += 1;
-    if (addedDate.startsWith(yestStr)) addedYest += 1;
-    if (frozenDate.startsWith(todayStr)) frozenToday += 1;
-    if (frozenDate.startsWith(yestStr)) frozenYest += 1;
-    if (isFrozen) totalFrozenToday += 1;
-    else totalAliveToday += 1;
+    if (addedDate.startsWith(todayStr)) newAddedToday += 1;
+    if (addedDate.startsWith(yestStr)) newAddedYest += 1;
+    if (frozenDate.startsWith(todayStr)) newFrozenToday += 1;
+    if (frozenDate.startsWith(yestStr)) newFrozenYest += 1;
+    if (isFrozen) frozenToday += 1;
+    else aliveToday += 1;
   });
 
-  const totalYest = totalToday - addedToday;
-  const totalFrozenYest = totalFrozenToday - frozenToday;
+  const totalYest = totalToday - newAddedToday;
+  const totalFrozenYest = frozenToday - newFrozenToday;
   const totalAliveYest = totalYest - totalFrozenYest;
 
-  const totalFrozenTodayPercent = Math.round(totalFrozenToday * 1000 / totalToday) / 10;
-  const totalAliveTodayPercent = Math.round(totalAliveToday * 1000 / totalToday) / 10;
+  const totalFrozenTodayPercent = Math.round(frozenToday * 1000 / totalToday) / 10;
+  const totalAliveTodayPercent = Math.round(aliveToday * 1000 / totalToday) / 10;
 
   const totalFrozenYestPercent = Math.round(totalFrozenYest * 1000 / totalYest) / 10;
   const totalAliveYestPercent = Math.round(totalAliveYest * 1000 / totalYest) / 10;
@@ -68,19 +106,19 @@ function likeSpamRenderStats(elemId) {
     '<table>' +
     '<tr><th></th><th>昨日</th><th>今日</th></tr>' +
     '<tr>' +
-      '<th>生存<br>(割合)</th>' +
+      '<th>生存アカウント<br>(割合)</th>' +
       `<td style="text-align: center;">${totalAliveYest}<br>(${totalAliveYestPercent}%)</td>` +
-      `<td style="text-align: center;"><strong>${totalAliveToday}</strong><br>(${totalAliveTodayPercent}%)</td>` +
+      `<td style="text-align: center;"><strong>${aliveToday}</strong><br>(${totalAliveTodayPercent}%)</td>` +
     '</tr>' +
     '<tr>' +
-      '<th>凍結<br>(増減)<br>(割合)</th>' +
-      `<td style="text-align: center;">${totalFrozenYest}<br>(+${frozenYest})<br>(${totalFrozenYestPercent}%)</td>` +
-      `<td style="text-align: center;">${totalFrozenToday}<br>(+${frozenToday})<br>(${totalFrozenTodayPercent}%)</td>` +
+      '<th>凍結アカウント<br>(増減)<br>(割合)</th>' +
+      `<td style="text-align: center;">${totalFrozenYest}<br>(+${newFrozenYest})<br>(${totalFrozenYestPercent}%)</td>` +
+      `<td style="text-align: center;">${frozenToday}<br>(+${newFrozenToday})<br>(${totalFrozenTodayPercent}%)</td>` +
     '</tr>' +
     '<tr>' +
       '<th>合計<br>(増減)</th>' +
-      `<td style="text-align: center;">${totalYest}<br>(+${addedYest})</td>` +
-      `<td style="text-align: center;">${totalToday}<br>(+${addedToday})</td>` +
+      `<td style="text-align: center;">${totalYest}<br>(+${newAddedYest})</td>` +
+      `<td style="text-align: center;">${totalToday}<br>(+${newAddedToday})</td>` +
     '</tr>' +
     '</table>';
 }
