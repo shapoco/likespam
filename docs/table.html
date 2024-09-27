@@ -127,8 +127,15 @@
           }
         }
         
-        document.getElementById('page_links_top').innerHTML = html;
-        document.getElementById('page_links_bottom').innerHTML = html;
+        const pageLinksTop = document.getElementById('page_links_top');
+        const pageLinksBottom = document.getElementById('page_links_bottom');
+        pageLinksTop.innerHTML = html;
+        pageLinksBottom.innerHTML = html;
+
+        const rect = pageLinksTop.getBoundingClientRect();
+        if (rect.top < 0 || window.innerHeight < rect.bottom) {
+          pageLinksTop.scrollIntoView();
+        }
       }
 
       function likeSpamRenderTable() {
@@ -178,67 +185,6 @@
         document.getElementById('spam_table').innerHTML = html;
       }
 
-      likeSpamRenderTable();
-    </script>
-
-    <script>
-      const STATUS_ICON_UNKNOWN = '⚪';
-      const STATUS_ICON_CHECKING = '🟡';
-      const STATUS_ICON_SUCCESS = '🟢';
-      const STATUS_ICON_FAILED = '🔴';
-
-      function main() {
-        //if (isSmartPhone()) {
-        //  document.getElementById('table_size_warning').style.display = 'block';
-        //}
-        //else {
-        //  generateTable();
-        //}
-      }
-
-      function generateTable() {
-        document.getElementById('table_size_warning').style.display = 'none';
-
-        now = Date.now();
-        tbl = document.getElementById('spam_table');
-        const num_spam = likeSpams.length;
-        for (var i = num_spam - 1; i >= 0; i--) {
-          const spam = likeSpams[i];
-          const isFrozen = !!(spam.frozenDate);
-          const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
-          const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
-          const scrNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
-          //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
-          const td_num = document.createElement('td'); 
-          const td_added = document.createElement('td');
-          const td_scrname = document.createElement('td');
-          const td_uesrid = document.createElement('td');
-          const td_name = document.createElement('td');
-          td_num.innerHTML = (i + 1).toString();
-          td_added.innerHTML = likeSpamFormatDate(spam.addedDate);
-          td_scrname.innerHTML = scrNameHtml;
-          td_uesrid.innerHTML = userIdHtml;
-          //td_name.innerHTML = icon_html + ' ' + spam.name;
-          td_name.innerHTML = spam.name;
-          tr = document.createElement('tr');
-          if (isFrozen) {
-            tr.classList.add("frozen");
-            if (isNewFrozen) {
-              tr.classList.add("frozen_new");
-            }
-          }
-          else if (spam.name.includes('リポストされたらおめでとう')) {
-            tr.classList.add("rpspam");
-          }
-          tr.appendChild(td_num);
-          tr.appendChild(td_added);
-          tr.appendChild(td_scrname);
-          tr.appendChild(td_uesrid);
-          tr.appendChild(td_name);
-          tbl.appendChild(tr);
-        }
-      }
-
       function checkProfileIconExistence(index) {
         const span = document.getElementById('status_icon_' + index);
         if (span.innerHTML != STATUS_ICON_UNKNOWN) return;
@@ -264,7 +210,7 @@
         });
       }
 
-      main();
+      likeSpamRenderTable();
     </script>
 
     <hr>
