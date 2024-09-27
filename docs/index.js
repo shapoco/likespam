@@ -60,10 +60,28 @@ function likeSpamRenderStats(elemId) {
   const totalAliveYestPercent = Math.round(totalAliveYest * 1000 / totalYest) / 10;
 
   document.getElementById(elemId).innerHTML = 
+    //'<table>' +
+    //'<tr><th></th><th>生存 (割合)</th><th>凍結 (増減, 割合)</th><th>合計 (増減)</th></tr>' +
+    //`<tr><th>今日</th><td>${totalAliveToday} (${totalAliveTodayPercent}%)</td><td>${totalFrozenToday} (+${frozenToday}, ${totalFrozenTodayPercent}%)</td><td>${totalToday} (+${addedToday})</td></tr>` +
+    //`<tr><th>昨日</th><td>${totalAliveYest} (${totalAliveYestPercent}%)</td><td>${totalFrozenYest} (+${frozenYest}, ${totalFrozenYestPercent}%)</td><td>${totalYest} (+${addedYest})</td></tr>` +
+    //'</table>';
     '<table>' +
-    '<tr><th></th><th>生存 (割合)</th><th>凍結 (増減, 割合)</th><th>合計 (増減)</th></tr>' +
-    `<tr><th>今日</th><td>${totalAliveToday} (${totalAliveTodayPercent}%)</td><td>${totalFrozenToday} (+${frozenToday}, ${totalFrozenTodayPercent}%)</td><td>${totalToday} (+${addedToday})</td></tr>` +
-    `<tr><th>昨日</th><td>${totalAliveYest} (${totalAliveYestPercent}%)</td><td>${totalFrozenYest} (+${frozenYest}, ${totalFrozenYestPercent}%)</td><td>${totalYest} (+${addedYest})</td></tr>` +
+    '<tr><th></th><th>昨日</th><th>今日</th></tr>' +
+    '<tr>' +
+      '<th>生存<br>(割合)</th>' +
+      `<td style="text-align: center;">${totalAliveYest}<br>(${totalAliveYestPercent}%)</td>` +
+      `<td style="text-align: center;"><strong>${totalAliveToday}</strong><br>(${totalAliveTodayPercent}%)</td>` +
+    '</tr>' +
+    '<tr>' +
+      '<th>凍結<br>(増減)<br>(割合)</th>' +
+      `<td style="text-align: center;">${totalFrozenYest}<br>(+${frozenYest})<br>(${totalFrozenYestPercent}%)</td>` +
+      `<td style="text-align: center;">${totalFrozenToday}<br>(+${frozenToday})<br>(${totalFrozenTodayPercent}%)</td>` +
+    '</tr>' +
+    '<tr>' +
+      '<th>合計<br>(増減)</th>' +
+      `<td style="text-align: center;">${totalYest}<br>(+${addedYest})</td>` +
+      `<td style="text-align: center;">${totalToday}<br>(+${addedToday})</td>` +
+    '</tr>' +
     '</table>';
 }
 
