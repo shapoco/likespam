@@ -84,7 +84,7 @@ function likeSpamRenderStats(elemId) {
   }
   for (var iday = 0; iday < depth; iday++) {
     var thisDay = records[iday];
-    thisDay.frozenPercent = Math.round(thisDay.frozen * 10000 / prevDay.total) / 100;
+    thisDay.frozenPercent = Math.round(thisDay.frozen * 10000 / thisDay.total) / 100;
   }
   records.shift();
 
