@@ -32,7 +32,7 @@
     <title>いいねスパム一覧</title>
     <link href="./style.css?20240928100739" rel="stylesheet" type="text/css">
     <script src="./index.js?20240928100739"></script>
-    <script src="./database.js?20240928121409"></script>
+    <script src="./database.js?20240928122040"></script>
   </head>
 
   <body>
@@ -125,16 +125,14 @@
     <form name="filter">
       フィルタ:
       <input id="show_likespam" type="checkbox" checked><label for="show_likespam">いいねスパム</label>
-      <input id="show_rpspam" type="checkbox"><label for="show_rpspam">RPスパム</label>
-      <input id="show_sakura" type="checkbox" checked><label for="show_sakura">サクラ</label>
-      <input id="hide_frozen" type="checkbox"><label for="hide_frozen">凍結済を隠す</label>
+      <input id="show_rpspam" type="checkbox"><label for="show_rpspam"><span class="rpspam">RPスパム</span></label>
+      <input id="show_sakura" type="checkbox" checked><label for="show_sakura"><span class="sakura">サクラ</span></label>
+      <input id="hide_frozen" type="checkbox"><label for="hide_frozen"><del>凍結済</del>を隠す</label>
     </form>
 
-    <ul>
-      <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del> : 過去24時間以内に凍結確認)</li>
-      <li><span class="rpspam">緑色</span> : RPスパム</li>
-      <li><span class="sakura">ピンク</span> : サクラ</li>
-    </ul>
+    <p>
+      <del class="frozen_new">水色</del> : 直近 24 時間以内に凍結が確認されたアカウント</li>
+    </p>
 
     <p>
       ⚠ X 検索の仕様のためスパムではない無関係なアカウントが混ざることがあります。
