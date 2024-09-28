@@ -49,6 +49,7 @@ const likeSpamNames = [
   "柚姫さん(フォロー歓迎！",
   "チュン太郎",
   "🎉いいね通知きた人だけ🎉プロフィ一ル確認してね！おめでとう🎁",
+  "man",
 ];
 
 function newLikeSpam(userId, screenName, spamType, addedDate, frozenDate, nameKey, profileImageUrl) {
@@ -13322,4 +13323,5 @@ const likeSpams = [
   newLikeSpam("1803780082474876928","AnaLopez1279283",0,2370067,-1,13,"%0%/1822648778345811968/0p79y3wZ_normal.jpg"),
   newLikeSpam("1803776336667811840","TamaraLamb4090",0,2370067,-1,13,"%0%/1822649574777118720/7CqCXs1x_normal.jpg"),
   newLikeSpam("1806952531249016832","RoblesDarc40960",0,2370520,-1,46,"%0%/1839219357563461632/Q997_rUm_normal.jpg"),
+  newLikeSpam("1392270785935409154","282763",2,2370600,-1,47,"%0%/1832596440440565761/uv_dLcBw_normal.jpg"),
 ];
