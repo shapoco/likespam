@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240929002923" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929002923"></script>
-    <script src="./database.js?20240929020747"></script>
+    <link href="./style.css?20240929051208" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929051208"></script>
+    <script src="./database.js?20240929054440"></script>
   </head>
 
   <body>
@@ -136,12 +136,14 @@
       </p>
     </div>
     
-    <form name="filter">
-      フィルタ:
-      <input id="show_likespam" type="checkbox" checked><label for="show_likespam">いいねスパム</label>
-      <input id="show_rpspam" type="checkbox"><label for="show_rpspam"><span class="rpspam">RPスパム</span></label>
-      <input id="show_sakura" type="checkbox" checked><label for="show_sakura"><span class="sakura">サクラ</span></label>
-      <input id="hide_frozen" type="checkbox"><label for="hide_frozen"><del>凍結済</del>を隠す</label>
+    <form name="filter" class="filter_wrapper">
+      <p>
+        フィルタ:
+        <input id="show_likespam" type="checkbox" checked><label for="show_likespam">いいねスパム</label>
+        <input id="show_rpspam" type="checkbox"><label for="show_rpspam"><span class="rpspam">RPスパム</span></label>
+        <input id="show_sakura" type="checkbox" checked><label for="show_sakura"><span class="sakura">サクラ</span></label>
+        <input id="hide_frozen" type="checkbox"><label for="hide_frozen"><del>凍結済</del>を隠す</label>
+      </p>
     </form>
 
     <p>
@@ -183,13 +185,13 @@
             isAllFrozen &= isFrozen;
             if (hideFrozen && isFrozen) continue;
 
-            const isLikeSpam = spam.spamType == LIKESPAM_TYPE_LIKESPAM;
+            const isLikeSpam = spam.spamType == LKSP_SPAM_TYPE_LIKESPAM;
             if (!showLikeSpam && isLikeSpam) continue;
 
-            const isRpSpam = spam.spamType == LIKESPAM_TYPE_RPSPAM;
+            const isRpSpam = spam.spamType == LKSP_SPAM_TYPE_RPSPAM;
             if (!showRpSpam && isRpSpam) continue;
 
-            const isSakura = spam.spamType == LIKESPAM_TYPE_SAKURA;
+            const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
             if (!showSakura && isSakura) continue;
 
             screenNames.push(spam.screenName);

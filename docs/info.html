@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240929002923" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929002923"></script>
-    <script src="./database.js?20240929020747"></script>
+    <link href="./style.css?20240929051208" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929051208"></script>
+    <script src="./database.js?20240929054440"></script>
   </head>
 
   <body>
@@ -68,7 +68,7 @@
     <script>
       const ul = document.getElementById('sakura_list');
       const to_id = "Zy_Iove";
-      const allSakuras = likeSpams.filter(spam => spam.spamType == LIKESPAM_TYPE_SAKURA).reverse();
+      const allSakuras = likeSpams.filter(spam => spam.spamType == LKSP_SPAM_TYPE_SAKURA).reverse();
       const sakuras = allSakuras.filter(spam => !(spam.frozenDate));
       const frozenSakuras = allSakuras.filter(spam => !!(spam.frozenDate));
       {

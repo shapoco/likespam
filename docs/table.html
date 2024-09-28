@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20240929002923" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929002923"></script>
-    <script src="./database.js?20240929020747"></script>
+    <link href="./style.css?20240929051208" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929051208"></script>
+    <script src="./database.js?20240929054440"></script>
   </head>
 
   <body>
@@ -54,53 +54,140 @@
     <div id="stats"></div>
     <script>likeSpamRenderStats('stats');</script>
 
-    <ul>
-      <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del> : 過去24時間以内に凍結確認)</li>
-      <li><span class="rpspam">緑色</span> : RPスパム</li>
-      <li><span class="sakura">ピンク</span> : サクラ</li>
-    </ul>
+    <form name="filter" class="filter_wrapper">
+      <p>
+        <span style="display: inline-block; width: 5em;">並べ替え</span>
+        <select id="filter_order">
+          <option value="index">追加順</option>
+          <option value="screen_name">screen_name</option>
+          <option value="user_id">user_id</option>
+          <option value="frozen_date">凍結日</option>
+        </select>
+        <input id="filter_descending" type="checkbox" checked>
+        <label for="filter_descending">降順</label>
+      </p>
+      <p>
+        <span style="display: inline-block; width: 5em;">フィルタ</span>
+        <input id="filter_show_likespam" type="checkbox" checked><label for="filter_show_likespam">いいねスパム</label>
+        <input id="filter_show_rpspam" type="checkbox" checked><label for="filter_show_rpspam"><span class="rpspam">RPスパム</span></label>
+        <input id="filter_show_sakura" type="checkbox" checked><label for="filter_show_sakura"><span class="sakura">サクラ</span></label>
+        <input id="filter_hide_frozen" type="checkbox"><label for="filter_hide_frozen"><del>凍結済</del>を隠す</label>
+      </p>
+      <p>
+        <span style="display: inline-block; width: 5em;">キーワード</span>
+        <input id="filter_keyword" type="text">
+      </p>
+      <p>
+        <button id="filter_apply" type="button">適用</button>
+      </p>
+    </form>
     
+    <p>
+      <del class="frozen_new">水色</del> : 直近 24 時間以内に凍結が確認されたアカウント</li>
+    </p>
+
     <p class="menu_wrapper">
       ページ: <span id="page_links_top"></span>
     </p>
     <table id="spam_table">
-      <tr>
-      </tr>
+      <tr></tr>
     </table>
     <p class="menu_wrapper">
       ページ: <span id="page_links_bottom"></span>
     </p>
 
     <script>
-      const LIKESPAM_ITEMS_PER_PAGE = 500;
+      const LKSP_ITEMS_PER_PAGE = 500;
 
-      function likeSpamOpenPage(ipage) {
-        window.location = './table.html#page' + ipage;
-        likeSpamRenderTable();
+      const LKSP_ARG_PAGE = 'p';
+      const LKSP_ARG_ORDER = 'o';
+      const LKSP_ARG_DESCENDING = 'd';
+      const LKSP_ARG_FILTER_FLAGS = 'f';
+      const LKSP_ARG_KEYWORD = 'k';
+
+      const LKSP_ORDER_INDEX = 0;
+      const LKSP_ORDER_SCREEN_NAME = 1;
+      const LKSP_ORDER_USER_ID = 2;
+      const LKSP_ORDER_FROZEN_DATE = 3;
+      const LKSP_ORDER_NAMES = ['index', 'screen_name', 'user_id', 'frozen_date'];
+
+      const LKSP_FILTER_SHOW_LIKESPAM = 1;
+      const LKSP_FILTER_SHOW_RPSPAM = 2;
+      const LKSP_FILTER_SHOW_SAKURA = 4;
+      const LKSP_FILTER_HIDE_FROZEN = 8;
+
+      document.querySelector('#filter_apply').addEventListener('click', e => {lkspOpenPage(0)});
+
+      function lkspOpenPage(ipage) {
+        const orderStr = document.querySelector('#filter_order').value;
+        const order = LKSP_ORDER_NAMES.indexOf(orderStr);
+        const descending = document.querySelector('#filter_descending').checked;
+        const filter = 
+          (document.querySelector('#filter_show_likespam').checked ? LKSP_FILTER_SHOW_LIKESPAM : 0) +
+          (document.querySelector('#filter_show_rpspam').checked ? LKSP_FILTER_SHOW_RPSPAM : 0) +
+          (document.querySelector('#filter_show_sakura').checked ? LKSP_FILTER_SHOW_SAKURA : 0) +
+          (document.querySelector('#filter_hide_frozen').checked ? LKSP_FILTER_HIDE_FROZEN : 0);
+        const keyword = document.querySelector('#filter_keyword').value;
+        window.location = 
+          `table.html#${LKSP_ARG_PAGE}=${ipage}` +
+          `&${LKSP_ARG_ORDER}=${order >= 0 ? order : LKSP_ORDER_INDEX}` +
+          `&${LKSP_ARG_DESCENDING}=${descending ? 1 : 0}` +
+          `&${LKSP_ARG_FILTER_FLAGS}=${filter}` +
+          `&${LKSP_ARG_KEYWORD}=${encodeURIComponent(keyword)}`;
+        lkspRenderTable();
       }
       
       history.replaceState(null, null, null);
       window.addEventListener('popstate', function(e) {
-        likeSpamRenderTable();
+        lkspRenderTable();
       });
 
-      function likeSpamGetPageIndex() {
-        const urlRegex = /#page(\d+)$/;
+      function lkspGetQuery() {
+        const urlRegex = /#((\w=))$/;
         const url = window.location.href;
         const m = url.match(urlRegex);
+
         var query = {};
-        if (m) {
-          query.page = m[1];
+        query.page = 0;
+        query.order = 0;
+        query.descending = true;
+        query.showLikeSpam = true;
+        query.showRpSpam = true;
+        query.showSakura = true;
+        query.hideFrozen = false;
+        query.keyword = '';
+
+        const isharp = url.indexOf('#');
+        if (isharp >= 0) {
+          url.substring(isharp + 1).split('&').forEach(pairStr => {
+            const pair = pairStr.split('=');
+            if (pair.length != 2) {
+              console.log(`ERROR: Invalid parameter format: '${pairStr}'`);
+            }
+            else {
+              switch(pair[0]) {
+                case LKSP_ARG_PAGE: query.page = parseInt(pair[1]); break;
+                case LKSP_ARG_ORDER: query.order = parseInt(pair[1]); break;
+                case LKSP_ARG_DESCENDING: query.descending = pair[1] == '1'; break;
+                case LKSP_ARG_FILTER_FLAGS:
+                  const filterFlags = parseInt(pair[1]);
+                  query.showLikeSpam = 0 != (filterFlags & LKSP_FILTER_SHOW_LIKESPAM);
+                  query.showRpSpam = 0 != (filterFlags & LKSP_FILTER_SHOW_RPSPAM);
+                  query.showSakura = 0 != (filterFlags & LKSP_FILTER_SHOW_SAKURA);
+                  query.hideFrozen = 0 != (filterFlags & LKSP_FILTER_HIDE_FROZEN);
+                  break;
+                case LKSP_ARG_KEYWORD: query.keyword = decodeURIComponent(pair[1]); break;
+                default: console.log(`ERROR: Unknown parameter: '${pair[0]}'`); break;
+              }
+            }
+          });
         }
-        else {
-          query.page = 0;
-        }
+
         return query;
       }
 
-      function likeSpamGenPageLinks() {
-        const query = likeSpamGetPageIndex();
-        const numPages = Math.ceil(likeSpams.length / LIKESPAM_ITEMS_PER_PAGE);
+      function lkspGenPageLinks(query, numSpams) {
+        const numPages = Math.ceil(numSpams / LKSP_ITEMS_PER_PAGE);
         //const ipageFrom = isSmartPhone() ? 0 : -1;
         const ipageFrom = 0;
         var html = '';
@@ -110,7 +197,7 @@
             html += `<span class="menu_item menu_selected">${text}</span> `;
           }
           else {
-            html += `<a class="menu_item" href="javascript: likeSpamOpenPage(${ipage})">${text}</a> `;
+            html += `<a class="menu_item" href="javascript: lkspOpenPage(${ipage})">${text}</a> `;
           }
         }
         
@@ -125,28 +212,81 @@
         }
       }
 
-      function likeSpamRenderTable() {
-        likeSpamGenPageLinks();
+      function extractQuery(query) {
+        if (0 <= query.order && query.order < LKSP_ORDER_NAMES.length) {
+          document.querySelector('#filter_order').value = LKSP_ORDER_NAMES[query.order];
+        }
+        document.querySelector('#filter_descending').checked = query.descending;
+        document.querySelector('#filter_show_likespam').checked = 0 != query.showLikeSpam;
+        document.querySelector('#filter_show_rpspam').checked = 0 != query.showRpSpam;
+        document.querySelector('#filter_show_sakura').checked = 0 != query.showSakura;
+        document.querySelector('#filter_hide_frozen').checked = 0 != query.hideFrozen;
+        document.querySelector('#filter_keyword').value = query.keyword;
+      }
 
-        const query = likeSpamGetPageIndex();
-        const ipage = query.page == 'all' ? -1 : parseInt(query.page);
+      function lkspRenderTable() {
+        const query = lkspGetQuery();
+        extractQuery(query);
 
-        const numSpam = likeSpams.length;
-        var ifrom = numSpam - 1;
-        var ito = 0;
-        if (ipage >= 0) {
-          ifrom = (numSpam - 1) - ipage * LIKESPAM_ITEMS_PER_PAGE;
-          ito = Math.max(0, ifrom - LIKESPAM_ITEMS_PER_PAGE + 1);
+        const regex = query.keyword ? new RegExp(query.keyword, 'i') : null;
+
+        var spams = likeSpams.filter(spam => {
+          if (query.hideFrozen && !!(spam.frozenDate)) return false;
+          {
+            const hit = 
+              (query.showLikeSpam && spam.spamType == LKSP_SPAM_TYPE_LIKESPAM) ||
+              (query.showRpSpam && spam.spamType == LKSP_SPAM_TYPE_RPSPAM) ||
+              (query.showSakura && spam.spamType == LKSP_SPAM_TYPE_SAKURA);
+            if (!hit) return false;
+          }
+          if (regex) {
+            const hit = 
+              spam.screenName.match(regex) ||
+              spam.userId.match(regex) ||
+              spam.name.match(regex);
+            if (!hit) return false;
+          }
+          return true;
+        });
+
+        switch(query.order) {
+          case LKSP_ORDER_INDEX: /* do nothing */break;
+          case LKSP_ORDER_SCREEN_NAME: spams.sort((a, b) => a.screenName.localeCompare(b.screenName)); break;
+          case LKSP_ORDER_USER_ID:
+            spams.sort((a, b) => 
+              a.userId.length > b.userId.length ? 1 :
+              a.userId.length < b.userId.length ? -1 :
+              a.userId.localeCompare(b.userId));
+            break;
+          case LKSP_ORDER_FROZEN_DATE:
+            spams.sort((a, b) => 
+              !!(a.frozenDate) && !(b.frozenDate) ? 1 :
+              !(a.frozenDate) && !!(b.frozenDate) ? -1 :
+              a.frozenDate - b.frozenDate);
+            break;
+        }
+
+        if (query.descending) spams = spams.reverse();
+
+        const numSpam = spams.length;
+
+        lkspGenPageLinks(query, numSpam);
+
+        var ifrom = 0;
+        var ito = numSpam - 1;
+        if (query.page >= 0) {
+          ifrom = query.page * LKSP_ITEMS_PER_PAGE;
+          ito = Math.min(numSpam - 1, ifrom + LKSP_ITEMS_PER_PAGE - 1);
         }
         
         const now = Date.now();
-        var html = '<th>#</th><th>追加日</th><th>ID (screen_name)</th><th>user_id</th><th>発見時の名前</th>';
-        for (var ispam = ifrom; ispam >= ito; ispam--) {
-          const spam = likeSpams[ispam];
+        var html = '<th>#</th><th>追加日</th><th>凍結確認</th><th>ID (screen_name)</th><th>user_id</th><th>発見時の名前</th>';
+        for (var ispam = ifrom; ispam <= ito; ispam++) {
+          const spam = spams[ispam];
           const isFrozen = !!(spam.frozenDate);
           const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
-          const isRpSpam = spam.spamType == LIKESPAM_TYPE_RPSPAM;
-          const isSakura = spam.spamType == LIKESPAM_TYPE_SAKURA;
+          const isRpSpam = spam.spamType == LKSP_SPAM_TYPE_RPSPAM;
+          const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
 
           const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
           const scrNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
@@ -158,8 +298,9 @@
           else if (isSakura) html += '<tr class="sakura">';
           else html += '<tr>';
 
-          html += `<td>${ispam + 1}</td>`;
+          html += `<td>${spam.index + 1}</td>`;
           html += `<td>${likeSpamFormatDate(spam.addedDate)}</td>`;
+          html += `<td>${spam.frozenDate ? likeSpamFormatDate(spam.frozenDate) : ''}</td>`;
           html += `<td>${scrNameHtml}</td>`;
           html += `<td>${userIdHtml}</td>`;
           html += `<td>${spam.name}</td>`;
@@ -194,7 +335,7 @@
         });
       }
 
-      likeSpamRenderTable();
+      lkspRenderTable();
     </script>
 
     <hr>

@@ -30,7 +30,12 @@ hr {
   margin: 10px 20px;
 }
 
-p, form, table, h1, h2, h3 {
+form {
+  margin: 0px;
+  padding: 0px;
+}
+
+p, table, h1, h2, h3 {
   margin: 10px 20px;
   padding: 0px;
 }
