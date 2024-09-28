@@ -7,11 +7,22 @@
 // @version     1.0.439
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240928141206
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240928151239
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
 // ==/UserScript==
+
+function createLinkButton(url, text, color) {
+  const a = document.createElement('a');
+  a.innerHTML = text;
+  a.href = url;
+  a.style.margin = '0px 2px 0px 0px';
+  a.style.padding = '0px 5px';
+  a.style.borderRadius = '5px';
+  a.style.background = color;
+  return a;
+}
 
 const divFoundUsers = document.createElement('div');
 divFoundUsers.style.position = 'fixed';
@@ -19,24 +30,41 @@ divFoundUsers.style.left = '10px';
 divFoundUsers.style.bottom = '10px';
 divFoundUsers.style.fontSize = '8pt';
 
-const aCpMiss = document.createElement('a');
-aCpMiss.innerHTML = '未発見IDのコピー';
-aCpMiss.href = '#';
-aCpMiss.style.margin = '0px 2px 0px 0px';
-aCpMiss.style.padding = '0px 5px';
-aCpMiss.style.background = '#ccc';
-aCpMiss.style.borderRadius = '5px';
+//const aCpMiss = document.createElement('a');
+//aCpMiss.innerHTML = '未発見IDのコピー';
+//aCpMiss.href = '#';
+//aCpMiss.style.margin = '0px 2px 0px 0px';
+//aCpMiss.style.padding = '0px 5px';
+//aCpMiss.style.background = '#ccc';
+//aCpMiss.style.borderRadius = '5px';
+const aCpMiss = createLinkButton('#', '未発見IDのコピー', '#ccc');
 aCpMiss.addEventListener('click', copyMissingScreenNames);
+
+const divUserIds = document.createElement('div');
+divUserIds.style.position = 'fixed';
+divUserIds.style.left = '10px';
+divUserIds.style.top = '10px';
+divUserIds.style.fontSize = '8pt';
+
+const aCpIds = createLinkButton('#', '全ての user_id をコピー', '#0ef');
+aCpIds.addEventListener('click', copyUserIds);
+divUserIds.appendChild(aCpIds);
+document.getElementsByTagName('body')[0].appendChild(divUserIds);
+
+const searchUrlRegex = /https:\/\/x.com\/search\?q=(%40\w+(\+OR\+%40\w+)*)&/;
+
+const userIdRegex = /data-testid="(\d+)-(un)?(follow|block)"/;
+const profileImageUrlRegex = /(https:\/\/pbs.twimg.com\/[^&]+)&quot;/;
 
 const frozenMessages = [
   'アカウントは凍結されています',
 ];
 
+var foundUsers = {};
 var foundUserLinks = {};
 var missingScreenNames = {};
 
 {
-  const searchUrlRegex = /https:\/\/x.com\/search\?q=(%40\w+(\+OR\+%40\w+)*)&/;
   const urlMatch = location.href.match(searchUrlRegex);
   var queryScreenNames = [];
   if (urlMatch) {
@@ -112,6 +140,8 @@ function scanElems(elems, startMarker) {
           delete missingScreenNames[key];
         }
       }
+
+      searchUserId(elem, screenName);
     }
   }
   if (Object.keys(missingScreenNames).length == 0) {
@@ -121,6 +151,37 @@ function scanElems(elems, startMarker) {
     aCpMiss.style.background = '#ff0';
   }
   highlighterTimeoutId = setTimeout(scanSpams, 1000);
+}
+
+function searchUserId(elem, screenName) {
+  const key = screenName.toLowerCase();
+  if (key in foundUsers) return;
+
+  const div0 = elem.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+  if (!div0) return;
+
+  const div1 = div0.parentElement;
+  if (!div1) return;
+
+  const snapshot = document.evaluate('div[1]/div[1]/div/div[1]/a/div/div[1]/span', div0, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+  if (!snapshot || snapshot == null) return;
+
+  const match0 = div0.innerHTML.match(userIdRegex);
+  const match1 = div1.innerHTML.match(profileImageUrlRegex);
+  const userName = getInnerTextWithAlt(snapshot.snapshotItem(0));
+
+  if (!match0 || !match1) return;
+  const userId = match0[1];
+  const profileImage = match1[1];
+
+  const user = {
+    'userId': userId,
+    'screenName': screenName,
+    'profileImage': profileImage,
+    'name': userName,
+  };
+  foundUsers[key] = user;
+  console.log(screenName + ' --> ' + user);
 }
 
 function getInnerTextWithAlt(elm) {
@@ -147,5 +208,53 @@ function getInnerTextWithAlt(elm) {
 function copyMissingScreenNames(elem) {
   const ids = Object.keys(missingScreenNames).join(' ');
   navigator.clipboard.writeText(ids);
+}
+
+function copyUserIds(elem) {
+  const s = Object.values(foundUsers).map(user =>
+    getPadRight(user.userId, 20) + ', ' +
+    getPadRight(user.screenName, 25) + ',         , ' +
+    getPadRight(toISOStringWithTimezone(new Date()), 25) + ', ' +
+    getPadRight('', 25) + ', ' +
+    user.name + ', ' +
+    user.profileImage + '\r\n').join('');
+  navigator.clipboard.writeText(s);
+}
+
+function toISOStringWithTimezone(date) {
+  const year = date.getFullYear().toString();
+  const month = zeroPadding((date.getMonth() + 1).toString());
+  const day = zeroPadding(date.getDate().toString());
+
+  const hour = zeroPadding(date.getHours().toString());
+  const minute = zeroPadding(date.getMinutes().toString());
+  const second = zeroPadding(date.getSeconds().toString());
+
+  const localDate = `${year}-${month}-${day}`;
+  const localTime = `${hour}:${minute}:${second}`;
+
+  const diffFromUtc = date.getTimezoneOffset();
+
+  // UTCだった場合
+  if (diffFromUtc === 0) {
+    const tzSign = 'Z';
+    return `${localDate}T${localTime}${tzSign}`;
+  }
+
+  // UTCではない場合
+  const tzSign = diffFromUtc < 0 ? '+' : '-';
+  const tzHour = zeroPadding((Math.abs(diffFromUtc) / 60).toString());
+  const tzMinute = zeroPadding((Math.abs(diffFromUtc) % 60).toString());
+
+  return `${localDate}T${localTime}${tzSign}${tzHour}:${tzMinute}`;
+}
+
+function zeroPadding(s) {
+  return ('0' + s).slice(-2);
+}
+
+function getPadRight(s, n) {
+  if (s.length >= n) return s;
+  return s + ' '.repeat(n - s.length);
 }
 
