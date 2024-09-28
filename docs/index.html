@@ -30,8 +30,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240929000507" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929000507"></script>
+    <link href="./style.css?20240929002005" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929002005"></script>
     <script src="./database.js?20240929000949"></script>
   </head>
 
@@ -75,14 +75,14 @@
 
     <h2>見つかったアカウント数</h2>
 
+    <div id="stats"></div>
+    <script>likeSpamRenderStats('stats');</script>
+
     <div class="warning">
       <p>
         あくまで見つかった数であり、存在する全てのスパムアカウントを網羅したわけではありません。
       </p>
     </div>
-
-    <div id="stats"></div>
-    <script>likeSpamRenderStats('stats');</script>
 
     <h2>いいねスパムの見つけ方</h2>
     <p>
@@ -125,15 +125,9 @@
     </div>
     
     <div class="note for_mobile">
-      <p>
-        スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。
-      </p>
-      <p>
-        <img src="user_tab.png">
-      </p>
-      <p>
-        <a href="table.html">PC 向けの 表形式版</a> もあります。
-      </p>
+      <p>スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</p>
+      <p><img src="user_tab.png"></p>
+      <p><a href="table.html">PC 向けの 表形式版</a> もあります。</p>
     </div>
 
     <div class="warning">
