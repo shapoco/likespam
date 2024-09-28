@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20240928083949" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240928083949"></script>
-    <script src="./database.js?20240928085204"></script>
+    <link href="./style.css?20240928100336" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240928100336"></script>
+    <script src="./database.js?20240928100338"></script>
   </head>
 
   <body>
@@ -153,22 +153,19 @@
           const spam = likeSpams[ispam];
           const isFrozen = !!(spam.frozenDate);
           const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
+          const isRpSpam = spam.spamType == LIKESPAM_TYPE_RPSPAM;
+          const isSakura = spam.spamType == LIKESPAM_TYPE_SAKURA;
+
           const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
           const scrNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
           //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
 
-          if (isNewFrozen) {
-            html += '<tr class="frozen frozen_new">';
-          }
-          else if (isFrozen) {
-            html += '<tr class="frozen">';
-          }
-          else if (spam.name.includes('リポストされたらおめでとう')) {
-            html += '<tr class="rpspam">';
-          }
-          else {
-            html += '<tr>';
-          }
+          if (isNewFrozen) html += '<tr class="frozen frozen_new">';
+          else if (isFrozen) html += '<tr class="frozen">';
+          else if (isRpSpam) html += '<tr class="rpspam">';
+          else if (isSakura) html += '<tr class="sakura">';
+          else html += '<tr>';
+
           html += `<td>${ispam + 1}</td>`;
           html += `<td>${likeSpamFormatDate(spam.addedDate)}</td>`;
           html += `<td>${scrNameHtml}</td>`;

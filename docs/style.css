@@ -84,12 +84,11 @@ tr.frozen td a {
 del.frozen_new { background: #8ff !important; }
 tr.frozen_new td { background: #8ff !important; }
 
-tr.rpspam td {
-  background: #aca;
-}
-span.rpspam {
-  background: #aca;
-}
+tr.rpspam td { background: #aca; }
+span.rpspam { background: #aca; }
+
+tr.sakura td { background: #fcf; }
+span.sakura { background: #fcf; }
 
 strong { color: #c00; font-weight: bold; }
 

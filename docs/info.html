@@ -30,8 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240928083949" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240928083949"></script>
+    <link href="./style.css?20240928100336" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240928100336"></script>
+    <script src="./database.js?20240928100338"></script>
   </head>
 
   <body>
@@ -57,50 +58,29 @@
         </ul>
       </li>
       <script>
-        const sakuras = [
-          { "user_id": ""                   , "screen_name": "GenalynWas73414", "status": ""             , "name": "オースト★★" },
-          { "user_id": ""                   , "screen_name": "FergusonSh43190", "status": ""             , "name": "うど" },
-          { "user_id": "1806986589261660161", "screen_name": "DaveFaubio25262", "status": ""             , "name": "えんどうまめ" },
-          { "user_id": "1807046778019033088", "screen_name": "ArlynHuski38795", "status": "9/28 凍結確認", "name": "isidaちゃん" },
-          { "user_id": "1803931208214286336", "screen_name": "AlvarengaS65101", "status": ""             , "name": "あるふぁ" },
-          { "user_id": "1825931796497747971", "screen_name": "CMoore60512"    , "status": "9/27 凍結確認", "name": "セキユキ" },
-          { "user_id": "1825931853372481536", "screen_name": "DanaHarris9010" , "status": "9/27 凍結確認", "name": "たこび" },
-          { "user_id": "1825931747210432513", "screen_name": "StacyThoma47185", "status": "9/27 凍結確認", "name": "柚姫さん(フォロー歓迎！" },
-          { "user_id": "1825931866244829189", "screen_name": "MichelleBe11784", "status": "9/27 凍結確認", "name": "チュン太郎" },
-          { "user_id": "279268351"          , "screen_name": "SPINACARBONETTO", "status": "9/26 凍結確認", "name": "宇田川勝也" },
-          { "user_id": "430215933"          , "screen_name": "souumafofis_"   , "status": "9/26 凍結確認", "name": "イッシー" },
-          { "user_id": "238253863"          , "screen_name": "sonrisasuarez"  , "status": "9/26 凍結確認", "name": "あもくん" },
-          { "user_id": "273136045"          , "screen_name": "TANIIS09"       , "status": ""             , "name": "オリーブ★" },
-          { "user_id": "368691802"          , "screen_name": "Suca_Ana"       , "status": "9/26 凍結確認", "name": "EMA魂" },
-          { "user_id": "1668184820223201281", "screen_name": "waldrup_07"     , "status": "9/24 凍結確認", "name": "ユウタ" },
-          { "user_id": "1667678898279129089", "screen_name": "exeunt1985"     , "status": ""             , "name": "ゾウのおーじ👑" },
-          { "user_id": "1624407366753222657", "screen_name": "benfield_alpha" , "status": ""             , "name": "Omara Otto" },
-          { "user_id": "1671795386736885761", "screen_name": "rutabaga1991"   , "status": "9/24 凍結確認", "name": "のへじ≒紅葉" },
-          { "user_id": "1637216734750060544", "screen_name": "basipetal_boy4" , "status": "9/24 凍結確認", "name": "永遠" },
-          { "user_id": "1247484061179760642", "screen_name": "mnes_hb"        , "status": "9/24 凍結確認", "name": "ろんどん" },
-          { "user_id": "4462728981"         , "screen_name": "DerpyyGamesHd"  , "status": "9/24 凍結確認", "name": "るる" },
-          { "user_id": "3017379293"         , "screen_name": "JkissLa"        , "status": "9/24 凍結確認", "name": "MIERU" },
-        ];
         const ul = document.getElementById('sakura_list');
         const to_id = "Zy_Iove";
+        const allSakuras = likeSpams.filter(spam => spam.spamType == LIKESPAM_TYPE_SAKURA).reverse();
+        const sakuras = allSakuras.filter(spam => !(spam.frozenDate));
+        const frozenSakuras = allSakuras.filter(spam => !!(spam.frozenDate));
         {
           const li = document.createElement('li');
-          li.innerHTML = likeSpamGetSearchLinkHtml(sakuras.filter(e => e.status.length == 0).map(e => e.screen_name), 'まとめて表示');
+          li.innerHTML = `${likeSpamGetSearchLinkHtml(sakuras.map(spam => spam.screenName), 'アプリでまとめて表示')} (${frozenSakuras.length} 件が凍結済み)`;
           ul.appendChild(li);
         }
-        sakuras.forEach(e => {
+        sakuras.forEach(spam => {
           const li = document.createElement('li');
           var html = '';
           if (isSmartPhone()) {
-            html += `<a href="https://x.com/${e.screen_name}/with_replies" target="_blank">${e.name}</a>`;
+            html += `<a href="https://x.com/${spam.screenName}/with_replies" target="_blank">${spam.name}</a>`;
           }
           else {
-            html += `${e.name} ` +
-              `(<a href="https://x.com/${e.screen_name}/with_replies" target="_blank">@${e.screen_name}</a>, ` +
-              `<a href="https://x.com/i/user/${e.user_id}" target="_blank">${e.user_id}</a>)`;
+            html += `${spam.name} ` +
+              `(<a href="https://x.com/${spam.screenName}/with_replies" target="_blank">@${spam.screenName}</a>, ` +
+              `<a href="https://x.com/i/user/${spam.userId}" target="_blank">${spam.userId}</a>)`;
           }
-          if (e.status.length != 0) {
-            html = `<del>${html}</del> ${e.status}`;
+          if (spam.frozenDate) {
+            html = `<del>${html}</del> ${likeSpamFormatDate(spam.frozenDate)} 凍結確認`;
           }
           li.innerHTML = html;
           ul.appendChild(li);

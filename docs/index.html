@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240928083949" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240928083949"></script>
-    <script src="./database.js?20240928085204"></script>
+    <link href="./style.css?20240928100336" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240928100336"></script>
+    <script src="./database.js?20240928100338"></script>
   </head>
 
   <body>
@@ -123,26 +123,33 @@
     </p>
 
     <form name="filter">
-      表示対象:
-      <input id="show_frozen" type="checkbox" checked><label for="show_frozen">凍結確認済み</label>
-      <input id="show_rpspam" type="checkbox"><label for="show_rpspam">リポストスパム</label>
+      フィルタ:
+      <input id="show_likespam" type="checkbox" checked><label for="show_likespam">いいねスパム</label>
+      <input id="show_rpspam" type="checkbox"><label for="show_rpspam">RPスパム</label>
+      <input id="show_sakura" type="checkbox" checked><label for="show_sakura">サクラ</label>
+      <input id="hide_frozen" type="checkbox"><label for="hide_frozen">凍結済を隠す</label>
     </form>
 
     <ul>
       <li><del>打ち消し線</del>: 凍結確認済 (<del class="frozen_new">水色</del> : 過去24時間以内に凍結確認)</li>
-      <li><span class="rpspam">緑色</span> : リポストスパム</li>
+      <li><span class="rpspam">緑色</span> : RPスパム</li>
+      <li><span class="sakura">ピンク</span> : サクラ</li>
     </ul>
     
     <ul id="query_list">
     </ul>
 
     <script>
-      document.filter.show_frozen.addEventListener('change', e => likeSpamRenderLinks());
+      document.filter.show_likespam.addEventListener('change', e => likeSpamRenderLinks());
       document.filter.show_rpspam.addEventListener('change', e => likeSpamRenderLinks());
+      document.filter.show_sakura.addEventListener('change', e => likeSpamRenderLinks());
+      document.filter.hide_frozen.addEventListener('change', e => likeSpamRenderLinks());
 
       function likeSpamRenderLinks() {
-        const showFrozen = document.filter.show_frozen.checked;
         const showRpSpam = document.filter.show_rpspam.checked;
+        const showLikeSpam = document.filter.show_likespam.checked;
+        const showSakura = document.filter.show_sakura.checked;
+        const hideFrozen = document.filter.hide_frozen.checked;
 
         const now = Date.now();
         const GROUP_SIZE = 20;
@@ -162,16 +169,23 @@
             const isFrozen = !!(spam.frozenDate);
             const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
             isAllFrozen &= isFrozen;
-            if (!showFrozen && isFrozen) continue;
+            if (hideFrozen && isFrozen) continue;
 
-            const isRpSpam = spam.name.includes('リポストされたらおめでとう');
+            const isLikeSpam = spam.spamType == LIKESPAM_TYPE_LIKESPAM;
+            if (!showLikeSpam && isLikeSpam) continue;
+
+            const isRpSpam = spam.spamType == LIKESPAM_TYPE_RPSPAM;
             if (!showRpSpam && isRpSpam) continue;
+
+            const isSakura = spam.spamType == LIKESPAM_TYPE_SAKURA;
+            if (!showSakura && isSakura) continue;
 
             screenNames.push(spam.screenName);
 
             if (isNewFrozen) linkTexts.push(`<del class="frozen_new">@${spam.screenName}</del>`);
             else if (isFrozen) linkTexts.push(`<del>@${spam.screenName}</del>`);
             else if (isRpSpam) linkTexts.push(`<span class="rpspam">@${spam.screenName}</span>`);
+            else if (isSakura) linkTexts.push(`<span class="sakura">@${spam.screenName}</span>`);
             else linkTexts.push('@' + spam.screenName);
           }
 
