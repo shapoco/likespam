@@ -32,7 +32,7 @@
     <title>いいねスパム一覧</title>
     <link href="./style.css?20240928100739" rel="stylesheet" type="text/css">
     <script src="./index.js?20240928100739"></script>
-    <script src="./database.js?20240928103246"></script>
+    <script src="./database.js?20240928104502"></script>
   </head>
 
   <body>
@@ -197,7 +197,12 @@
           
           html += `<li${isAllFrozen ? ' class=frozen"' : ''}>`
           html += `#${ifrom + 1}～${ito} (${likeSpamFormatDate(likeSpams[ito - 1].addedDate)} 追加)<br>`;
-          html += `${likeSpamGetSearchLinkHtml(screenNames, linkTexts.join(' '))}`;
+          if (screenNames.length == 1) {
+            html += `<a href="https://x.com/${screenNames[0]}" target="_blank">@${screenNames[0]}</a>`;
+          }
+          else {
+            html += `${likeSpamGetSearchLinkHtml(screenNames, linkTexts.join(' '))}`;
+          }
           html += '</li>';
         }
 
