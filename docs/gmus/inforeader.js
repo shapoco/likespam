@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.289
+// @version     1.0.290
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240928100338
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240928100741
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -133,7 +133,7 @@ function scanUsers() {
     //https://pbs.twimg.com/profile_images/1835709222513971201/O5HOnatY_normal.png
     const record =
           getPadRight(userId, 20) + ', ' +
-          getPadRight(screenName.substring(1), 25) + ', ' +
+          getPadRight(screenName.substring(1), 25) + ',         , ' +
           getPadRight(toISOStringWithTimezone(new Date()), 25) + ', ' +
           getPadRight('', 25) + ', ' +
           userName + ', ' + profileImage;
