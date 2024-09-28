@@ -170,9 +170,9 @@ function searchUserId(elem, screenName) {
   const match1 = div1.innerHTML.match(profileImageUrlRegex);
   const userName = getInnerTextWithAlt(snapshot.snapshotItem(0));
 
-  if (!match0 || !match1) return;
+  if (!match0) return;
   const userId = match0[1];
-  const profileImage = match1[1];
+  const profileImage = !!match1 ? match1[1] : '';
 
   const user = {
     'userId': userId,
