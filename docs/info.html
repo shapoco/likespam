@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240929002401" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929002401"></script>
-    <script src="./database.js?20240929002531"></script>
+    <link href="./style.css?20240929002923" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929002923"></script>
+    <script src="./database.js?20240929002924"></script>
   </head>
 
   <body>
@@ -45,22 +45,22 @@
 
     <h1>補足情報</h1>
 
-    <h2 id="pivot">Zy_Iove について</h2>
+    <h2 id="pivot">Zy_Iove</h2>
+    <p>
+      <a href="https://topics.smt.docomo.ne.jp/article/otakuma/trend/otakuma-20231128_04">当選詐欺 (?)</a> の窓口になっているアカウントです。
+    </p>
     <ul>
       <li>screen_name : <a href="https://x.com/Zy_Iove" target="_blank">@Zy_Iove</a> (注: I は i の大文字)</li>
       <li>user_id : <a href="https://x.com/i/user/843484673087082496" target="_blank">843484673087082496</a></li>
-      <li>2017 年 3 月から存在し、何度か ID を変えている。</li>
-      <li>アイコンと名前を頻繁に変えている。</li>
-      <li>いいねを送りつけてくるスパムアカウントの多くはプロフィールから上記アカウントへ誘導している。</li>
-      <li>
-        定期的にサクラに本当に金品が貰えたかのようなリプライを送らせている。
-      </li>
+      <li>2017 年 3 月から存在し、何度か ID を変えています。</li>
+      <li>アイコンと名前を頻繁に変えています。</li>
+      <li>いいねを送りつけてくるスパムアカウントの多くはプロフィールから上記アカウントへ誘導しています。</li>
     </ul>
 
     <h2>サクラアカウント</h2>
 
     <p>
-
+      定期的に本当に金品が貰えたかのようなリプライを Zy_Iove に送らせています。
     </p>
 
     <ul id="sakura_list">
@@ -74,7 +74,7 @@
       {
         const li = document.createElement('li');
         li.innerHTML = 
-          `${likeSpamGetSearchLinkHtml(sakuras.map(spam => spam.screenName), 'アプリでまとめて表示')} (${frozenSakuras.length} 件が凍結済み)` +
+          `${likeSpamGetSearchLinkHtml(sakuras.map(spam => spam.screenName), 'X 検索でまとめて表示')} (${frozenSakuras.length} 件が凍結済み)` +
           '<ul class="for_mobile"><li>スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</li></ul>';
         ul.appendChild(li);
       }
