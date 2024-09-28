@@ -198,7 +198,7 @@
           html += `<li${isAllFrozen ? ' class=frozen"' : ''}>`
           html += `#${ifrom + 1}～${ito} (${likeSpamFormatDate(likeSpams[ito - 1].addedDate)} 追加)<br>`;
           if (screenNames.length == 1) {
-            html += `<a href="https://x.com/${screenNames[0]}" target="_blank">@${screenNames[0]}</a>`;
+            html += `<a href="https://x.com/${screenNames[0]}" target="_blank">${linkTexts[0]}</a>`;
           }
           else {
             html += `${likeSpamGetSearchLinkHtml(screenNames, linkTexts.join(' '))}`;
