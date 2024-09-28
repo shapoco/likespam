@@ -68,7 +68,7 @@ function newLikeSpam(userId, screenName, spamType, addedDate, frozenDate, nameKe
 
 const likeSpams = [
   newLikeSpam("1667021810607734785","sop_gamers",0,1209600,1849680,0,"%0%/1831702055628439552/GtahEo-5_normal.png"),
-  newLikeSpam("1796833680188403712","BlissPatti24841",0,1209600,-1,1,"%0%/1834226308085415940/JGA0CKk3_normal.png"),
+  newLikeSpam("1796833680188403712","BlissPatti24841",0,1209600,2419783,1,"%0%/1834226308085415940/JGA0CKk3_normal.png"),
   newLikeSpam("1796828110488289280","fox_tiffan43615",0,1209600,-1,2,"%0%/1834234299543158784/-j5JrJtn_normal.png"),
   newLikeSpam("","snyder_jan60941",0,1209600,1382726,3,""),
   newLikeSpam("","TimothyMcc13832",0,1209600,1382726,3,""),
@@ -2087,7 +2087,7 @@ const likeSpams = [
   newLikeSpam("1666001006193438720","outbuilding44",0,1723756,2099177,2,"%0%/1831680008688939008/osM186Yy_normal.png"),
   newLikeSpam("1807140516221558784","EvelynKnap5399",0,1726173,-1,4,"%0%/1834242397896876032/ll6F0anX_normal.png"),
   newLikeSpam("1806821737927180288","JennyS17684",0,1726173,-1,4,"%0%/1834253152629223424/ZWD6z03H_normal.png"),
-  newLikeSpam("1796829196519428097","DianaV85800",0,1726173,-1,9,"%0%/1831528025562742785/GHdeORUn_normal.png"),
+  newLikeSpam("1796829196519428097","DianaV85800",0,1726173,2419783,9,"%0%/1831528025562742785/GHdeORUn_normal.png"),
   newLikeSpam("1806997388965580800","LothamerMi75565",0,1726173,-1,7,"%0%/1835582914375155712/gNez1sqP_normal.png"),
   newLikeSpam("1807111776921640960","ChristineG27424",0,1726173,-1,4,"%0%/1834233315299348480/yP0GypMA_normal.png"),
   newLikeSpam("1806819600648073216","ChrisMccra94799",0,1726173,-1,4,"%0%/1834232836435677184/KBnUdcj7_normal.png"),

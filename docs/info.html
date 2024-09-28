@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240928100739" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240928100739"></script>
-    <script src="./database.js?20240928222036"></script>
+    <link href="./style.css?20240929000507" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929000507"></script>
+    <script src="./database.js?20240929000949"></script>
   </head>
 
   <body>
@@ -92,13 +92,16 @@
 
     <h3>ハッシュタグ (推奨)</h3>
     <p>
-      直近で活動中のアカウントについては <a href="https://x.com/syego/status/1839236483284443539" target="_blank">#いいねスパム</a> タグを参照ください (情報提供にご協力お願いします)。
+      直近で活動中のアカウントについては <a class="xsearch_link" href="https://x.com/search?q=%23%E3%81%84%E3%81%84%E3%81%AD%E3%82%B9%E3%83%91%E3%83%A0&src=typed_query&f=live" target="_blank">#いいねスパム</a> タグを参照ください (情報提供にご協力お願いします)。
     </p>
-
+    <div class="note">
+      <p>
+        「最新」タブに結果が表示されない場合は、検索キーワードに「<span class="xsearch_link">since:2024-9-25</span>」などを付け加えて日付を指定し
+        「話題のツイート」タブに切り替えると最近のポストを閲覧できます (ただし時系列順にはなりません)。
+      </p>
+    </div>
+    
     <h3>キーワード検索</h3>
-    <p>
-      ⚠ 犯人は頻繁に使用するアカウントと名前を変えてしまうため、現在活動中のアカウントを検索によって網羅的に見つけるのは困難です。
-    </p>
     <ul id="search_keywords">
     </ul>
     <script>
@@ -155,6 +158,10 @@
     </p>
 
     <hr>
+
+    <script>
+      fixContents();
+    </script>
   </body>
 
 </html>

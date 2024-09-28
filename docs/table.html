@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20240928100739" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240928100739"></script>
-    <script src="./database.js?20240928222036"></script>
+    <link href="./style.css?20240929000507" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929000507"></script>
+    <script src="./database.js?20240929000949"></script>
   </head>
 
   <body>
@@ -45,9 +45,11 @@
     
     <h1>詳細一覧</h1>
 
-    <p>
-      スマホ等で 1 アカウントずつ開くのが面倒な場合は 20 アカウントずつにまとまった <a href="./">グループ形式版</a> をご覧下さい。
-    </p>
+    <div class="note for_mobile">
+      <p>
+        スマホ等で 1 アカウントずつ開くのが面倒な場合は 20 アカウントずつにまとまった <a href="./">グループ形式版</a> をご覧下さい。
+      </p>
+    </div>
 
     <div id="stats"></div>
     <script>likeSpamRenderStats('stats');</script>
@@ -58,17 +60,6 @@
       <li><span class="sakura">ピンク</span> : サクラ</li>
     </ul>
     
-    <div id="table_size_warning" style="display: none;">
-      <p>
-        <strong>
-          スパムアカウントの数が非常に多くなっているため、スマートフォンでは表が大きすぎてブラウザの動作が不安定になる場合があります。<br>
-        </strong>
-      </p>
-      <p>
-        <a href="javascript:generateTable();">表を表示するにはここをクリックしてください</a>
-      </p>
-    </div>
-
     <p class="menu_wrapper">
       ページ: <span id="page_links_top"></span>
     </p>

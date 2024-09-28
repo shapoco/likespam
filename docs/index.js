@@ -165,3 +165,18 @@ function likeSpamFormatDate(d) {
 function isSmartPhone() {
   return window.matchMedia && window.matchMedia('(max-device-width: 640px)').matches;
 }
+
+function fixContents() {
+  const now = new Date();
+  const recentDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  recentDay.setDate(recentDay.getDate() - 3);
+
+  const year = recentDay.getFullYear().toString();
+  const month = (recentDay.getMonth() + 1).toString();
+  const day = recentDay.getDate().toString();
+  const dateStr = `${year}-${month}-${day}`;
+
+  document.querySelectorAll('.xsearch_link').forEach(link => {
+    link.href = `https://x.com/search?q=%23%E3%81%84%E3%81%84%E3%81%AD%E3%82%B9%E3%83%91%E3%83%A0%20since%3A${dateStr}&src=typed_query&f=top`;
+  });
+}
