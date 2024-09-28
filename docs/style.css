@@ -1,10 +1,10 @@
 body {
   margin: 0px;
   padding: 0px;
+  background: #eee;
 }
 
-body, input, textarea {
-  background: #eee;
+body, input, textarea, th, td {
   font-size: 10pt;
   font-family: メイリオ, Meiryo, sans-serif;
 }
@@ -171,7 +171,7 @@ img.profile_image {
 .menu_selected {
   font-weight: bold;
   background: transparent;
-  color: #048;
+  color: #000;
 }
 
 .menu_item { text-decoration: none !important; }
