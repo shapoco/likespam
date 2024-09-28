@@ -50,6 +50,7 @@ const likeSpamNames = [
   "チュン太郎",
   "🎉いいね通知きた人だけ🎉プロフィ一ル確認してね！おめでとう🎁",
   "man",
+  "【公式】 いいねされた人🎁おめでとう！ ※プロフィールチェックしてね！",
 ];
 
 function newLikeSpam(userId, screenName, spamType, addedDate, frozenDate, nameKey, profileImageUrl) {
@@ -13605,4 +13606,6 @@ const likeSpams = [
   newLikeSpam("1796711822910783488","c3keAEoYRy7kCMP",0,2373900,-1,21,"%0%/1837691773877211137/txg7lnRE_normal.jpg"),
   newLikeSpam("1723020661738680321","TonyaWrigh56206",0,2373900,-1,21,"%0%/1838159075189870592/HaMNftqO_normal.jpg"),
   newLikeSpam("1807090283558912000","SarahHarri50381",0,2373900,-1,46,"%0%/1837728650822868992/69jpFcG__normal.jpg"),
+  newLikeSpam("1710941163346362368","07ewb",0,2376831,-1,48,"%0%/1806968175105646592/5zEnm4IU_normal.jpg"),
+  newLikeSpam("1791893683593261056","otelia52329",0,2376831,-1,48,"%0%/1806023270711644160/ok7-POCp_normal.jpg"),
 ];
