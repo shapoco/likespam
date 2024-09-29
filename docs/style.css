@@ -126,12 +126,7 @@ a:hover { color: #06c; background: #cef; }
 a:active { color: #06c; background: #cef; }
 
 tr.frozen td { color: #666; }
-tr.frozen td a {
-  color: #666 !important;
-  text-decoration: line-through !important;
-  border-radius: 5px;
-  padding: 0px 3px;
-}
+tr.frozen td a { color: #666 !important; }
 tr.frozen_new td { background: #8ff !important; }
 del.frozen_new {
   background: #8ff !important;
