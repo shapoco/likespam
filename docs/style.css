@@ -2,9 +2,9 @@ body {
   margin: 0px;
   padding: 0px;
   background: #eee;
-  
+
   /* iOS の Safari で表内の white-space: nowrap な要素の文字サイズが大きくなってしまう問題の対処 */
-  webkit-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body, input, textarea, th, td {
