@@ -32,7 +32,7 @@
     <title>詳細一覧 | いいねスパム一覧</title>
     <link href="./style.css?20240929111514" rel="stylesheet" type="text/css">
     <script src="./index.js?20240929111514"></script>
-    <script src="./database.js?20240929112207"></script>
+    <script src="./database.js?20240929112355"></script>
   </head>
 
   <body>
@@ -114,9 +114,11 @@
     <p class="menu_wrapper">
       ページ: <span id="page_links_top"></span>
     </p>
-    <table id="spam_table">
-      <tr></tr>
-    </table>
+    <div style="overflow-x: scroll;">
+      <table id="spam_table">
+        <tr></tr>
+      </table>
+    </div>
     <p class="menu_wrapper">
       ページ: <span id="page_links_bottom"></span>
     </p>
