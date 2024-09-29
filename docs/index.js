@@ -99,7 +99,7 @@ function likeSpamRenderStats(elemId) {
   titles = records.map(r => 
     `<th>${r.title}</th>`);
   alives = records.map(r =>
-    `<td style="text-align: center;">${r.isToday ? '<strong>' + r.alive + '</strong>' : r.alive}` +
+    `<td style="text-align: center;">${r.alive}` +
     `<br><span class="gray">(${deltaStr(r.newAlive)})</span></td>`);
   forzens = records.map(r => 
     `<td style="text-align: center;">${r.frozen}` +

@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20240929051208" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929051208"></script>
-    <script src="./database.js?20240929092344"></script>
+    <link href="./style.css?20240929111514" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929111514"></script>
+    <script src="./database.js?20240929112207"></script>
   </head>
 
   <body>
@@ -54,32 +54,57 @@
     <div id="stats"></div>
     <script>likeSpamRenderStats('stats');</script>
 
-    <form name="filter" class="filter_wrapper">
+    <hr>
+
+    <form id="filter_form" class="filter_wrapper" onsubmit="return false;">
       <p>
-        <span style="display: inline-block; width: 5em;">並べ替え</span>
-        <select id="filter_order">
-          <option value="index">追加順</option>
-          <option value="screen_name">screen_name</option>
-          <option value="user_id">user_id</option>
-          <option value="frozen_date">凍結日</option>
-        </select>
-        <input id="filter_descending" type="checkbox" checked>
-        <label for="filter_descending">降順</label>
+        フィルタ: <button id="filter_apply" type="button">&nbsp;&nbsp;&nbsp;適用&nbsp;&nbsp;&nbsp;</button>
       </p>
-      <p>
-        <span style="display: inline-block; width: 5em;">フィルタ</span>
-        <input id="filter_show_likespam" type="checkbox" checked><label for="filter_show_likespam">いいねスパム</label>
-        <input id="filter_show_rpspam" type="checkbox" checked><label for="filter_show_rpspam"><span class="rpspam">RPスパム</span></label>
-        <input id="filter_show_sakura" type="checkbox" checked><label for="filter_show_sakura"><span class="sakura">サクラ</span></label>
-        <input id="filter_hide_frozen" type="checkbox"><label for="filter_hide_frozen"><del>凍結済</del>を隠す</label>
-      </p>
-      <p>
-        <span style="display: inline-block; width: 5em;">キーワード</span>
-        <input id="filter_keyword" type="text">
-      </p>
-      <p>
-        <button id="filter_apply" type="button">適用</button>
-      </p>
+      <table>
+        <tr>
+          <th>並べ替え</th>
+          <td>
+            <select id="filter_order">
+              <option value="index">追加日</option>
+              <option value="frozen_date">凍結確認日</option>
+              <option value="screen_name">screen_name</option>
+              <option value="user_id">user_id</option>
+            </select>
+            <span class="nowrap">
+              <input id="filter_descending" type="checkbox" checked>
+              <label for="filter_descending">降順</label>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th>表示対象</th>
+          <td>
+            <span class="nowrap">
+              <input id="filter_show_likespam" type="checkbox" checked>
+              <label for="filter_show_likespam">いいねスパム</label>
+            </span>
+            <span class="nowrap">
+              <input id="filter_show_rpspam" type="checkbox" checked>
+              <label for="filter_show_rpspam"><span class="rpspam">RPスパム</span></label>
+            </span>
+            <span class="nowrap">
+              <input id="filter_show_sakura" type="checkbox" checked>
+              <label for="filter_show_sakura"><span class="sakura">サクラ</span></label>
+            </span>
+            <span class="nowrap">
+              <input id="filter_hide_frozen" type="checkbox">
+              <label for="filter_hide_frozen"><del>凍結済</del>を隠す</label>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th>キーワード</th>
+          <td>
+            <input id="filter_keyword" type="text"><br>
+            screen_name と名前は部分一致、user_id は完全一致。正規表現使用可。
+          </td>
+        </tr>
+      </table>
     </form>
     
     <p>
@@ -117,6 +142,7 @@
       const LKSP_FILTER_HIDE_FROZEN = 8;
 
       document.querySelector('#filter_apply').addEventListener('click', e => {lkspOpenPage(0)});
+      document.querySelector('#filter_form').addEventListener('submit', e => {lkspOpenPage(0)});
 
       function lkspOpenPage(ipage) {
         const orderStr = document.querySelector('#filter_order').value;
@@ -135,6 +161,8 @@
           `&${LKSP_ARG_FILTER_FLAGS}=${filter}` +
           `&${LKSP_ARG_KEYWORD}=${encodeURIComponent(keyword)}`;
         lkspRenderTable();
+
+        return false; // form で return したときにページ遷移させないために必要
       }
       
       history.replaceState(null, null, null);
@@ -240,9 +268,10 @@
             if (!hit) return false;
           }
           if (regex) {
+            const idMatch = spam.userId.match(regex);
             const hit = 
               spam.screenName.match(regex) ||
-              spam.userId.match(regex) ||
+              (idMatch ? idMatch[0] == spam.userId : false) || // user_id は完全一致
               spam.name.match(regex);
             if (!hit) return false;
           }

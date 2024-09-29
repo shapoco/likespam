@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240929051208" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929051208"></script>
-    <script src="./database.js?20240929092344"></script>
+    <link href="./style.css?20240929111514" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240929111514"></script>
+    <script src="./database.js?20240929112207"></script>
   </head>
 
   <body>
@@ -138,11 +138,23 @@
     
     <form name="filter" class="filter_wrapper">
       <p>
-        フィルタ:
-        <input id="show_likespam" type="checkbox" checked><label for="show_likespam">いいねスパム</label>
-        <input id="show_rpspam" type="checkbox"><label for="show_rpspam"><span class="rpspam">RPスパム</span></label>
-        <input id="show_sakura" type="checkbox" checked><label for="show_sakura"><span class="sakura">サクラ</span></label>
-        <input id="hide_frozen" type="checkbox"><label for="hide_frozen"><del>凍結済</del>を隠す</label>
+        フィルタ:<br>
+        <span class="nowrap">
+          <input id="show_likespam" type="checkbox" checked>
+          <label for="show_likespam">いいねスパム</label>
+        </span>
+        <span class="nowrap">
+          <input id="show_rpspam" type="checkbox">
+          <label for="show_rpspam"><span class="rpspam">RPスパム</span></label>
+        </span>
+        <span class="nowrap">
+          <input id="show_sakura" type="checkbox" checked>
+          <label for="show_sakura"><span class="sakura">サクラ</span></label>
+        </span>
+        <span class="nowrap">
+          <input id="hide_frozen" type="checkbox">
+          <label for="hide_frozen"><del>凍結済</del>を隠す</label>
+        </span>
       </p>
     </form>
 

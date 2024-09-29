@@ -9,6 +9,10 @@ body, input, textarea, th, td {
   font-family: メイリオ, Meiryo, sans-serif;
 }
 
+input[type="checkbox"] {
+  vertical-align: middle;
+}
+
 div.header {
   background: #404040;
   text-align: center;
@@ -78,6 +82,22 @@ div.warning {
   background-position: 10px 10px;
 }
 
+form.filter_wrapper {
+  margin: 10px 20px;
+  padding: 0px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  background: #f8f8f8;
+}
+
+
+form.filter_wrapper p,
+form.filter_wrapper ul,
+form.filter_wrapper ol,
+form.filter_wrapper table {
+  margin: 10px;
+}
+
 table {
   border-collapse: collapse;
 }
@@ -86,7 +106,6 @@ table th,
 table td {
   border: solid 1px #888;
   padding: 0.2ex 0.5em;
-  white-space: nowrap;
 }
 
 table th {
@@ -110,15 +129,29 @@ tr.frozen td { color: #666; }
 tr.frozen td a {
   color: #666 !important;
   text-decoration: line-through !important;
+  border-radius: 5px;
+  padding: 0px 3px;
 }
-del.frozen_new { background: #8ff !important; }
 tr.frozen_new td { background: #8ff !important; }
+del.frozen_new {
+  background: #8ff !important;
+  border-radius: 5px;
+  padding: 0px 3px;
+}
 
 tr.rpspam td { background: #aca; }
-span.rpspam { background: #aca; }
+span.rpspam {
+  background: #aca;
+  border-radius: 5px;
+  padding: 0px 3px;
+}
 
 tr.sakura td { background: #fcf; }
-span.sakura { background: #fcf; }
+span.sakura {
+  background: #fcf;
+  border-radius: 5px;
+  padding: 0px 3px;
+}
 
 strong { color: #c00; font-weight: bold; }
 
@@ -145,6 +178,8 @@ ul#query_list li.frozen a:active { color: #666; text-decoration: line-through; }
 del {
   background: #ccc; 
   color: #666;
+  border-radius: 5px;
+  padding: 0px 3px;
 }
 
 img {
@@ -185,6 +220,15 @@ img.profile_image {
   color: #666;
   font-size: smaller;
   font-weight: normal;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+#spam_table th,
+#spam_table td {
+  white-space: nowrap;
 }
 
 @media(min-width:640px){
