@@ -458,7 +458,7 @@ const likeSpams = [
   newLikeSpam(387,"","VanessaLun71440",0,1406040,1522320,3,""),
   newLikeSpam(388,"","ThomasTenn48448",0,1406040,1560720,3,""),
   newLikeSpam(389,"","JessicaBoy65015",0,1406040,1560720,3,""),
-  newLikeSpam(390,"1804019323154903040","CCravalho15984",0,1406040,2572685,7,"%0%/1835540862253871104/Jj6c2QCv_normal.png"),
+  newLikeSpam(390,"1804019323154903040","CCravalho15984",0,1406040,-1,7,"%0%/1835540862253871104/Jj6c2QCv_normal.png"),
   newLikeSpam(391,"1803985492838617088","BrendaVang60246",0,1406040,1849440,7,"%0%/1835536084106977280/IDoJyqEH_normal.png"),
   newLikeSpam(392,"","lawson_tia21194",0,1406040,1591740,3,""),
   newLikeSpam(393,"","RebeccaLov66116",0,1406040,1545120,3,""),

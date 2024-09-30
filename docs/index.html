@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240930182636" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240930182636"></script>
-    <script src="./database.js?20240930184215"></script>
+    <link href="./style.css?20240930190008" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930190008"></script>
+    <script src="./database.js?20240930190010"></script>
   </head>
 
   <body>
@@ -214,9 +214,10 @@
             const isFrozen = !!(spam.frozenDate);
             const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
             isAllFrozen &= isFrozen;
-            if (hideFrozen && isFrozen) continue;
 
             const isRead = (i in lkspReads);
+
+            if (hideFrozen && isFrozen) continue;
             if (hideRead && isRead) continue;
 
             const isLikeSpam = spam.spamType == LKSP_SPAM_TYPE_LIKESPAM;
@@ -228,8 +229,10 @@
             const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
             if (!showSakura && isSakura) continue;
 
-            isAllRead &= isRead;
-            isAllUnread &= !isRead;
+            if (!isFrozen) {
+              isAllRead &= isRead;
+              isAllUnread &= !isRead;
+            }
 
             screenNames.push(spam.screenName);
             indexes.push(i);
@@ -252,7 +255,8 @@
             var classes = ['read_state'];
             if (isAllRead) classes.push('read_state_read');
             const text = isAllRead ? '既読' : isAllUnread ? '未読' : '一部未読';
-            html += ` <a href="javascript:void(0)" class="${classes.join(' ')}" ${readFlagHrefAttr}>${text}</a><br>`;
+            const style = isAllFrozen ? 'style="display: none;"' : '';
+            html += ` <a href="javascript:void(0)" class="${classes.join(' ')}" ${style} ${readFlagHrefAttr}>${text}</a><br>`;
           }
           if (screenNames.length == 1) {
             html += `<a href="https://x.com/${screenNames[0]}" ${searchLinkClickAttr} target="_blank">${linkTexts[0]}</a>`;
