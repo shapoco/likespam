@@ -32,8 +32,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240930181140" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240930181140"></script>
+    <link href="./style.css?20240930182636" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930182636"></script>
     <script src="./database.js?20240930181552"></script>
   </head>
 
@@ -287,6 +287,7 @@
           indexes.forEach(ispam => { delete lkspReads[ispam]; });
         }
         a.classList.toggle('read_state_read');
+        a.classList.add('read_state_clicked');
         a.innerHTML = isRead ? '既読' : '未読';
         lkspSaveSettings();
       }
