@@ -1,6 +1,6 @@
 const likeSpamMenuItems = [
   { "name": "トップ"  , "url": "./"         },
-  { "name": "詳細一覧 (PC用)", "url": "table.html" },
+  { "name": "詳細一覧", "url": "table.html" },
   { "name": "補足情報", "url": "info.html"  },
   { "name": "ツール"  , "url": "tools.html" },
 ];
