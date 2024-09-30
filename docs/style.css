@@ -244,6 +244,6 @@ img.profile_image {
 
 @media(min-width:640px){
   .for_mobile{
-      display: none !important;
+    display: none !important;
   }
 }

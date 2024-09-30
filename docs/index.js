@@ -183,9 +183,11 @@ function lkspFixContents() {
 
 function lkspEscapeForHtml(s) {
   return s
-    .replace('&', '&amp;')
-    .replace('<', '&lt;')
-    .replace('>', '&gt;')
-    .replace('"', '&quot;')
-    .replace("'", '&#39;');
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+    .replaceAll(" ", '&nbsp;')
+    .replaceAll("　", '&#x3000;');
 }
