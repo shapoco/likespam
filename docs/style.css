@@ -12,7 +12,8 @@ body, input, textarea, th, td {
   font-family: メイリオ, Meiryo, sans-serif;
 }
 
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="radio"] {
   vertical-align: middle;
 }
 
