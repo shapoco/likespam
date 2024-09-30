@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.552
+// @version     1.0.554
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240930112925
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240930113454
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -208,7 +208,8 @@ function getInnerTextWithAlt(elm) {
 
 function copyMissingScreenNames(elem) {
   const ids = Object.keys(missingScreenNames).join(' ');
-  navigator.clipboard.writeText(`./freeze.py ${ids}`);
+  navigator.clipboard.writeText(ids);
+  //navigator.clipboard.writeText(`./freeze.py ${ids}`);
 }
 
 function copyUserIds(elem) {
