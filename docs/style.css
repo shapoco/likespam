@@ -173,6 +173,14 @@ ul#query_list li.frozen a:visited { color: #666; text-decoration: line-through; 
 ul#query_list li.frozen a:hover { color: #666; text-decoration: line-through; }
 ul#query_list li.frozen a:active { color: #666; text-decoration: line-through; }
 
+.read_state { color: #c88 !important; }
+.read_state_read { color: #4c4 !important; }
+.read_state_clicked {
+  background: #ffc !important;
+  border-radius: 5px;
+  padding: 0px 3px;
+}
+
 del {
   background: #ccc; 
   color: #666;

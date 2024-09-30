@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20240929114339" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929114339"></script>
-    <script src="./database.js?20240929235623"></script>
+    <link href="./style.css?20240930092733" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930092733"></script>
+    <script src="./database.js?20240930093453"></script>
   </head>
 
   <body>
@@ -161,17 +161,25 @@
     <p>
       <del class="frozen_new">水色</del> : 直近 24 時間以内に凍結が確認されたアカウント</li>
     </p>
+    <p>
+      <a href="javascript:lkspSetAllReadState(false)">全て未読にする</a>
+      <a href="javascript:lkspSetAllReadState(true)">全て既読にする</a>
+    </p>
 
     <ul id="query_list">
     </ul>
 
     <script>
-      document.filter.show_likespam.addEventListener('change', e => likeSpamRenderLinks());
-      document.filter.show_rpspam.addEventListener('change', e => likeSpamRenderLinks());
-      document.filter.show_sakura.addEventListener('change', e => likeSpamRenderLinks());
-      document.filter.hide_frozen.addEventListener('change', e => likeSpamRenderLinks());
+      const LKSP_STORAGE_KEY_READS = 'readIndexes';
 
-      function likeSpamRenderLinks() {
+      var lkspReads = {};
+
+      document.filter.show_likespam.addEventListener('change', e => lkspRenderLinks());
+      document.filter.show_rpspam.addEventListener('change', e => lkspRenderLinks());
+      document.filter.show_sakura.addEventListener('change', e => lkspRenderLinks());
+      document.filter.hide_frozen.addEventListener('change', e => lkspRenderLinks());
+
+      function lkspRenderLinks() {
         const showRpSpam = document.filter.show_rpspam.checked;
         const showLikeSpam = document.filter.show_likespam.checked;
         const showSakura = document.filter.show_sakura.checked;
@@ -187,8 +195,11 @@
           const ifrom = igrp * GROUP_SIZE;
           const ito = (igrp < numGroup - 1) ? (ifrom + GROUP_SIZE) : numSpam;
           var isAllFrozen = true;
+          var isAllRead = true;
+          var isAllUnread = true;
           var screenNames = [];
           var linkTexts = [];
+          var indexes = [];
           for (var i = ito - 1; i >= ifrom; i--) {
             const spam = likeSpams[i];
 
@@ -206,7 +217,11 @@
             const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
             if (!showSakura && isSakura) continue;
 
+            isAllRead &= i in lkspReads;
+            isAllUnread &= !(i in lkspReads);
+
             screenNames.push(spam.screenName);
+            indexes.push(i);
 
             if (isNewFrozen) linkTexts.push(`<del class="frozen_new">@${spam.screenName}</del>`);
             else if (isFrozen) linkTexts.push(`<del>@${spam.screenName}</del>`);
@@ -216,14 +231,23 @@
           }
 
           if (screenNames.length == 0) continue;
+
+          const searchLinkClickAttr = `onClick="lkspSearchLinkClicked(this.parentNode, [${indexes.join(',')}]);"`;
+          const readFlagHrefAttr = `onClick="lkspToggleReadState(this.parentNode, [${indexes.join(',')}]);"`;
           
           html += `<li ${isAllFrozen ? 'class="frozen"' : ''}>`
-          html += `#${ifrom + 1}～${ito} (${likeSpamFormatDate(likeSpams[ito - 1].addedDate)} 追加)<br>`;
+          html += `#${ifrom + 1}～${ito} (${likeSpamFormatDate(likeSpams[ito - 1].addedDate)} 追加)`;
+          {
+            var classes = ['read_state'];
+            if (isAllRead) classes.push('read_state_read');
+            const text = isAllRead ? '既読' : isAllUnread ? '未読' : '一部未読';
+            html += ` <a href="javascript:void(0)" class="${classes.join(' ')}" ${readFlagHrefAttr}>${text}</a><br>`;
+          }
           if (screenNames.length == 1) {
-            html += `<a href="https://x.com/${screenNames[0]}" target="_blank">${linkTexts[0]}</a>`;
+            html += `<a href="https://x.com/${screenNames[0]}" ${searchLinkClickAttr} target="_blank">${linkTexts[0]}</a>`;
           }
           else {
-            html += `${likeSpamGetSearchLinkHtml(screenNames, linkTexts.join(' '))}`;
+            html += `${lkspGetSearchLinkHtml(screenNames, linkTexts.join(' '), searchLinkClickAttr)}`;
           }
           html += '</li>';
         }
@@ -231,11 +255,108 @@
         document.getElementById('query_list').innerHTML = html;
       }
 
-      likeSpamRenderLinks();
+      function lkspSearchLinkClicked(li, indexes) {
+        const a = li.querySelector('.read_state');
+        a.innerHTML = '既読';
+        a.classList.add('read_state_read');
+        a.classList.add('read_state_clicked');
+        indexes.forEach(ispam => {
+          lkspReads[ispam] = true;
+        });
+        lkspSaveSettings();
+      }
+
+      function lkspToggleReadState(li, indexes) {
+        const a = li.querySelector('.read_state');
+        const isRead = !a.classList.contains('read_state_read');
+        if (isRead) {
+          indexes.forEach(ispam => { lkspReads[ispam] = true; });
+        }
+        else {
+          indexes.forEach(ispam => { delete lkspReads[ispam]; });
+        }
+        a.classList.toggle('read_state_read');
+        a.innerHTML = isRead ? '既読' : '未読';
+        lkspSaveSettings();
+      }
+
+      function lkspSetAllReadState(isRead) {
+        const numSpams = likeSpams.length;
+        if (isRead) {
+          for (var i = 0; i < numSpams; i++) {
+            lkspReads[i] = true;
+          }
+          const ul = document.getElementById('query_list');
+          ul.querySelectorAll('a.read_state').forEach(a => {
+            a.classList.add('read_state_read');
+            a.innerHTML = '既読';
+          });
+        }
+        else {
+          lkspReads = {};
+          const ul = document.getElementById('query_list');
+          ul.querySelectorAll('a.read_state').forEach(a => {
+            a.classList.remove('read_state_read');
+            a.innerHTML = '未読';
+          });
+        }
+        lkspSaveSettings();
+      }
+
+      function lkspSaveSettings() {
+        const numSpams = likeSpams.length;
+        var readRangesArray = [];
+        var ifrom = -1;
+        var ito = -1;
+        for (var i = 0; i < numSpams; i++) {
+          const isRead = i in lkspReads;
+          if (isRead) {
+            if (ifrom < 0 || ito < 0) {
+              ifrom = i;
+              ito = i;
+            }
+            else {
+              ito = i;
+            }
+          }
+
+          if (!isRead || i == numSpams - 1) {
+            if (ifrom >= 0 && ito >= 0) {
+              readRangesArray.push(`${ifrom}-${ito}`)
+            }
+            ifrom = -1;
+            ito = -1;
+          }
+        }
+        localStorage.setItem(LKSP_STORAGE_KEY_READS, readRangesArray.join(','));
+      }
+
+      function lkspLoadSettings() {
+        const numSpams = likeSpams.length;
+        const readRangesStr = localStorage.getItem(LKSP_STORAGE_KEY_READS);
+        if (readRangesStr) {
+          readRangesStr.split(',').forEach(rangeStr => {
+            const rangeArray = rangeStr.split('-');
+            if (rangeArray.length == 1) {
+              lkspReads[parseInt(rangeArray[0])] = true;
+            }
+            else if (rangeArray.length == 2) {
+              const ifrom = Math.max(0, Math.min(numSpams - 1, parseInt(rangeArray[0])));
+              const ito = Math.max(0, Math.min(numSpams - 1, parseInt(rangeArray[1])));
+              for (var i = ifrom; i <= ito; i++) {
+                lkspReads[i] = true;
+              }
+            }
+          });
+        }
+      }
+
+      lkspLoadSettings();
+      lkspRenderLinks();
 
     </script>
     <script>
-      fixContents();
+      lkspFixContents();
     </script>
 
     <hr>

@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240929114339" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929114339"></script>
-    <script src="./database.js?20240929235623"></script>
+    <link href="./style.css?20240930092733" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930092733"></script>
+    <script src="./database.js?20240930093453"></script>
   </head>
 
   <body>
@@ -74,7 +74,7 @@
       {
         const li = document.createElement('li');
         li.innerHTML = 
-          `${likeSpamGetSearchLinkHtml(sakuras.map(spam => spam.screenName), 'X 検索でまとめて表示')} (${frozenSakuras.length} 件が凍結済み)` +
+          `${lkspGetSearchLinkHtml(sakuras.map(spam => spam.screenName), 'X 検索でまとめて表示', null)} (${frozenSakuras.length} 件が凍結済み)` +
           '<ul class="for_mobile"><li>スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</li></ul>';
         ul.appendChild(li);
       }
@@ -169,7 +169,7 @@
     <hr>
 
     <script>
-      fixContents();
+      lkspFixContents();
     </script>
   </body>
 

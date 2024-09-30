@@ -30,9 +30,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>ツール | いいねスパム一覧</title>
-    <link href="./style.css?20240929114339" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240929114339"></script>
-    <script src="./database.js?20240929235623"></script>
+    <link href="./style.css?20240930092733" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930092733"></script>
+    <script src="./database.js?20240930093453"></script>
   </head>
 
   <body>
@@ -104,25 +104,15 @@
         const items = getNormalizedScreenNames();
 
         {
-          const ul = document.getElementById('search_links');
-          ul.innerHTML = '';
           const GROUP_SIZE = 20;
+          var html = '';
           for (var istep = 0; istep < items.length; istep+=GROUP_SIZE) {
             var ifrom = istep;
             var ito = ifrom + GROUP_SIZE;
             if (ito > items.length) ito = items.length;
-            var url = 'https://x.com/search?q=';
-            for(var i = ifrom; i < ito; i++) {
-              url += '@' + items[i];
-              if (i < ito - 1) {
-                url += '+OR+';
-              }
-            }
-            url += '&src=typed_query&f=user';
-            li = document.createElement('li');
-            li.innerHTML = '<a href="' + url + '" target="_blank">' + url + '</a>';
-            ul.appendChild(li);
+            html += `<li>${lkspGetSearchLinkHtml(items.slice(ifrom, ito), null, null)}</li>`;
           }
+          document.querySelector('#search_links').innerHTML = html;
         }
 
         {

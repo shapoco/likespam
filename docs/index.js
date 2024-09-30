@@ -120,12 +120,12 @@ function likeSpamRenderStats(elemId) {
   document.getElementById(elemId).innerHTML = html;
 }
 
-function likeSpamGetSearchLinkHtml(screenNames, linkText) {
+function lkspGetSearchLinkHtml(screenNames, linkText, attrs) {
   const url = `https://x.com/search?q=${screenNames.map(e => '%40' + e).join('+OR+')}&src=typed_query&f=user`;
   if (!linkText || linkText.length == 0) {
     linkText = screenNames.map(e => '@' + e).join(' ');
   }
-  return `<a href="${url}" target="_blank">${linkText}</a>`;
+  return `<a href="${url}" ${!!attrs ? attrs : ''} target="_blank">${linkText}</a>`;
 }
 
 function likeSpamFormatDate(d) {
@@ -166,7 +166,7 @@ function isSmartPhone() {
   return window.matchMedia && window.matchMedia('(max-device-width: 640px)').matches;
 }
 
-function fixContents() {
+function lkspFixContents() {
   const now = new Date();
   const recentDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   recentDay.setDate(recentDay.getDate() - 3);
