@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20240930173142" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240930173142"></script>
-    <script src="./database.js?20240930160910"></script>
+    <link href="./style.css?20240930175828" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930175828"></script>
+    <script src="./database.js?20240930180208"></script>
   </head>
 
   <body>
@@ -66,12 +66,22 @@
         <tr>
           <th class="nowrap">並べ替え</th>
           <td>
-            <select id="filter_order">
-              <option value="index">追加日</option>
-              <option value="frozen_date">凍結確認日</option>
-              <option value="screen_name">screen_name</option>
-              <option value="user_id">user_id</option>
-            </select>
+            <span class="nowrap">
+              <input type="radio" id="filter_order_index" name="filter_order" value="index" checked />
+              <label for="filter_order_index">追加日</label>
+            </span>
+            <span class="nowrap">
+              <input type="radio" id="filter_order_frozen_date" name="filter_order" value="frozen_date" />
+              <label for="filter_order_frozen_date">凍結確認日</label>
+            </span>
+            <span class="nowrap">
+              <input type="radio" id="filter_order_screen_name" name="filter_order" value="screen_name" />
+              <label for="filter_order_screen_name">screen_name</label>
+            </span>
+            <span class="nowrap">
+              <input type="radio" id="filter_order_user_id" name="filter_order" value="user_id" />
+              <label for="filter_order_user_id">user_id</label>
+            </span>
             <span class="nowrap">
               <input id="filter_descending" type="checkbox" checked>
               <label for="filter_descending">降順</label>
@@ -149,8 +159,14 @@
       document.querySelector('#filter_form').addEventListener('submit', e => {lkspOpenPage(0)});
 
       function lkspOpenPage(ipage) {
-        const orderStr = document.querySelector('#filter_order').value;
-        const order = LKSP_ORDER_NAMES.indexOf(orderStr);
+        var order = 0;
+        for (var i = 0; i < LKSP_ORDER_NAMES.length; i++) {
+          const radio = document.querySelector(`#filter_order_${LKSP_ORDER_NAMES[i]}`);
+          if (radio.checked) {
+            order = i;
+            break;
+          }
+        }
         const descending = document.querySelector('#filter_descending').checked;
         const filter = 
           (document.querySelector('#filter_show_likespam').checked ? LKSP_FILTER_SHOW_LIKESPAM : 0) +
@@ -220,7 +236,6 @@
 
       function lkspGenPageLinks(query, numSpams) {
         const numPages = Math.ceil(numSpams / LKSP_ITEMS_PER_PAGE);
-        //const ipageFrom = isSmartPhone() ? 0 : -1;
         const ipageFrom = 0;
         var html = '';
         for(var ipage = ipageFrom; ipage < numPages; ipage++) {
@@ -246,7 +261,7 @@
 
       function extractQuery(query) {
         if (0 <= query.order && query.order < LKSP_ORDER_NAMES.length) {
-          document.querySelector('#filter_order').value = LKSP_ORDER_NAMES[query.order];
+          document.querySelector(`#filter_order_${LKSP_ORDER_NAMES[query.order]}`).checked = true;
         }
         document.querySelector('#filter_descending').checked = query.descending;
         document.querySelector('#filter_show_likespam').checked = 0 != query.showLikeSpam;
@@ -349,11 +364,9 @@
         const url = likeSpams[index].profile_image_url;
         checkIfImageExists(index, url)
           .then((index, url) => {
-              //console.log(`Image found: ${index}`);
               span.innerHTML = STATUS_ICON_SUCCESS;
           })
           .catch((index, url) => {
-              //console.log(`Image not found: ${index}`);
               span.innerHTML = STATUS_ICON_FAILED;
           });
       }
