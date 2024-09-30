@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.548
+// @version     1.0.550
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20240930110704
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20240930112715
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -37,7 +37,7 @@ divFoundUsers.style.fontSize = '8pt';
 //aCpMiss.style.padding = '0px 5px';
 //aCpMiss.style.background = '#ccc';
 //aCpMiss.style.borderRadius = '5px';
-const aCpMiss = createLinkButton('#', '未発見IDのコピー', '#ccc');
+const aCpMiss = createLinkButton('javascript:void(0)', '未発見IDのコピー', '#ccc');
 aCpMiss.addEventListener('click', copyMissingScreenNames);
 
 const divUserIds = document.createElement('div');
@@ -46,7 +46,7 @@ divUserIds.style.left = '10px';
 divUserIds.style.top = '10px';
 divUserIds.style.fontSize = '8pt';
 
-const aCpIds = createLinkButton('#', '全ての user_id をコピー', '#0ef');
+const aCpIds = createLinkButton('javascript:void(0)', '全ての user_id をコピー', '#0ef');
 aCpIds.addEventListener('click', copyUserIds);
 divUserIds.appendChild(aCpIds);
 document.getElementsByTagName('body')[0].appendChild(divUserIds);
@@ -150,6 +150,7 @@ function scanElems(elems, startMarker) {
   else {
     aCpMiss.style.background = '#ff0';
   }
+  aCpMiss.innerHTML = `未発見IDのコピー (${Object.keys(missingScreenNames).length})`;
   highlighterTimeoutId = setTimeout(scanSpams, 1000);
 }
 
@@ -207,7 +208,7 @@ function getInnerTextWithAlt(elm) {
 
 function copyMissingScreenNames(elem) {
   const ids = Object.keys(missingScreenNames).join(' ');
-  navigator.clipboard.writeText(ids);
+  navigator.clipboard.writeText(`./freeze.py ${ids}`);
 }
 
 function copyUserIds(elem) {
