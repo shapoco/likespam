@@ -34,7 +34,7 @@
     <title>いいねスパム一覧</title>
     <link href="./style.css?20240930092733" rel="stylesheet" type="text/css">
     <script src="./index.js?20240930092733"></script>
-    <script src="./database.js?20240930094004"></script>
+    <script src="./database.js?20240930094617"></script>
   </head>
 
   <body>
@@ -157,6 +157,10 @@
           <input id="hide_frozen" type="checkbox">
           <label for="hide_frozen"><del>凍結済</del>を隠す</label>
         </span>
+        <span class="nowrap">
+          <input id="hide_read" type="checkbox">
+          <label for="hide_read">既読を隠す</label>
+        </span>
       </p>
     </form>
 
@@ -180,12 +184,14 @@
       document.filter.show_rpspam.addEventListener('change', e => lkspRenderLinks());
       document.filter.show_sakura.addEventListener('change', e => lkspRenderLinks());
       document.filter.hide_frozen.addEventListener('change', e => lkspRenderLinks());
+      document.filter.hide_read.addEventListener('change', e => lkspRenderLinks());
 
       function lkspRenderLinks() {
         const showRpSpam = document.filter.show_rpspam.checked;
         const showLikeSpam = document.filter.show_likespam.checked;
         const showSakura = document.filter.show_sakura.checked;
         const hideFrozen = document.filter.hide_frozen.checked;
+        const hideRead = document.filter.hide_read.checked;
 
         const now = Date.now();
         const GROUP_SIZE = 20;
@@ -210,6 +216,9 @@
             isAllFrozen &= isFrozen;
             if (hideFrozen && isFrozen) continue;
 
+            const isRead = (i in lkspReads);
+            if (hideRead && isRead) continue;
+
             const isLikeSpam = spam.spamType == LKSP_SPAM_TYPE_LIKESPAM;
             if (!showLikeSpam && isLikeSpam) continue;
 
@@ -219,8 +228,8 @@
             const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
             if (!showSakura && isSakura) continue;
 
-            isAllRead &= i in lkspReads;
-            isAllUnread &= !(i in lkspReads);
+            isAllRead &= isRead;
+            isAllUnread &= !isRead;
 
             screenNames.push(spam.screenName);
             indexes.push(i);
