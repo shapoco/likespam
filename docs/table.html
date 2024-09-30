@@ -32,8 +32,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20240930114805" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240930114805"></script>
+    <link href="./style.css?20240930173142" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930173142"></script>
     <script src="./database.js?20240930160910"></script>
   </head>
 
@@ -321,9 +321,8 @@
           const isRpSpam = spam.spamType == LKSP_SPAM_TYPE_RPSPAM;
           const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
 
+          const screenNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
           const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
-          const scrNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
-          //var icon_html = '<span id="status_icon_' + i + '" onMouseOver="javascript: checkProfileIconExistence(' + i + ')">' + STATUS_ICON_UNKNOWN + '</span>';
 
           if (isNewFrozen) html += '<tr class="frozen frozen_new">';
           else if (isFrozen) html += '<tr class="frozen">';
@@ -334,9 +333,9 @@
           html += `<td>${spam.index + 1}</td>`;
           html += `<td>${likeSpamFormatDate(spam.addedDate)}</td>`;
           html += `<td>${spam.frozenDate ? likeSpamFormatDate(spam.frozenDate) : ''}</td>`;
-          html += `<td>${scrNameHtml}</td>`;
+          html += `<td>${screenNameHtml}</td>`;
           html += `<td>${userIdHtml}</td>`;
-          html += `<td>${spam.name}</td>`;
+          html += `<td>${lkspEscapeForHtml(spam.name)}</td>`;
           html += '</tr>';
         }
 

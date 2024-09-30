@@ -180,3 +180,12 @@ function lkspFixContents() {
     link.href = `https://x.com/search?q=%23%E3%81%84%E3%81%84%E3%81%AD%E3%82%B9%E3%83%91%E3%83%A0%20since%3A${dateStr}&src=typed_query&f=top`;
   });
 }
+
+function lkspEscapeForHtml(s) {
+  return s
+    .replace('&', '&amp;')
+    .replace('<', '&lt;')
+    .replace('>', '&gt;')
+    .replace('"', '&quot;')
+    .replace("'", '&#39;');
+}

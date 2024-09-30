@@ -32,8 +32,8 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>補足情報 | いいねスパム一覧</title>
-    <link href="./style.css?20240930114805" rel="stylesheet" type="text/css">
-    <script src="./index.js?20240930114805"></script>
+    <link href="./style.css?20240930173142" rel="stylesheet" type="text/css">
+    <script src="./index.js?20240930173142"></script>
     <script src="./database.js?20240930160910"></script>
   </head>
 
@@ -65,29 +65,24 @@
       定期的に本当に金品が貰えたかのようなリプライを Zy_Iove に送らせています。
     </p>
 
-    <ul id="sakura_list">
-    </ul>
+    <ul id="sakura_list"></ul>
+    <p id="sakura_search_link"></p>
+
     <script>
       const ul = document.getElementById('sakura_list');
       const to_id = "Zy_Iove";
-      const allSakuras = likeSpams.filter(spam => spam.spamType == LKSP_SPAM_TYPE_SAKURA).reverse();
-      const sakuras = allSakuras.filter(spam => !(spam.frozenDate));
-      const frozenSakuras = allSakuras.filter(spam => !!(spam.frozenDate));
-      {
-        const li = document.createElement('li');
-        li.innerHTML = 
-          `${lkspGetSearchLinkHtml(sakuras.map(spam => spam.screenName), 'X 検索でまとめて表示', null)} (${frozenSakuras.length} 件が凍結済み)` +
-          '<ul class="for_mobile"><li>スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</li></ul>';
-        ul.appendChild(li);
-      }
-      sakuras.forEach(spam => {
+      const sakuras = likeSpams.filter(spam => spam.spamType == LKSP_SPAM_TYPE_SAKURA).reverse();
+      const aliveSakuras = sakuras.filter(spam => !(spam.frozenDate));
+      const frozenSakuras = sakuras.filter(spam => !!(spam.frozenDate));
+
+      aliveSakuras.forEach(spam => {
         const li = document.createElement('li');
         var html = '';
         if (isSmartPhone()) {
-          html += `<a href="https://x.com/${spam.screenName}/with_replies" target="_blank">${spam.name}</a>`;
+          html += `<a href="https://x.com/${spam.screenName}/with_replies" target="_blank">${lkspEscapeForHtml(spam.name)}</a>`;
         }
         else {
-          html += `${spam.name} ` +
+          html += `${lkspEscapeForHtml(spam.name)} ` +
             `(<a href="https://x.com/${spam.screenName}/with_replies" target="_blank">@${spam.screenName}</a>, ` +
             `<a href="https://x.com/i/user/${spam.userId}" target="_blank">${spam.userId}</a>)`;
         }
@@ -97,6 +92,12 @@
         li.innerHTML = html;
         ul.appendChild(li);
       });
+
+      if (aliveSakuras.length > 0) {
+        document.querySelector('#sakura_search_link').innerHTML =
+          `${lkspGetSearchLinkHtml(aliveSakuras.map(spam => spam.screenName), 'X 検索でまとめて表示', null)} (${frozenSakuras.length} 件が凍結済み)<br>` +
+          '<span class="for_mobile">スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</span>';
+      }
     </script>
     
     <h2 id="finding">いいねスパムの見つけ方</h2>
