@@ -349,7 +349,7 @@
           const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
           const isSmoker = spam.spamType == LKSP_SPAM_TYPE_SMOKER;
 
-          const screenNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
+          const screenNameHtml = '<a href="https://x.com/' + spam.screenName + '/with_replies" target="_blank">@' + spam.screenName + '</a>';
           const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
 
           if (isNewFrozen) html += '<tr class="frozen frozen_new">';
