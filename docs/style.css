@@ -145,9 +145,16 @@ span.rpspam {
   padding: 0px 3px;
 }
 
-tr.sakura td { background: #fcf; }
+tr.sakura td { background: #fce; }
 span.sakura {
-  background: #fcf;
+  background: #fce;
+  border-radius: 5px;
+  padding: 0px 3px;
+}
+
+tr.smoker td { background: #ccf; }
+span.smoker {
+  background: #ccf;
   border-radius: 5px;
   padding: 0px 3px;
 }

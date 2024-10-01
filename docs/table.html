@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20241001020734" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241001020734"></script>
-    <script src="./database.js?20241002051052"></script>
+    <link href="./style.css?20241002052629" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241002052629"></script>
+    <script src="./database.js?20241002053400"></script>
   </head>
 
   <body>
@@ -105,6 +105,10 @@
               <label for="filter_show_sakura"><span class="sakura">サクラ</span></label>
             </span>
             <span class="nowrap">
+              <input id="filter_show_smoker" type="checkbox" checked>
+              <label for="filter_show_smoker"><span class="smoker">検索荒らし</span></label>
+            </span>
+            <span class="nowrap">
               <input id="filter_hide_frozen" type="checkbox">
               <label for="filter_hide_frozen"><del>凍結済</del>を隠す</label>
             </span>
@@ -155,6 +159,7 @@
       const LKSP_FILTER_SHOW_RPSPAM = 2;
       const LKSP_FILTER_SHOW_SAKURA = 4;
       const LKSP_FILTER_HIDE_FROZEN = 8;
+      const LKSP_FILTER_SHOW_SMOKER = 16;
 
       document.querySelector('#filter_apply').addEventListener('click', e => {lkspOpenPage(0)});
       document.querySelector('#filter_form').addEventListener('submit', e => {lkspOpenPage(0)});
@@ -173,6 +178,7 @@
           (document.querySelector('#filter_show_likespam').checked ? LKSP_FILTER_SHOW_LIKESPAM : 0) +
           (document.querySelector('#filter_show_rpspam').checked ? LKSP_FILTER_SHOW_RPSPAM : 0) +
           (document.querySelector('#filter_show_sakura').checked ? LKSP_FILTER_SHOW_SAKURA : 0) +
+          (document.querySelector('#filter_show_smoker').checked ? LKSP_FILTER_SHOW_SMOKER : 0) +
           (document.querySelector('#filter_hide_frozen').checked ? LKSP_FILTER_HIDE_FROZEN : 0);
         const keyword = document.querySelector('#filter_keyword').value;
         window.location = 
@@ -203,6 +209,7 @@
         query.showLikeSpam = true;
         query.showRpSpam = true;
         query.showSakura = true;
+        query.showSmoker = true;
         query.hideFrozen = false;
         query.keyword = '';
 
@@ -223,6 +230,7 @@
                   query.showLikeSpam = 0 != (filterFlags & LKSP_FILTER_SHOW_LIKESPAM);
                   query.showRpSpam = 0 != (filterFlags & LKSP_FILTER_SHOW_RPSPAM);
                   query.showSakura = 0 != (filterFlags & LKSP_FILTER_SHOW_SAKURA);
+                  query.showSmoker = 0 != (filterFlags & LKSP_FILTER_SHOW_SMOKER);
                   query.hideFrozen = 0 != (filterFlags & LKSP_FILTER_HIDE_FROZEN);
                   break;
                 case LKSP_ARG_KEYWORD: query.keyword = decodeURIComponent(pair[1]); break;
@@ -268,6 +276,7 @@
         document.querySelector('#filter_show_likespam').checked = 0 != query.showLikeSpam;
         document.querySelector('#filter_show_rpspam').checked = 0 != query.showRpSpam;
         document.querySelector('#filter_show_sakura').checked = 0 != query.showSakura;
+        document.querySelector('#filter_show_smoker').checked = 0 != query.showSmoker;
         document.querySelector('#filter_hide_frozen').checked = 0 != query.hideFrozen;
         document.querySelector('#filter_keyword').value = query.keyword;
       }
@@ -284,7 +293,8 @@
             const hit = 
               (query.showLikeSpam && spam.spamType == LKSP_SPAM_TYPE_LIKESPAM) ||
               (query.showRpSpam && spam.spamType == LKSP_SPAM_TYPE_RPSPAM) ||
-              (query.showSakura && spam.spamType == LKSP_SPAM_TYPE_SAKURA);
+              (query.showSakura && spam.spamType == LKSP_SPAM_TYPE_SAKURA) ||
+              (query.showSmoker && spam.spamType == LKSP_SPAM_TYPE_SMOKER);
             if (!hit) return false;
           }
           if (regex) {
@@ -336,6 +346,7 @@
           const isNewFrozen = isFrozen && (now - spam.frozenDate) < 1000 * 60 * 60 * 24;
           const isRpSpam = spam.spamType == LKSP_SPAM_TYPE_RPSPAM;
           const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
+          const isSmoker = spam.spamType == LKSP_SPAM_TYPE_SMOKER;
 
           const screenNameHtml = '<a href="https://x.com/' + spam.screenName + '" target="_blank">@' + spam.screenName + '</a>';
           const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
@@ -344,6 +355,7 @@
           else if (isFrozen) html += '<tr class="frozen">';
           else if (isRpSpam) html += '<tr class="rpspam">';
           else if (isSakura) html += '<tr class="sakura">';
+          else if (isSmoker) html += '<tr class="smoker">';
           else html += '<tr>';
 
           html += `<td>${spam.index + 1}</td>`;

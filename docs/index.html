@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20241001020734" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241001020734"></script>
-    <script src="./database.js?20241002051052"></script>
+    <link href="./style.css?20241002052629" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241002052629"></script>
+    <script src="./database.js?20241002053400"></script>
   </head>
 
   <body>
@@ -154,6 +154,10 @@
           <label for="show_sakura"><span class="sakura">サクラ</span></label>
         </span>
         <span class="nowrap">
+          <input id="show_smoker" type="checkbox" checked>
+          <label for="show_smoker"><span class="smoker">検索荒らし</span></label>
+        </span>
+        <span class="nowrap">
           <input id="hide_frozen" type="checkbox">
           <label for="hide_frozen"><del>凍結済</del>を隠す</label>
         </span>
@@ -183,6 +187,7 @@
       document.filter.show_likespam.addEventListener('change', e => lkspRenderLinks());
       document.filter.show_rpspam.addEventListener('change', e => lkspRenderLinks());
       document.filter.show_sakura.addEventListener('change', e => lkspRenderLinks());
+      document.filter.show_smoker.addEventListener('change', e => lkspRenderLinks());
       document.filter.hide_frozen.addEventListener('change', e => lkspRenderLinks());
       document.filter.hide_read.addEventListener('change', e => lkspRenderLinks());
 
@@ -190,6 +195,7 @@
         const showRpSpam = document.filter.show_rpspam.checked;
         const showLikeSpam = document.filter.show_likespam.checked;
         const showSakura = document.filter.show_sakura.checked;
+        const showSmoker = document.filter.show_smoker.checked;
         const hideFrozen = document.filter.hide_frozen.checked;
         const hideRead = document.filter.hide_read.checked;
 
@@ -229,6 +235,9 @@
             const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
             if (!showSakura && isSakura) continue;
 
+            const isSmoker = spam.spamType == LKSP_SPAM_TYPE_SMOKER;
+            if (!showSmoker && isSmoker) continue;
+
             if (!isFrozen) {
               isAllRead &= isRead;
               isAllUnread &= !isRead;
@@ -241,6 +250,7 @@
             else if (isFrozen) linkTexts.push(`<del>@${spam.screenName}</del>`);
             else if (isRpSpam) linkTexts.push(`<span class="rpspam">@${spam.screenName}</span>`);
             else if (isSakura) linkTexts.push(`<span class="sakura">@${spam.screenName}</span>`);
+            else if (isSmoker) linkTexts.push(`<span class="smoker">@${spam.screenName}</span>`);
             else linkTexts.push('@' + spam.screenName);
           }
 
