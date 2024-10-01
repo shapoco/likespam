@@ -34,7 +34,7 @@
     <title>ツール | いいねスパム一覧</title>
     <link href="./style.css?20241001020734" rel="stylesheet" type="text/css">
     <script src="./index.js?20241001020734"></script>
-    <script src="./database.js?20241001195724"></script>
+    <script src="./database.js?20241001233640"></script>
   </head>
 
   <body>
@@ -61,10 +61,21 @@
       </p>
     </form>
     <p id="idgen_result"></p>
-    <ol id="search_links"></ol>
-    <ol id="profile_links"></ol>
-    <p id="regex_text"></p>
-
+    <ul>
+      <li>
+        検索リンク:
+        <ol id="search_links"></ol>    
+      </li>
+      <li>
+        個別リンク:
+        <ol id="profile_links"></ol>
+      </li>
+      <li>
+        screen_name 正規表現:<br>
+        <span id="regex_text"></span>
+      </li>
+    </ul>
+    
     <script>
       var knownScreenNames = {};
       var frozenScreenNames = {};
@@ -100,18 +111,15 @@
         }
 
         {
-          const ul = document.getElementById('profile_links');
-          ul.innerHTML = '';
+          var html = '';
           for(var i = 0; i < items.length; i++) {
             url = 'https://x.com/' + items[i];
-            li = document.createElement('li');
-            li.innerHTML = '<a href="' + url + '" target="_blank">' + url + '</a>';
-            ul.appendChild(li);
+            html += '<li><a href="' + url + '" target="_blank">' + url + '</a></li>';
           }
+          document.querySelector('#profile_links').innerHTML = html;
         }
 
         {
-          const p = document.getElementById('regex_text');
           var text = '';
           if (items.length > 0) {
             text += '\\b('
@@ -123,7 +131,7 @@
             }
             text += ')\\b';
           }
-          p.innerHTML = text;
+          document.querySelector('#regex_text').innerHTML = text;
         }
       }
 
