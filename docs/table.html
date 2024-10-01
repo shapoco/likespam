@@ -34,7 +34,7 @@
     <title>詳細一覧 | いいねスパム一覧</title>
     <link href="./style.css?20241002052629" rel="stylesheet" type="text/css">
     <script src="./index.js?20241002052629"></script>
-    <script src="./database.js?20241002055755"></script>
+    <script src="./database.js?20241002062032"></script>
   </head>
 
   <body>
@@ -128,17 +128,13 @@
       <del class="frozen_new">水色</del> : 直近 24 時間以内に凍結が確認されたアカウント</li>
     </p>
 
-    <p class="menu_wrapper">
-      ページ: <span id="page_links_top"></span>
-    </p>
+    <p class="menu_wrapper page_list"></p>
     <div style="overflow-x: scroll;">
       <table id="spam_table">
         <tr></tr>
       </table>
     </div>
-    <p class="menu_wrapper">
-      ページ: <span id="page_links_bottom"></span>
-    </p>
+    <p class="menu_wrapper page_list"></p>
 
     <script>
       const LKSP_ITEMS_PER_PAGE = 500;
@@ -246,7 +242,12 @@
       function lkspGenPageLinks(query, numSpams) {
         const numPages = Math.ceil(numSpams / LKSP_ITEMS_PER_PAGE);
         const ipageFrom = 0;
-        var html = '';
+        
+        const numSpamsInThisPage =
+          (query.page < numPages - 1) ? LKSP_ITEMS_PER_PAGE : numSpams - query.page * LKSP_ITEMS_PER_PAGE;
+
+        var html = `${numSpams} 件中 ${numSpamsInThisPage} 件を表示中<br>ページ: `;
+
         for(var ipage = ipageFrom; ipage < numPages; ipage++) {
           const text = ipage < 0 ? '全て' : (ipage + 1).toString();
           if (ipage == query.page) {
@@ -257,14 +258,14 @@
           }
         }
         
-        const pageLinksTop = document.getElementById('page_links_top');
-        const pageLinksBottom = document.getElementById('page_links_bottom');
-        pageLinksTop.innerHTML = html;
-        pageLinksBottom.innerHTML = html;
-
-        const rect = pageLinksTop.getBoundingClientRect();
+        const pageListWrappers = document.querySelectorAll('.page_list');
+        pageListWrappers.forEach(e => {
+          e.innerHTML = html;
+        });
+        
+        const rect = pageListWrappers[0].getBoundingClientRect();
         if (rect.top < 0 || window.innerHeight < rect.bottom) {
-          pageLinksTop.scrollIntoView();
+          pageListWrappers[0].scrollIntoView();
         }
       }
 
