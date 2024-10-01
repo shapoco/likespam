@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.499
+// @version     1.0.509
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20241001155722
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20241001185628
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
