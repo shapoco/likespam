@@ -79,8 +79,6 @@ function lkspTouch(index, score) {
   lkspTouchedIndexesDict[index] = score;
 
   var scoreSum = lkspTouchedIndexesQueue.reduce((sum, e) =>  sum + lkspTouchedIndexesDict[e], 0);
-  console.log(lkspTouchedIndexesQueue.length);
-  console.log(scoreSum);
 
   while (scoreSum > LKSP_TOUCHED_QUEUE_CAPACITY) {
     if (lkspTouchedIndexesQueue.length <= 0) {
