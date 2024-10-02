@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20241002112316" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241002112316"></script>
-    <script src="./database.js?20241002113550"></script>
+    <link href="./style.css?20241002114647" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241002114647"></script>
+    <script src="./database.js?20241002114649"></script>
   </head>
 
   <body>
@@ -411,7 +411,7 @@
 
       function lkspLinkClicked(tr, index) {
         lkspReadIndexes[index] = true;
-        lkspTouch(index);
+        lkspTouch(index, 1);
         const a = tr.querySelector('.read_state');
         a.classList.add('read_state_read');
         a.classList.add('read_state_touched');
@@ -427,7 +427,7 @@
           lkspReadIndexes[index] = true;
           link.classList.add('read_state_read');
         }
-        lkspTouch(index);
+        lkspTouch(index, 1);
         link.classList.add('read_state_touched');
         lkspSaveSettings();
       }

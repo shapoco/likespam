@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20241002112316" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241002112316"></script>
-    <script src="./database.js?20241002113550"></script>
+    <link href="./style.css?20241002114647" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241002114647"></script>
+    <script src="./database.js?20241002114649"></script>
   </head>
 
   <body>
@@ -281,9 +281,11 @@
       }
 
       function lkspSearchLinkClicked(li, indexes) {
+        if (indexes.length == 0) return;
+        const touchScore = 1 / indexes.length;
         indexes.forEach(ispam => {
           lkspReadIndexes[ispam] = true;
-          lkspTouch(ispam);
+          lkspTouch(ispam, touchScore);
         });
         const a = li.querySelector('.read_state');
         a.innerHTML = '既読';
@@ -293,18 +295,20 @@
       }
 
       function lkspToggleReadState(li, indexes) {
+        if (indexes.length == 0) return;
+        const touchScore = 1 / indexes.length;
         const a = li.querySelector('.read_state');
         const isRead = !a.classList.contains('read_state_read');
         if (isRead) {
           indexes.forEach(ispam => {
             lkspReadIndexes[ispam] = true;
-            lkspTouch(ispam);
+            lkspTouch(ispam, touchScore);
           });
         }
         else {
           indexes.forEach(ispam => {
             delete lkspReadIndexes[ispam]; 
-            lkspTouch(ispam);
+            lkspTouch(ispam, touchScore);
           });
         }
         a.classList.toggle('read_state_read');

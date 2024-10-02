@@ -1,11 +1,13 @@
 const LKSP_STORAGE_KEY_READS = 'readIndexes';
 const LKSP_STORAGE_KEY_TOUCHED = 'touchedIndexes';
-const LKSP_TOUCHED_QUEUE_LENGTH = 100;
+const LKSP_TOUCHED_QUEUE_CAPACITY = 100;
 var lkspReadIndexes = {};
 var lkspTouchedIndexesDict = {};
 var lkspTouchedIndexesQueue = [];
 
 function lkspSaveSettings() {
+  console.log(`lkspTouchedIndexesQueue.length = ${lkspTouchedIndexesQueue.length}`);
+  
   const numSpams = likeSpams.length;
   var readRangesArray = [];
   var ifrom = -1;
@@ -61,19 +63,30 @@ function lkspLoadSettings() {
       }
     });
   }
+  
+  console.log(`lkspTouchedIndexesQueue.length = ${lkspTouchedIndexesQueue.length}`);
 }
 
-function lkspTouch(index) {
-  if (index in lkspTouchedIndexesDict && lkspTouchedIndexesDict[index]) {
+function lkspTouch(index, score) {
+  if (index in lkspTouchedIndexesDict && lkspTouchedIndexesDict[index] > 0) {
     lkspTouchedIndexesQueue = lkspTouchedIndexesQueue.filter(e => e !== index);
-    lkspTouchedIndexesQueue.push(index);
   }
-  else {
-    lkspTouchedIndexesQueue.push(index);
-    lkspTouchedIndexesDict[index] = true;
-    while (lkspTouchedIndexesQueue.length > LKSP_TOUCHED_QUEUE_LENGTH) {
-      lkspTouchedIndexesDict[lkspTouchedIndexesQueue.shift()] = false;
+  lkspTouchedIndexesQueue.push(index);
+  lkspTouchedIndexesDict[index] = score;
+
+  var scoreSum = lkspTouchedIndexesQueue.reduce((a, b) => {
+    return lkspTouchedIndexesDict[a] + lkspTouchedIndexesDict[b];
+  });
+
+  while (scoreSum > LKSP_TOUCHED_QUEUE_CAPACITY) {
+    if (lkspTouchedIndexesQueue.length <= 0) {
+      console.log('ERROR: Queue broken.');
+      break;
     }
+    const i = lkspTouchedIndexesQueue.shift();
+    const p = lkspTouchedIndexesDict[i];
+    lkspTouchedIndexesDict[i] = 0;
+    scoreSum -= p;
   }
 }
 
