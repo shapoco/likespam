@@ -34,7 +34,7 @@
     <title>詳細一覧 | いいねスパム一覧</title>
     <link href="./style.css?20241002112316" rel="stylesheet" type="text/css">
     <script src="./index.js?20241002112316"></script>
-    <script src="./database.js?20241002112516"></script>
+    <script src="./database.js?20241002113550"></script>
   </head>
 
   <body>
@@ -87,10 +87,6 @@
               <input id="filter_descending" type="checkbox" checked>
               <label for="filter_descending">降順</label>
             </span>
-            <span class="nowrap">
-              <input id="hide_read" type="checkbox">
-              <label for="hide_read">既読を隠す</label>
-            </span>
           </td>
         </tr>
         <tr>
@@ -115,6 +111,10 @@
             <span class="nowrap">
               <input id="filter_hide_frozen" type="checkbox">
               <label for="filter_hide_frozen"><del>凍結済</del>を隠す</label>
+            </span>
+            <span class="nowrap">
+              <input id="filter_hide_read" type="checkbox">
+              <label for="filter_hide_read">既読を隠す</label>
             </span>
           </td>
         </tr>
@@ -160,6 +160,7 @@
       const LKSP_FILTER_SHOW_SAKURA = 4;
       const LKSP_FILTER_HIDE_FROZEN = 8;
       const LKSP_FILTER_SHOW_SMOKER = 16;
+      const LKSP_FILTER_HIDE_READ = 32;
 
       document.querySelector('#filter_apply').addEventListener('click', e => {lkspOpenPage(0)});
       document.querySelector('#filter_form').addEventListener('submit', e => {lkspOpenPage(0)});
@@ -179,7 +180,8 @@
           (document.querySelector('#filter_show_rpspam').checked ? LKSP_FILTER_SHOW_RPSPAM : 0) +
           (document.querySelector('#filter_show_sakura').checked ? LKSP_FILTER_SHOW_SAKURA : 0) +
           (document.querySelector('#filter_show_smoker').checked ? LKSP_FILTER_SHOW_SMOKER : 0) +
-          (document.querySelector('#filter_hide_frozen').checked ? LKSP_FILTER_HIDE_FROZEN : 0);
+          (document.querySelector('#filter_hide_frozen').checked ? LKSP_FILTER_HIDE_FROZEN : 0) +
+          (document.querySelector('#filter_hide_read').checked ? LKSP_FILTER_HIDE_READ : 0);
         const keyword = document.querySelector('#filter_keyword').value;
         window.location = 
           `table.html#${LKSP_ARG_PAGE}=${ipage}` +
@@ -211,6 +213,7 @@
         query.showSakura = true;
         query.showSmoker = true;
         query.hideFrozen = false;
+        query.hideRead = false;
         query.keyword = '';
 
         const isharp = url.indexOf('#');
@@ -232,6 +235,7 @@
                   query.showSakura = 0 != (filterFlags & LKSP_FILTER_SHOW_SAKURA);
                   query.showSmoker = 0 != (filterFlags & LKSP_FILTER_SHOW_SMOKER);
                   query.hideFrozen = 0 != (filterFlags & LKSP_FILTER_HIDE_FROZEN);
+                  query.hideRead = 0 != (filterFlags & LKSP_FILTER_HIDE_READ);
                   break;
                 case LKSP_ARG_KEYWORD: query.keyword = decodeURIComponent(pair[1]); break;
                 default: console.log(`ERROR: Unknown parameter: '${pair[0]}'`); break;
@@ -283,6 +287,7 @@
         document.querySelector('#filter_show_sakura').checked = 0 != query.showSakura;
         document.querySelector('#filter_show_smoker').checked = 0 != query.showSmoker;
         document.querySelector('#filter_hide_frozen').checked = 0 != query.hideFrozen;
+        document.querySelector('#filter_hide_read').checked = 0 != query.hideRead;
         document.querySelector('#filter_keyword').value = query.keyword;
       }
 
@@ -294,6 +299,7 @@
 
         var spams = likeSpams.filter(spam => {
           if (query.hideFrozen && !!(spam.frozenDate)) return false;
+          if (query.hideRead && !!(spam.index in lkspReadIndexes)) return false;
           {
             const hit = 
               (query.showLikeSpam && spam.spamType == LKSP_SPAM_TYPE_LIKESPAM) ||
