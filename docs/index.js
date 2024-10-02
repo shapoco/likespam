@@ -32,7 +32,6 @@ function lkspSaveSettings() {
   }
   localStorage.setItem(LKSP_STORAGE_KEY_READS, readRangesArray.join(','));
   localStorage.setItem(LKSP_STORAGE_KEY_TOUCHED, lkspTouchedIndexesQueue.join(','));
-  console.log(`lkspTouchedIndexesQueue.length = ${lkspTouchedIndexesQueue.length}`)
 }
 
 function lkspLoadSettings() {
@@ -62,7 +61,6 @@ function lkspLoadSettings() {
       }
     });
   }
-  console.log(`lkspTouchedIndexesQueue.length = ${lkspTouchedIndexesQueue.length}`)
 }
 
 function lkspTouch(index) {

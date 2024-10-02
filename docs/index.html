@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20241002095659" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241002095659"></script>
-    <script src="./database.js?20241002110826"></script>
+    <link href="./style.css?20241002112316" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241002112316"></script>
+    <script src="./database.js?20241002112516"></script>
   </head>
 
   <body>
@@ -296,12 +296,17 @@
         const a = li.querySelector('.read_state');
         const isRead = !a.classList.contains('read_state_read');
         if (isRead) {
-          indexes.forEach(ispam => { lkspReadIndexes[ispam] = true; });
+          indexes.forEach(ispam => {
+            lkspReadIndexes[ispam] = true;
+            lkspTouch(ispam);
+          });
         }
         else {
-          indexes.forEach(ispam => { delete lkspReadIndexes[ispam]; });
+          indexes.forEach(ispam => {
+            delete lkspReadIndexes[ispam]; 
+            lkspTouch(ispam);
+          });
         }
-        lkspTouch(ispam);
         a.classList.toggle('read_state_read');
         a.classList.add('read_state_touched');
         a.innerHTML = isRead ? '既読' : '未読';
