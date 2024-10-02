@@ -3,10 +3,10 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.531
+// @version     1.0.519
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20241002090041
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20241002090958
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -15,6 +15,17 @@
 const profileTextKeys = ['Zy_Iove', 'Su_Iover', 'Zy_iove', 'Xy_Iove', 'ace_GlFT', '________l__I___', 'ギフト1万円分', 'bit.ly/3ZJEViG'];
 const nameKeys = [
   '【公式】 いいねされた人はプロフィールをチェックして景品をGET🎁おめでとう🎉',
+];
+const blackList = [
+//  'adrianar87200', 'aesophcynt69168', 'adrianamor21352', 'achmielorz19052', 'abby_rober23863', 'abby_rober9069', 'abbycarlso20835', 'ackermanum62161',
+//  'abrams_pat84908', 'abbydavis218913', 'abarcaamy89224', 'adrienneth19619', 'abbywillia66946', 'advorak51481', 'acklair98191', 'aantishin35043',
+//  'acosta_hea67784', 'adoehrman7953', 'aanquero69625', 'agarwalmar74858', 'adkinson_a72036', 'abbypink64681', 'adams_mega14727', 'abbysmith156409',
+//  'adamsmissy80015', 'adams_eliz50734', 'ablair24790', 'adams_eliz94260', 'aellis99573', 'adkinskath71938', 'addisondea6441', 'adamsvanes97762',
+//  'adkinsrach5824', 'abbywoods550187', 'afoell62269', 'aellis60479', 'aboucher69923', 'abigailbel56613', 'ackermantr59026', 'adams_jess96904',
+//  'abemis74901', 'adamskiara604', 'aaronbaker29976', 'abigail20454293', 'acosta_lyd92005', 'abbyfisher30611', 'abbythomas59888', 'aellis43362',
+//  'ablair55310', 'adamshanna57979', 'abbottlyne10257', 'aimeewrigh24249', 'aimeewilli65936', 'aimeehobbs81330', 'ahuynh93110', 'ahorton88813',
+//  'ahorton38532', 'aholt79103', 'ahenderson73195', 'aheiser20890', 'aguirrejen26954', 'aguillonan80140', 'agnesargui97096', 'alicia_joh2495',
+//  'alejosjuli33105', 'akostohryz46365', 'aimeemurph37163', 'ahuckstep66341', 'aelfgen34609', 'adrienneva92842',
 ];
 
 const screenNameRegex = /^@\w+$/;
@@ -83,6 +94,12 @@ function scanUsers() {
 
     if (!containsKey) {
       if (nameKeys.includes(userName)) {
+        containsKey = true;
+      }
+    }
+
+    if (!containsKey) {
+      if (blackList.includes(screenName.substring(1).toLowerCase())) {
         containsKey = true;
       }
     }
