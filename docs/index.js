@@ -7,7 +7,7 @@ var lkspTouchedIndexesQueue = [];
 
 function lkspSaveSettings() {
   console.log(`lkspTouchedIndexesQueue.length = ${lkspTouchedIndexesQueue.length}`);
-  
+
   const numSpams = likeSpams.length;
   var readRangesArray = [];
   var ifrom = -1;
@@ -33,7 +33,10 @@ function lkspSaveSettings() {
     }
   }
   localStorage.setItem(LKSP_STORAGE_KEY_READS, readRangesArray.join(','));
-  localStorage.setItem(LKSP_STORAGE_KEY_TOUCHED, lkspTouchedIndexesQueue.join(','));
+
+  localStorage.setItem(LKSP_STORAGE_KEY_TOUCHED, lkspTouchedIndexesQueue.map(ispam => {
+    return `${ispam}:${lkspTouchedIndexesDict[ispam]}`
+  }).join(','));
 }
 
 function lkspLoadSettings() {
@@ -57,9 +60,10 @@ function lkspLoadSettings() {
 
   const touchedStr = localStorage.getItem(LKSP_STORAGE_KEY_TOUCHED);
   if (touchedStr) {
-    touchedStr.split(',').forEach(indexStr => {
-      if (indexStr) {
-        lkspTouch(parseInt(indexStr));
+    touchedStr.split(',').forEach(kvStr => {
+      const kv = kvStr.split(':');
+      if (kv.length == 2) {
+        lkspTouch(parseInt(kv[0]), parseFloat(kv[1]));
       }
     });
   }
@@ -74,9 +78,9 @@ function lkspTouch(index, score) {
   lkspTouchedIndexesQueue.push(index);
   lkspTouchedIndexesDict[index] = score;
 
-  var scoreSum = lkspTouchedIndexesQueue.reduce((a, b) => {
-    return lkspTouchedIndexesDict[a] + lkspTouchedIndexesDict[b];
-  });
+  var scoreSum = lkspTouchedIndexesQueue.reduce((sum, e) =>  sum + lkspTouchedIndexesDict[e], 0);
+  console.log(lkspTouchedIndexesQueue.length);
+  console.log(scoreSum);
 
   while (scoreSum > LKSP_TOUCHED_QUEUE_CAPACITY) {
     if (lkspTouchedIndexesQueue.length <= 0) {
