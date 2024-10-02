@@ -1,3 +1,88 @@
+const LKSP_STORAGE_KEY_READS = 'readIndexes';
+const LKSP_STORAGE_KEY_TOUCHED = 'touchedIndexes';
+const LKSP_TOUCHED_QUEUE_LENGTH = 100;
+var lkspReadIndexes = {};
+var lkspTouchedIndexesDict = {};
+var lkspTouchedIndexesQueue = [];
+
+function lkspSaveSettings() {
+  const numSpams = likeSpams.length;
+  var readRangesArray = [];
+  var ifrom = -1;
+  var ito = -1;
+  for (var i = 0; i < numSpams; i++) {
+    const isRead = i in lkspReadIndexes;
+    if (isRead) {
+      if (ifrom < 0 || ito < 0) {
+        ifrom = i;
+        ito = i;
+      }
+      else {
+        ito = i;
+      }
+    }
+
+    if (!isRead || i == numSpams - 1) {
+      if (ifrom >= 0 && ito >= 0) {
+        readRangesArray.push(`${ifrom}-${ito}`)
+      }
+      ifrom = -1;
+      ito = -1;
+    }
+  }
+  localStorage.setItem(LKSP_STORAGE_KEY_READS, readRangesArray.join(','));
+  localStorage.setItem(LKSP_STORAGE_KEY_TOUCHED, lkspTouchedIndexesQueue.join(','));
+  console.log(`lkspTouchedIndexesQueue.length = ${lkspTouchedIndexesQueue.length}`)
+}
+
+function lkspLoadSettings() {
+  const numSpams = likeSpams.length;
+  const readRangesStr = localStorage.getItem(LKSP_STORAGE_KEY_READS);
+  if (readRangesStr) {
+    readRangesStr.split(',').forEach(rangeStr => {
+      const rangeArray = rangeStr.split('-');
+      if (rangeArray.length == 1) {
+        lkspReadIndexes[parseInt(rangeArray[0])] = true;
+      }
+      else if (rangeArray.length == 2) {
+        const ifrom = Math.max(0, Math.min(numSpams - 1, parseInt(rangeArray[0])));
+        const ito = Math.max(0, Math.min(numSpams - 1, parseInt(rangeArray[1])));
+        for (var i = ifrom; i <= ito; i++) {
+          lkspReadIndexes[i] = true;
+        }
+      }
+    });
+  }
+
+  const touchedStr = localStorage.getItem(LKSP_STORAGE_KEY_TOUCHED);
+  if (touchedStr) {
+    touchedStr.split(',').forEach(indexStr => {
+      if (indexStr) {
+        lkspTouch(parseInt(indexStr));
+      }
+    });
+  }
+  console.log(`lkspTouchedIndexesQueue.length = ${lkspTouchedIndexesQueue.length}`)
+}
+
+function lkspTouch(index) {
+  if (index in lkspTouchedIndexesDict && lkspTouchedIndexesDict[index]) {
+    lkspTouchedIndexesQueue = lkspTouchedIndexesQueue.filter(e => e !== index);
+    lkspTouchedIndexesQueue.push(index);
+  }
+  else {
+    lkspTouchedIndexesQueue.push(index);
+    lkspTouchedIndexesDict[index] = true;
+    while (lkspTouchedIndexesQueue.length > LKSP_TOUCHED_QUEUE_LENGTH) {
+      lkspTouchedIndexesDict[lkspTouchedIndexesQueue.shift()] = false;
+    }
+  }
+}
+
+function lkspIsRecentlyTouched(index) {
+  return index in lkspTouchedIndexesDict;
+}
+
 const likeSpamMenuItems = [
   { "name": "トップ"  , "url": "./"         },
   { "name": "詳細一覧", "url": "table.html" },
@@ -191,3 +276,9 @@ function lkspEscapeForHtml(s) {
     .replaceAll(" ", '&nbsp;')
     .replaceAll("　", '&#x3000;');
 }
+
+function lkspInit() {
+  lkspLoadSettings();
+  lkspFixContents();
+}
+

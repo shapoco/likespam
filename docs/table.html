@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20241002052629" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241002052629"></script>
-    <script src="./database.js?20241002094126"></script>
+    <link href="./style.css?20241002095659" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241002095659"></script>
+    <script src="./database.js?20241002105942"></script>
   </head>
 
   <body>
@@ -86,6 +86,10 @@
             <span class="nowrap">
               <input id="filter_descending" type="checkbox" checked>
               <label for="filter_descending">降順</label>
+            </span>
+            <span class="nowrap">
+              <input id="hide_read" type="checkbox">
+              <label for="hide_read">既読を隠す</label>
             </span>
           </td>
         </tr>
@@ -349,8 +353,9 @@
           const isSakura = spam.spamType == LKSP_SPAM_TYPE_SAKURA;
           const isSmoker = spam.spamType == LKSP_SPAM_TYPE_SMOKER;
 
-          const screenNameHtml = '<a href="https://x.com/' + spam.screenName + '/with_replies" target="_blank">@' + spam.screenName + '</a>';
-          const userIdHtml = spam.userId.length > 0 ? '<a href="https://x.com/i/user/' + spam.userId + '" target="_blank">' + spam.userId + '</a>' : '';
+          const searchLinkClickAttr = `onClick="lkspLinkClicked(this.parentNode.parentNode, ${spam.index});"`;
+          const screenNameHtml = `<a href="https://x.com/${spam.screenName}/with_replies" ${searchLinkClickAttr} target="_blank">@${spam.screenName}</a>`;
+          const userIdHtml = spam.userId.length > 0 ? `<a href="https://x.com/i/user/${spam.userId}" ${searchLinkClickAttr} target="_blank">${spam.userId}</a>` : '';
 
           if (isNewFrozen) html += '<tr class="frozen frozen_new">';
           else if (isFrozen) html += '<tr class="frozen">';
@@ -359,11 +364,15 @@
           else if (isSmoker) html += '<tr class="smoker">';
           else html += '<tr>';
 
-          html += `<td>${spam.index + 1}</td>`;
+          var numberClass = ['read_state'];
+          if (spam.index in lkspReadIndexes) numberClass.push('read_state_read');
+          if (lkspIsRecentlyTouched(spam.index)) numberClass.push('read_state_touched');
+
+          html += `<td style="text-align:right;"><a href="javascript:void(0)" onclick="toggleReadState(this, ${spam.index})" class="${numberClass.join(' ')}">${spam.index + 1}</a></td>`;
           html += `<td>${likeSpamFormatDate(spam.addedDate)}</td>`;
           html += `<td>${spam.frozenDate ? likeSpamFormatDate(spam.frozenDate) : ''}</td>`;
           html += `<td>${screenNameHtml}</td>`;
-          html += `<td>${userIdHtml}</td>`;
+          html += `<td style="text-align:right;">${userIdHtml}</td>`;
           html += `<td>${lkspEscapeForHtml(spam.name)}</td>`;
           html += '</tr>';
         }
@@ -394,7 +403,35 @@
         });
       }
 
-      lkspRenderTable();
+      function lkspLinkClicked(tr, index) {
+        lkspReadIndexes[index] = true;
+        lkspTouch(index);
+        const a = tr.querySelector('.read_state');
+        a.classList.add('read_state_read');
+        a.classList.add('read_state_touched');
+        lkspSaveSettings();
+      }
+
+      function toggleReadState(link, index) {
+        if (index in lkspReadIndexes) {
+          delete lkspReadIndexes[index];
+          link.classList.remove('read_state_read');
+        }
+        else {
+          lkspReadIndexes[index] = true;
+          link.classList.add('read_state_read');
+        }
+        lkspTouch(index);
+        link.classList.add('read_state_touched');
+        lkspSaveSettings();
+      }
+
+      function main() {
+        lkspInit();
+        lkspRenderTable();
+      }
+
+      main();
     </script>
 
     <hr>
