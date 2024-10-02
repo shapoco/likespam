@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>詳細一覧 | いいねスパム一覧</title>
-    <link href="./style.css?20241002133151" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241002133151"></script>
-    <script src="./database.js?20241002132936"></script>
+    <link href="./style.css?20241002181938" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241002181938"></script>
+    <script src="./database.js?20241002183508"></script>
   </head>
 
   <body>
@@ -129,9 +129,10 @@
     </form>
     
     <p>
-      <del class="frozen_new">水色</del> : 直近 24 時間以内に凍結が確認されたアカウント</li>
+      <span class="nowrap"><del class="frozen_new">水色</del> : 最近凍結されたアカウント,</span>
+      <span class="nowrap"><span class="read_state_touched">黄色</span> : 最近見たアカウント</span>
     </p>
-
+    
     <p class="menu_wrapper page_list"></p>
     <div style="overflow-x: scroll;">
       <table id="spam_table">

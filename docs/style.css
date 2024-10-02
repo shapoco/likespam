@@ -187,10 +187,12 @@ ul#query_list li.frozen a:active { color: #666; text-decoration: line-through; }
 }
 .read_state_read {
   color: #484 !important;
+  padding: 0px 3px;
 }
 .read_state_touched {
   background: #ffc !important;
   border-radius: 5px;
+  padding: 0px 3px;
 }
 
 del {
