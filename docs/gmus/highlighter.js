@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.752
+// @version     1.0.753
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20241004110537
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20241004110559
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
@@ -56,8 +56,19 @@ const searchUrlRegex = /https:\/\/x.com\/search\?q=(%40\w+(\+OR\+%40\w+)*)&/;
 const userIdRegex = /data-testid="(\d+)-(un)?(follow|block)"/;
 const profileImageUrlRegex = /(https:\/\/pbs.twimg.com\/[^&]+)&quot;/;
 
-const frozenMessages = [
-  'アカウントは凍結されています',
+const warningMessages = {
+  'アカウントは凍結されています': {
+    'marker': '🔵',
+    'message': '凍結されています',
+  },
+  '注意: プロフィールにセンシティブな内容が含まれている可能性のあるアカウントです': {
+    'marker': '🟡',
+    'message': 'センシティブ',
+  },
+};
+
+const warningMessage = [
+  '注意: プロフィールにセンシティブな内容が含まれている可能性のあるアカウントです',
 ];
 
 var foundUsers = {};
@@ -108,13 +119,14 @@ function scanSpams() {
   const numSpans = spans.length;
   for (var ispan = 0; ispan < numSpans; ispan++) {
     const span = spans[ispan];
-    if (frozenMessages.includes(span.innerHTML)) {
+    if (span.innerHTML in warningMessages) {
+      const warnMsg = warningMessages[span.innerHTML];
       if (document.title.length == 0) {
-        document.title = '🔵 凍結されています';
+        document.title = `${warnMsg.marker} ${warnMsg.message}`;
         break;
       }
-      else if (!document.title.startsWith('🔵')) {
-        document.title = '🔵' + document.title;
+      else if (!document.title.startsWith(warnMsg.marker)) {
+        document.title = `${warnMsg.marker} ${document.title}`;
         break;
       }
     }
