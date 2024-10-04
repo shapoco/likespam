@@ -1,6 +1,8 @@
+const LKSP_SEARCH_STRIDE = 20;
+
 const LKSP_STORAGE_KEY_READS = 'readIndexes';
 const LKSP_STORAGE_KEY_TOUCHED = 'touchedIndexes';
-const LKSP_TOUCHED_QUEUE_CAPACITY = 100;
+const LKSP_TOUCHED_QUEUE_CAPACITY = LKSP_SEARCH_STRIDE * 100;
 var lkspReadIndexes = {};
 var lkspTouchedIndexesDict = {};
 var lkspTouchedIndexesQueue = [];

@@ -38,9 +38,9 @@
     <link rel="shortcut icon" href="/likespam/favicon48.ico">
 
     <title>いいねスパム一覧</title>
-    <link href="./style.css?20241002181938" rel="stylesheet" type="text/css">
-    <script src="./index.js?20241002181938"></script>
-    <script src="./database.js?20241004092316"></script>
+    <link href="./style.css?20241004104759" rel="stylesheet" type="text/css">
+    <script src="./index.js?20241004104759"></script>
+    <script src="./database.js?20241004110537"></script>
   </head>
 
   <body>
@@ -205,14 +205,13 @@
         const hideRead = document.filter.hide_read.checked;
 
         const now = Date.now();
-        const GROUP_SIZE = 20;
         const numSpam = likeSpams.length;
-        const numGroup = Math.ceil(numSpam / GROUP_SIZE);
+        const numGroup = Math.ceil(numSpam / LKSP_SEARCH_STRIDE);
 
         var html = '';
         for (var igrp = numGroup - 1; igrp >= 0; igrp--)  {
-          const ifrom = igrp * GROUP_SIZE;
-          const ito = (igrp < numGroup - 1) ? (ifrom + GROUP_SIZE) : numSpam;
+          const ifrom = igrp * LKSP_SEARCH_STRIDE;
+          const ito = (igrp < numGroup - 1) ? (ifrom + LKSP_SEARCH_STRIDE) : numSpam;
           var isAllFrozen = true;
           var isAllRead = true;
           var isAllUnread = true;
@@ -290,10 +289,9 @@
 
       function lkspSearchLinkClicked(li, indexes) {
         if (indexes.length == 0) return;
-        const touchScore = 1 / indexes.length;
         indexes.forEach(ispam => {
           lkspReadIndexes[ispam] = true;
-          lkspTouch(ispam, touchScore);
+          lkspTouch(ispam, 1);
         });
         const a = li.querySelector('.read_state');
         a.innerHTML = '既読';
@@ -304,19 +302,18 @@
 
       function lkspToggleReadState(li, indexes) {
         if (indexes.length == 0) return;
-        const touchScore = 1 / indexes.length;
         const a = li.querySelector('.read_state');
         const isRead = !a.classList.contains('read_state_read');
         if (isRead) {
           indexes.forEach(ispam => {
             lkspReadIndexes[ispam] = true;
-            lkspTouch(ispam, touchScore);
+            lkspTouch(ispam, 1);
           });
         }
         else {
           indexes.forEach(ispam => {
             delete lkspReadIndexes[ispam]; 
-            lkspTouch(ispam, touchScore);
+            lkspTouch(ispam);
           });
         }
         a.classList.toggle('read_state_read');
