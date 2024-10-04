@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
     <meta http-equiv="refresh" content="1; URL=./table.html">
     <meta name="Hatena::Bookmark" content="nocomment" />
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMDGFGR0Z4"></script>
+    <script>
+      var remotHost = window.location.hostname;
+      if (remotHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remotHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-BMDGFGR0Z4');
+      }
+    </script>
   </head>
 
   <body>
