@@ -4,10 +4,10 @@
 // @match       https://x.com/*
 // @match       https://pro.twitter.com/*
 // @grant       none
-// @version     1.0.820
+// @version     1.0.822
 // @author      Shapoco
 // @description いいねスパムリストに収録済みのユーザーを強調表示します。
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20241007082501
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20241007105220
 // @updateURL   https://shapoco.github.io/likespam/gmus/highlighter.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/highlighter.js
 // @supportURL  https://shapoco.github.io/likespam
