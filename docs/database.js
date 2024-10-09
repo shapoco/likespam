@@ -53,6 +53,10 @@ const likeSpamNames = [
   "man",
   "【公式】 いいねされた人🎁おめでとう！ ※プロフィールチェックしてね！",
   "a",
+  "ドリア",
+  "エタナル様",
+  "ΘそんΘ",
+  "ロックスター",
 ];
 
 function newLikeSpam(index, userId, screenName, spamType, addedDate, frozenDate, nameKey, profileImageUrl) {
@@ -2883,7 +2887,7 @@ const likeSpams = [
   newLikeSpam(2810,"1797303196886417409","PreethikaA3038",0,1786652,-1,8,"%0%/1834475916740993024/X-Ai-mEV_normal.png"),
   newLikeSpam(2811,"1796734373208985600","p4PTuggCbIVnDUI",0,1786652,-1,8,"%0%/1834472922792296448/z1z3Be6D_normal.png"),
   newLikeSpam(2812,"1796818957338284032","tiffany_pr83756",0,1786652,-1,4,"%0%/1836308365263409154/v939CBws_normal.png"),
-  newLikeSpam(2813,"1796832664185389056","AmyPressle32341",0,1786652,-1,15,"%0%/1837134358496563203/BeRqr1j3_normal.jpg"),
+  newLikeSpam(2813,"1796832664185389056","AmyPressle32341",0,1786652,3351672,15,"%0%/1837134358496563203/BeRqr1j3_normal.jpg"),
   newLikeSpam(2814,"1796734612049108992","pWApKnYElXHBmUS",0,1786652,-1,13,"%0%/1810510608619761664/UDUagkc8_normal.jpg"),
   newLikeSpam(2815,"1796827306385678337","andrea_pre19144",0,1786652,-1,15,"%0%/1837134649996496900/AdBHW_BT_normal.jpg"),
   newLikeSpam(2816,"1796735231430467584","psi5fcTA6pTeQSK",0,1786652,-1,8,"%0%/1834476126372306944/UwfH4Kyj_normal.png"),
@@ -17327,4 +17331,8 @@ const likeSpams = [
   newLikeSpam(17254,"1796826164855517184","MullinsHea67721",0,3344558,-1,11,"%0%/1810658197721714688/xBEPD6Gq_normal.jpg"),
   newLikeSpam(17255,"1796735964636672000","7tqraFauQP2YjHI",0,3344558,-1,11,"%0%/1810506815870017536/tPR7mx42_normal.jpg"),
   newLikeSpam(17256,"1796718702190080002","fInkqSW7uiaYRvj",0,3344558,-1,13,"%0%/1810321518062395393/ZVWaOfEE_normal.jpg"),
+  newLikeSpam(17257,"864638153046536192","Joker269Ojok",2,3351426,-1,50,"%0%/1716003274883764224/hLSCKi6R_bigger.jpg"),
+  newLikeSpam(17258,"1671709154803687426","ramayana_uas",2,3351500,-1,51,"https://pbs.twimg.com/profile_banners/1671709154803687426/1726153732/600x200"),
+  newLikeSpam(17259,"2757425920","calzsalim1",2,3351521,-1,52,"https://pbs.twimg.com/profile_banners/2757425920/1410411970/600x200"),
+  newLikeSpam(17260,"1189305736750198784","673QuaIity",2,3351558,-1,53,"%0%/1376960456804425729/vALMavhj_200x200.jpg"),
 ];
