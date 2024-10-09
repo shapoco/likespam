@@ -3,16 +3,16 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://x.com/search?*
 // @grant       none
-// @version     1.0.733
+// @version     1.0.725
 // @author      Shapoco
 // @description Xの検索結果からスパムアカウントの情報を抽出します
-// @require     https://shapoco.github.io/likespam/gmus/db.js?20241009204128
+// @require     https://shapoco.github.io/likespam/gmus/db.js?20241009204441
 // @updateURL   https://shapoco.github.io/likespam/gmus/inforeader.js
 // @downloadURL https://shapoco.github.io/likespam/gmus/inforeader.js
 // @supportURL  https://shapoco.github.io/likespam
 // ==/UserScript==
 
-const profileTextKeys = ['Zy_Iove', 'Su_Iover', 'Zy_iove', 'Xy_Iove', 'ace_GlFT', '________l__I___', 'ギフト1万円分', 'bit.ly/3ZJEViG'];
+const profileTextKeys = ['Zy_Iove', 'Su_Iover', 'Zy_iove', 'Xy_Iove', 'ace_GlFT', '________l__I___', 'ギフト1万円分', 'bit.ly/3ZJEViG', 'Officiai_______', '____I_____l____'];
 const nameKeys = [
   '【公式】 いいねされた人はプロフィールをチェックして景品をGET🎁おめでとう🎉',
 ];
