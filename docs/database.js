@@ -17335,4 +17335,5 @@ const likeSpams = [
   newLikeSpam(17258,"1671709154803687426","ramayana_uas",2,3351500,-1,51,"https://pbs.twimg.com/profile_banners/1671709154803687426/1726153732/600x200"),
   newLikeSpam(17259,"2757425920","calzsalim1",2,3351521,-1,52,"https://pbs.twimg.com/profile_banners/2757425920/1410411970/600x200"),
   newLikeSpam(17260,"1189305736750198784","673QuaIity",2,3351558,-1,53,"%0%/1376960456804425729/vALMavhj_200x200.jpg"),
+  newLikeSpam(17261,"1806918721182773248","AbeytaTere38162",0,3354961,-1,21,"%0%/1843964155931635712/jsRSYldQ_normal.jpg"),
 ];
