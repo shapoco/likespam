@@ -40,7 +40,7 @@
     <title>補足情報 | いいねスパム一覧</title>
     <link href="./style.css?20241004104759" rel="stylesheet" type="text/css">
     <script src="./index.js?20241004104759"></script>
-    <script src="./database.js?20241009012716"></script>
+    <script src="./database.js?20241009165853"></script>
   </head>
 
   <body>
@@ -53,12 +53,17 @@
 
     <h1>補足情報</h1>
 
-    <h2 id="pivot">Zy_Iove</h2>
+    <h2 id="pivot">OfficiaI_______</h2>
     <p>
       <a href="https://topics.smt.docomo.ne.jp/article/otakuma/trend/otakuma-20231128_04">当選詐欺 (?)</a> の窓口になっているアカウントです。
     </p>
     <ul>
-      <li>screen_name : <a href="https://x.com/Zy_Iove" target="_blank">@Zy_Iove</a> (注: I は i の大文字)</li>
+      <li>
+        screen_name :
+        <ul>
+          <li><del>@Zy_Iove (注: I は i の大文字)</del> ～2024/10/9</li>
+          <li><a href="https://x.com/OfficiaI_______" target="_blank">@OfficiaI_______</a> (注: I は i の大文字)</li></li>
+        </ul>
       <li>user_id : <a href="https://x.com/i/user/843484673087082496" target="_blank">843484673087082496</a></li>
       <li>2017 年 3 月から存在し、何度か ID を変えています。</li>
       <li>アイコンと名前を頻繁に変えています。</li>
@@ -68,7 +73,7 @@
     <h2>サクラアカウント</h2>
 
     <p>
-      定期的に本当に金品が貰えたかのようなリプライを Zy_Iove に送らせています。
+      定期的に本当に金品が貰えたかのようなリプライを送らせています。
     </p>
 
     <ul id="sakura_list"></ul>
@@ -76,7 +81,6 @@
 
     <script>
       const ul = document.getElementById('sakura_list');
-      const to_id = "Zy_Iove";
       const sakuras = likeSpams.filter(spam => spam.spamType == LKSP_SPAM_TYPE_SAKURA).reverse();
       const aliveSakuras = sakuras.filter(spam => !(spam.frozenDate));
       const frozenSakuras = sakuras.filter(spam => !!(spam.frozenDate));
