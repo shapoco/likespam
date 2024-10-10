@@ -57,6 +57,7 @@ const likeSpamNames = [
   "エタナル様",
   "ΘそんΘ",
   "ロックスター",
+  "おはぎ",
 ];
 
 function newLikeSpam(index, userId, screenName, spamType, addedDate, frozenDate, nameKey, profileImageUrl) {
@@ -17427,4 +17428,5 @@ const likeSpams = [
   newLikeSpam(17350,"1796865138907062273","HeatherOro20504",0,3422190,-1,21,"%0%/1843991993707581440/V_5E1Shi_normal.jpg"),
   newLikeSpam(17351,"1807111361585131520","HeatherJoh9951",0,3422190,-1,21,"%0%/1843991785951182848/fXmqdSc__normal.jpg"),
   newLikeSpam(17352,"1803575929572134912","HeatherL46755",0,3422190,-1,21,"%0%/1843991866662133760/GhmwIGXP_normal.jpg"),
+  newLikeSpam(17353,"158458667","kingRon2015",2,3423053,-1,54,"%0%/1844160472247042050/Lwmpjbn6_normal.jpg"),
 ];
