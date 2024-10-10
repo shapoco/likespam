@@ -3,7 +3,7 @@
 // @namespace   https://github.com/shapoco/likespam
 // @match       https://search.yahoo.co.jp/realtime/search?p=*
 // @grant       none
-// @version     1.0.154
+// @version     1.0.157
 // @author      Syego
 // @description Yahoo! リアルタイム検索の結果からユーザー情報を読み取ります
 // @updateURL   https://shapoco.github.io/likespam/gmus/yrs_reader.js
