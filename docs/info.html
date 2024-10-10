@@ -40,7 +40,7 @@
     <title>補足情報 | いいねスパム一覧</title>
     <link href="./style.css?20241009204435" rel="stylesheet" type="text/css">
     <script src="./index.js?20241009204435"></script>
-    <script src="./database.js?20241010082124"></script>
+    <script src="./database.js?20241010110155"></script>
   </head>
 
   <body>
@@ -53,17 +53,50 @@
 
     <h1>補足情報</h1>
 
-    <h2 id="pivot">____I_____l____</h2>
+    <h2 id="measures">対策方法</h2>
+    <p>
+      フォローしていないユーザーからの通知を切ることを検討してください。
+      大量の捨てアカウントを使って通知を送るこのスパムの性質上、
+      あなたの通知欄やいいね欄が汚されることを防ぐのは X 社による根本的な対策がとられない限り不可能に思えます。
+    </p>
+    <p>
+      <img src="notify_setting.png">
+    </p>
+    <p>
+      関連キーワードの検索結果を見ているとこのスパムに対する怒りのポストが多く見られます。
+      いいね欄を汚されるのが不快なのは理解しますが、スパムに対して感情の炎を燃やすのは個人的には時間と精神力の無駄と思います。
+      「スパムからいいねが付いて不快だからポストしなおした」というのもよく見ますが、ブロックしてからリロードすれば十分だと思います。
+    </p>
+    <p>
+      スパムのプロフィールを見てすぐに「こんな幼稚な詐欺に引っかかる人がいるのか」と思ったあなたは、恐らく彼らの眼中にはありません。
+      彼らはそのような判断ができない (場合によっては社会的サポートが必要になるような) 人々をターゲットにしている可能性があります。
+    </p>
+    <p>
+      そういうわけで多くの人にとっては蚊やハエのような存在でしかないので、関わりたくない場合は通知を切るのがベストだと思います。
+      そうでなければ自分に来た通知を機械的に淡々とブロックまたは報告するしかありません (数が膨大なのでそれすら意味があるのか謎です)。
+      何かしたくてたまらない方は捨てアカウントだけではなく以下の本体アカウントとその周辺アカウントを報告するか、
+      <del>イーロンマスクに怒りをぶつけてください</del>。
+    </p>
+    <p>
+      このサイトもそう長く続けるつもりはありませんので、スパム対策サイトであるかのように宣伝するのものご遠慮頂けると助かります。
+    </p>
+
+    <h2 id="pivot">本体 (?) アカウント</h2>
     <p>
       <a href="https://topics.smt.docomo.ne.jp/article/otakuma/trend/otakuma-20231128_04">当選詐欺 (?)</a> の窓口になっているアカウントです。
     </p>
     <ul>
       <li>
-        screen_name :
+        ID (screen_name) :
         <ul>
-          <li><del>@Zy_Iove (注: I は大文字の i )</del> ～2024/10/9</li>
+          <li><a href="https://x.com/____I_____l____" target="_blank">@____I_____l____</a> (注: 1つ目の I は大文字の i、2つ目の l は小文字の L) 2024/10/9～</li>
           <li><del>@OfficiaI_______ (注: I は大文字の i )</del> 2024/10/9 に一瞬だけ使用</li>
-          <li><a href="https://x.com/____I_____l____" target="_blank">@____I_____l____</a> (注: 最初の I は大文字の i、2個目の l は小文字の L)</li></li>
+          <li>
+            <del>@Zy_Iove (注: I は大文字の i )</del> ～2024/10/9
+            <ul>
+              <li>2024/10/9 現在別の方が押さえています。</li>
+            </ul>
+          </li>
         </ul>
       <li>user_id : <a href="https://x.com/i/user/843484673087082496" target="_blank">843484673087082496</a></li>
       <li>2017 年 3 月から存在し、何度か ID を変えています。</li>
@@ -72,48 +105,66 @@
     </ul>
 
     <h2>サクラアカウント</h2>
-
     <p>
-      定期的に本当に金品が貰えたかのようなリプライを送らせています。
+      本体アカウントを信用させるために定期的に本当に金品が貰えたかのようなリプライを送らせてさせようとしているようです。
     </p>
-
-    <ul id="sakura_list"></ul>
-    <p id="sakura_search_link"></p>
+    <ul>
+      <li><a href="table.html#p=0&o=0&d=1&f=4">サクラアカウントの一覧</a></li>
+      <li>
+        X 検索でまとめて表示:
+        <ul id="sakura_list"></ul>
+        <span class="for_mobile">スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</span>
+      </li>
+    </ul>
 
     <script>
-      const ul = document.getElementById('sakura_list');
-      const sakuras = likeSpams.filter(spam => spam.spamType == LKSP_SPAM_TYPE_SAKURA).reverse();
-      const aliveSakuras = sakuras.filter(spam => !(spam.frozenDate));
-      const frozenSakuras = sakuras.filter(spam => !!(spam.frozenDate));
+      {
+        const ul = document.getElementById('sakura_list');
+        const sakuras = likeSpams.filter(spam => spam.spamType == LKSP_SPAM_TYPE_SAKURA).reverse();
+        const screenNames = sakuras.filter(spam => !(spam.frozenDate)).map(spam => spam.screenName);
+        for (var istep = 0; istep < screenNames.length; istep+=LKSP_SEARCH_STRIDE) {
+          var ifrom = istep;
+          var ito = ifrom + LKSP_SEARCH_STRIDE;
+          if (ito > screenNames.length) ito = screenNames.length;
+          const li = document.createElement('li');
+          li.innerHTML = `<li>${lkspGetSearchLinkHtml(screenNames.slice(ifrom, ito), null, null)}</li>`;
+          ul.appendChild(li);
+        }
+      }
+    </script>
+    
+    <h2>検索荒らしアカウント</h2>
+    <p>
+      いいねスパムの検索を妨害するため、関連するキーワードを短時間に大量にポストして検索を妨害することがあります。
+    </p>
+    <ul>
+      <li><a href="table.html#p=0&o=0&d=1&f=24">検索荒らしアカウントの一覧</a></li>
+      <li>
+        X 検索でまとめて表示:
+        <ul id="smokers_list"></ul>
+        <span class="for_mobile">スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</span>
+      </li>
+    </ul>
 
-      aliveSakuras.forEach(spam => {
-        const li = document.createElement('li');
-        var html = '';
-        if (isSmartPhone()) {
-          html += `<a href="https://x.com/${spam.screenName}/with_replies" target="_blank">${lkspEscapeForHtml(spam.name)}</a>`;
+    <script>
+      {
+        const ul = document.getElementById('smokers_list');
+        const smokers = likeSpams.filter(spam => spam.spamType == LKSP_SPAM_TYPE_SMOKER).reverse();
+        const screenNames = smokers.filter(spam => !(spam.frozenDate)).map(spam => spam.screenName);
+        for (var istep = 0; istep < screenNames.length; istep+=LKSP_SEARCH_STRIDE) {
+          var ifrom = istep;
+          var ito = ifrom + LKSP_SEARCH_STRIDE;
+          if (ito > screenNames.length) ito = screenNames.length;
+          const li = document.createElement('li');
+          li.innerHTML = `<li>${lkspGetSearchLinkHtml(screenNames.slice(ifrom, ito), null, null)}</li>`;
+          ul.appendChild(li);
         }
-        else {
-          html += `${lkspEscapeForHtml(spam.name)} ` +
-            `(<a href="https://x.com/${spam.screenName}/with_replies" target="_blank">@${spam.screenName}</a>, ` +
-            `<a href="https://x.com/i/user/${spam.userId}" target="_blank">${spam.userId}</a>)`;
-        }
-        if (spam.frozenDate) {
-          html = `<del>${html}</del> ${likeSpamFormatDate(spam.frozenDate)} 凍結確認`;
-        }
-        li.innerHTML = html;
-        ul.appendChild(li);
-      });
-
-      if (aliveSakuras.length > 0) {
-        document.querySelector('#sakura_search_link').innerHTML =
-          `${lkspGetSearchLinkHtml(aliveSakuras.map(spam => spam.screenName), 'X 検索でまとめて表示', null)} (${frozenSakuras.length} 件が凍結済み)<br>` +
-          '<span class="for_mobile">スマホアプリの場合は各リンクをクリック後「ユーザー」のタブを選択してください。</span>';
       }
     </script>
     
     <h2 id="finding">いいねスパムの見つけ方</h2>
 
-    <h3>ハッシュタグ (推奨)</h3>
+    <h3>ハッシュタグ</h3>
     <p>
       直近で活動中のアカウントについては <a class="xsearch_link" href="https://x.com/search?q=%23%E3%81%84%E3%81%84%E3%81%AD%E3%82%B9%E3%83%91%E3%83%A0&src=typed_query&f=live" target="_blank">#いいねスパム</a> タグを参照ください (情報提供にご協力お願いします)。
     </p>
@@ -125,6 +176,9 @@
     </div>
     
     <h3>キーワード検索</h3>
+    <p>
+      捨てアカウントは頻繁に名前が変わるため、今現在活動中のアカウントを検索で見つけるのは難しいかもしれません。
+    </p>
     <ul id="search_keywords">
     </ul>
     <script>
